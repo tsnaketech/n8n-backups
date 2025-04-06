@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-04-06T15:57:03.917Z",
-    "updatedAt": "2025-04-06T22:21:10.000Z",
+    "updatedAt": "2025-04-06T22:23:55.000Z",
     "id": "YWECdarx8fM6a4Ss",
     "name": "Save backed up workflows from n8n to GitHub",
     "active": false,
@@ -510,7 +510,7 @@
                     "value": "={{ $('Globals').first().json.repo.name }}",
                     "mode": "name"
                 },
-                "filePath": "={{ $('Globals').first().json.repo.path }}{{ $json.id }}.json",
+                "filePath": "={{ $('Globals').first().json.repo.path }}{{ $json.name }}.json",
                 "additionalParameters": {}
             },
             "type": "n8n-nodes-base.github",
@@ -818,7 +818,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "cc4a1588-c44f-4340-9ceb-fb62783d8e83",
+    "versionId": "e879fb8c-1a34-478d-99c8-63ce29fbd612",
     "triggerCount": 0,
     "tags": []
 }
