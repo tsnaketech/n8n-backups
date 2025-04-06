@@ -1,0 +1,82 @@
+{
+    "createdAt": "2024-09-19T23:34:38.621Z",
+    "updatedAt": "2024-09-25T00:24:30.000Z",
+    "id": "jTrTbAb3Q41qyoaM",
+    "name": "My workflow",
+    "active": false,
+    "nodes": [
+        {
+            "parameters": {},
+            "id": "e4b00fbc-0e9b-4c33-99ba-294cb90ae7e7",
+            "name": "When clicking ‘Test workflow’",
+            "type": "n8n-nodes-base.manualTrigger",
+            "position": [
+                20,
+                460
+            ],
+            "typeVersion": 1
+        },
+        {
+            "parameters": {
+                "inputText": "csfsdf",
+                "options": {}
+            },
+            "id": "7e324cec-18fc-4f0f-a4d8-08925f440664",
+            "name": "Sentiment Analysis",
+            "type": "@n8n/n8n-nodes-langchain.sentimentAnalysis",
+            "typeVersion": 1,
+            "position": [
+                260,
+                460
+            ]
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "id": "1a2a67fd-b924-4940-96e6-f9f67a1f4382",
+            "name": "Mistral Cloud Chat Model",
+            "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+            "typeVersion": 1,
+            "position": [
+                40,
+                640
+            ]
+        }
+    ],
+    "connections": {
+        "When clicking ‘Test workflow’": {
+            "main": [
+                [
+                    {
+                        "node": "Sentiment Analysis",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Mistral Cloud Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Sentiment Analysis",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "7a4fe420-f739-4981-a214-126f156e475e",
+    "triggerCount": 0,
+    "tags": []
+}
