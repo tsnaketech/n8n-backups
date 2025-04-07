@@ -1,9 +1,9 @@
 {
     "createdAt": "2025-04-06T15:57:03.917Z",
-    "updatedAt": "2025-04-06T22:23:55.000Z",
+    "updatedAt": "2025-04-06T22:25:39.000Z",
     "id": "YWECdarx8fM6a4Ss",
     "name": "Save backed up workflows from n8n to GitHub",
-    "active": false,
+    "active": true,
     "nodes": [
         {
             "parameters": {},
@@ -320,13 +320,13 @@
             "parameters": {
                 "content": "## Save the data\nSave the data as new or edited file, ignored or note as error.",
                 "height": 786,
-                "width": 720
+                "width": 780
             },
             "id": "1c0eff6a-e469-41bd-890c-76bc760a2b4e",
             "name": "Sticky Note1",
             "type": "n8n-nodes-base.stickyNote",
             "position": [
-                2360,
+                2300,
                 -100
             ],
             "typeVersion": 1
@@ -812,13 +812,24 @@
     "settings": {
         "executionOrder": "v1"
     },
-    "staticData": null,
+    "staticData": {
+        "node:Schedule Trigger": {
+            "recurrenceRules": []
+        }
+    },
     "meta": {
         "templateId": "2385",
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "e879fb8c-1a34-478d-99c8-63ce29fbd612",
-    "triggerCount": 0,
-    "tags": []
+    "versionId": "a2a944bd-e590-4a7f-96cf-550459a6602f",
+    "triggerCount": 1,
+    "tags": [
+        {
+            "createdAt": "2025-04-06T22:25:36.119Z",
+            "updatedAt": "2025-04-06T22:25:36.119Z",
+            "id": "FonH40fYgFPBKvBz",
+            "name": "save"
+        }
+    ]
 }
