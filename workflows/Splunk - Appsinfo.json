@@ -1,31 +1,25 @@
 {
     "createdAt": "2024-09-28T09:11:06.127Z",
-    "updatedAt": "2024-10-04T23:53:13.000Z",
+    "updatedAt": "2025-04-06T23:02:59.000Z",
     "id": "gTBkibbRHEFPmn1l",
     "name": "Splunk - Appsinfo",
     "active": false,
     "nodes": [
         {
-            "parameters": {},
-            "id": "ab666b50-5977-46b7-b385-3735a33cc175",
-            "name": "When clicking ‘Test workflow’",
-            "type": "n8n-nodes-base.manualTrigger",
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "splunk-appinfo",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2,
             "position": [
-                820,
-                360
+                -340,
+                -40
             ],
-            "typeVersion": 1
-        },
-        {
-            "parameters": {},
-            "id": "34fe8c81-0ca1-48c4-8ab6-9cd808929243",
-            "name": "Execute Workflow Trigger",
-            "type": "n8n-nodes-base.executeWorkflowTrigger",
-            "typeVersion": 1,
-            "position": [
-                340,
-                260
-            ]
+            "id": "b37f12a4-232d-49e6-bfb4-c80acbb3987d",
+            "name": "Webhook",
+            "webhookId": "6834f464-b579-4250-9b15-8b59562edb97"
         }
     ],
     "connections": {},
@@ -37,7 +31,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "fcfc6191-0905-43b1-bf6c-4c96bbd5e313",
+    "versionId": "fce1230c-7704-46c4-b43d-3829467ecc4f",
     "triggerCount": 0,
     "tags": []
 }
