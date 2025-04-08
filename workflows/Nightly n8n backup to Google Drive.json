@@ -1102,7 +1102,9 @@
             "recurrenceRules": []
         },
         "node:Schedule Trigger1": {
-            "recurrenceRules": []
+            "recurrenceRules": [
+                97
+            ]
         }
     },
     "meta": {
