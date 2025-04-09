@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-04-06T15:57:38.594Z",
-    "updatedAt": "2025-04-06T16:26:58.000Z",
+    "updatedAt": "2025-04-08T16:50:13.000Z",
     "id": "xOTtK1CYu6OBwj9o",
     "name": "Restore backed up workflows from GitHub to n8n",
     "active": false,
@@ -30,7 +30,7 @@
                         },
                         {
                             "name": "repo.path",
-                            "value": "workflows/"
+                            "value": "workflows"
                         }
                     ]
                 },
@@ -76,11 +76,11 @@
             "parameters": {
                 "conditions": {
                     "options": {
-                        "leftValue": "",
                         "caseSensitive": true,
-                        "typeValidation": "strict"
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 1
                     },
-                    "combinator": "and",
                     "conditions": [
                         {
                             "id": "063d51c7-0b7a-48a4-82b3-76b370fc4265",
@@ -92,7 +92,8 @@
                             "leftValue": "={{ $('Merge Github and n8n workflows - Keep only non existing workflows based on the name').item.json.name }}",
                             "rightValue": ""
                         }
-                    ]
+                    ],
+                    "combinator": "and"
                 },
                 "options": {}
             },
@@ -134,13 +135,13 @@
                 "operation": "list",
                 "owner": {
                     "__rl": true,
-                    "mode": "name",
-                    "value": "={{$node[\"Globals\"].json[\"repo\"][\"owner\"]}}"
+                    "value": "={{ $json.repo.owner }}",
+                    "mode": "name"
                 },
                 "repository": {
                     "__rl": true,
-                    "mode": "name",
-                    "value": "={{$node[\"Globals\"].json[\"repo\"][\"name\"]}}"
+                    "value": "={{ $json.repo.name }}",
+                    "mode": "name"
                 },
                 "filePath": "={{ $json.repo.path }}"
             },
@@ -204,7 +205,13 @@
                 1660,
                 300
             ],
-            "typeVersion": 1
+            "typeVersion": 1,
+            "credentials": {
+                "githubApi": {
+                    "id": "tn3ndHG3IRtsw5oS",
+                    "name": "GitHub account"
+                }
+            }
         },
         {
             "parameters": {
@@ -248,7 +255,13 @@
                 2700,
                 300
             ],
-            "typeVersion": 1
+            "typeVersion": 1,
+            "credentials": {
+                "n8nApi": {
+                    "id": "CZA86B6Hbh4AZWcQ",
+                    "name": "n8n account"
+                }
+            }
         },
         {
             "parameters": {
@@ -489,10 +502,11 @@
     },
     "staticData": null,
     "meta": {
-        "templateId": "2289"
+        "templateId": "2289",
+        "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "9b8b749b-a83e-4009-a6f5-4ffe63d0f7ce",
+    "versionId": "5a08d453-802f-4ef3-9c05-02f2cac844e2",
     "triggerCount": 0,
     "tags": []
 }
