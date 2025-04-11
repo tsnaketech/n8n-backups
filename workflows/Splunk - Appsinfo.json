@@ -1,6 +1,6 @@
 {
     "createdAt": "2024-09-28T09:11:06.127Z",
-    "updatedAt": "2025-04-06T23:02:59.000Z",
+    "updatedAt": "2025-04-11T00:05:34.000Z",
     "id": "gTBkibbRHEFPmn1l",
     "name": "Splunk - Appsinfo",
     "active": false,
@@ -20,9 +20,45 @@
             "id": "b37f12a4-232d-49e6-bfb4-c80acbb3987d",
             "name": "Webhook",
             "webhookId": "6834f464-b579-4250-9b15-8b59562edb97"
+        },
+        {
+            "parameters": {
+                "chatId": "1037310358",
+                "text": "={{ $json.body.message }}",
+                "additionalFields": {
+                    "appendAttribution": false
+                }
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                -120,
+                -40
+            ],
+            "id": "2f0c6b21-f92e-4e3a-807a-0db2420c9998",
+            "name": "Telegram",
+            "webhookId": "296977e5-bbd6-4418-81bf-c7f34baf7471",
+            "credentials": {
+                "telegramApi": {
+                    "id": "t5jP1rX1Q7rEmgPc",
+                    "name": "Telegram account"
+                }
+            }
         }
     ],
-    "connections": {},
+    "connections": {
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Telegram",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
     "settings": {
         "executionOrder": "v1"
     },
@@ -31,7 +67,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "fce1230c-7704-46c4-b43d-3829467ecc4f",
+    "versionId": "d57c3ad0-c2b8-4062-9855-5f59bc22285b",
     "triggerCount": 0,
     "tags": []
 }
