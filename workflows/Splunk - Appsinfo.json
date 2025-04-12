@@ -1,9 +1,9 @@
 {
     "createdAt": "2024-09-28T09:11:06.127Z",
-    "updatedAt": "2025-04-11T00:05:34.000Z",
+    "updatedAt": "2025-04-11T07:18:54.000Z",
     "id": "gTBkibbRHEFPmn1l",
     "name": "Splunk - Appsinfo",
-    "active": false,
+    "active": true,
     "nodes": [
         {
             "parameters": {
@@ -68,6 +68,6 @@
     },
     "pinData": {},
     "versionId": "d57c3ad0-c2b8-4062-9855-5f59bc22285b",
-    "triggerCount": 0,
+    "triggerCount": 1,
     "tags": []
 }
