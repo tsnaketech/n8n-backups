@@ -1,0 +1,318 @@
+{
+    "createdAt": "2024-09-28T09:11:06.127Z",
+    "updatedAt": "2025-04-15T00:01:00.000Z",
+    "id": "gTBkibbRHEFPmn1l",
+    "name": "Splunk - Notification",
+    "active": true,
+    "nodes": [
+        {
+            "parameters": {
+                "chatId": "1037310358",
+                "text": "={{ $json.text }}",
+                "additionalFields": {
+                    "appendAttribution": false
+                }
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                420,
+                40
+            ],
+            "id": "2f0c6b21-f92e-4e3a-807a-0db2420c9998",
+            "name": "Telegram",
+            "webhookId": "296977e5-bbd6-4418-81bf-c7f34baf7471",
+            "credentials": {
+                "telegramApi": {
+                    "id": "t5jP1rX1Q7rEmgPc",
+                    "name": "Telegram account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "b7f30531-bbfd-48ad-8b72-cfb8a7c28d43",
+                            "leftValue": "={{ $json.body.diff }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notEmpty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                -300,
+                40
+            ],
+            "id": "c1bc587e-83b1-486f-b1f1-37af089b415c",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Transformez la notification de changement de ChangeDetection au format suivant:\n\nLa notification est au format:\n(changed) [nom_produit],[nom_fichier],[ancienne_version],[version_précédente],[date_heure]\n(into) [nom_produit],[nom_fichier],[nouvelle_version],[nouvelle_version_précédente],[date_heure]\n\nTransformer en format Telegram avec des émojis uniquement:\n\n🔄 MISE À JOUR 🔄\n\n📦 Produit : [nom_produit]\n\n➡️ Version : [ancienne_version] → [nouvelle_version]\n⬅️ Version précédente : [version_précédente] → [nouvelle_version_précédente]\n\n⏱️ Date : [date_heure]\n\n🔗 Fichier : [nom_fichier]\n\nN'utilisez pas de formatage spécial comme les étoiles ou les balises HTML. Respect les espaces. Seul les élements demandés sont nécessaires. Rajoute \"---\" entre les éléments, s'il y a plusieurs produits.\n\nLa notification est la suivante :\n{{ $json.body.diff }}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.chainLlm",
+            "typeVersion": 1.5,
+            "position": [
+                100,
+                -20
+            ],
+            "id": "cbf43d69-d629-4d5c-87a4-0c457d142c2b",
+            "name": "Basic LLM Chain"
+        },
+        {
+            "parameters": {
+                "model": "deepseek/deepseek-r1-distill-llama-70b:free",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+            "typeVersion": 1,
+            "position": [
+                20,
+                220
+            ],
+            "id": "073ae533-c155-4b53-a97c-8ebadcb4aebf",
+            "name": "OpenRouter Chat Model",
+            "credentials": {
+                "openRouterApi": {
+                    "id": "eJL3ulSkeT8Q0dwT",
+                    "name": "OpenRouter account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Formatez les informations sur les problèmes de mise à niveau de Splunk Enterprise pour Telegram selon les règles suivantes :\n\n1. Commencez par un titre général avec l'emoji 🔧.\n\n2. Pour chaque problème :\n   a. Numérotez avec des emojis (1️⃣, 2️⃣, 3️⃣, 4️⃣).\n   b. Mettez le titre du problème en gras.\n   c. Indentez les informations suivantes :\n      - Date (📅)\n      - Numéro d'issue (🔢)\n      - Description (📝)\n      - Solution de contournement (⚠️)\n\n3. Pour les listes de Workaround :\n   a. Commencez chaque élément par \"- \" suivi d'un indicateur de couleur.\n   b. Utilisez ces indicateurs au début de la ligne si les mots correspondants sont présents :\n      🟢 remplace \"(added)\"\n      🔴 remplace \"(removed)\"\n      🟠 remplace \"(changed)\"\n      🟡 remplace \"(into)\"\n\n4. Pour les autres éléments (comme le numéro d'issue) :\n   a. Gardez l'icône de base (par exemple, 🔢).\n   b. Ajoutez l'indicateur de couleur juste après si nécessaire.\n\n5. Mettez les stanzas de configuration sur une nouvelle ligne et indentez-les.\n\n6. Encadrez le tout dans des backticks (```) pour le rendre copiable.\n\nExemple de format pour un problème :\n\n1️⃣ Titre du problème\n    📅 Date filed: YYYY-MM-DD\n    🔢🟢 XXX-XXXXX\n    📝 Description: Description du problème\n    ⚠️ Workaround: \n    - 🟢 Étape ajoutée\n    - 🔴 Étape supprimée\n    - 🟠 Étape modifiée\n    - 🟡 Résultat de la modification\n\nLes informations sont les suivantes :\n{{ $json.body.diff }}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.chainLlm",
+            "typeVersion": 1.5,
+            "position": [
+                100,
+                100
+            ],
+            "id": "fdabfb1c-34c8-4af2-9619-c2d9bb3080f9",
+            "name": "Basic LLM Chain1"
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json.webhookUrl }}",
+                                        "rightValue": "splunk-appinfo",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "contains"
+                                        },
+                                        "id": "e38b90ea-32e8-4d81-92f0-33436edccd04"
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "172366e4-fc17-4c6d-b3b0-a45d654b307e",
+                                        "leftValue": "{{ $json.webhookUrl }}",
+                                        "rightValue": "splunk-issues",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "contains"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 3.2,
+            "position": [
+                -80,
+                40
+            ],
+            "id": "0e279135-95c5-4976-b6a1-452167a4dc26",
+            "name": "Switch"
+        },
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "splunk-appinfo",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2,
+            "position": [
+                -540,
+                -40
+            ],
+            "id": "b37f12a4-232d-49e6-bfb4-c80acbb3987d",
+            "name": "Appinfo",
+            "webhookId": "6834f464-b579-4250-9b15-8b59562edb97"
+        },
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "splunk-issues",
+                "options": {}
+            },
+            "id": "eb4462f5-d032-4a94-bda2-aaa727e06a5b",
+            "name": "Known issues",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2,
+            "position": [
+                -540,
+                120
+            ],
+            "webhookId": "f274fdf3-1562-4ab9-8619-a9875fcedc35",
+            "notes": "ChangeDetection Input"
+        }
+    ],
+    "connections": {
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Switch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Basic LLM Chain": {
+            "main": [
+                [
+                    {
+                        "node": "Telegram",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "OpenRouter Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    },
+                    {
+                        "node": "Basic LLM Chain1",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Basic LLM Chain1": {
+            "main": [
+                [
+                    {
+                        "node": "Telegram",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Switch": {
+            "main": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Basic LLM Chain1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Appinfo": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Known issues": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "4e654520-940a-43b0-a00a-af0189e85061",
+    "triggerCount": 2,
+    "tags": [
+        {
+            "createdAt": "2025-03-07T09:51:44.106Z",
+            "updatedAt": "2025-03-07T09:51:44.106Z",
+            "id": "hrujP4Cg0eJXvNqE",
+            "name": "splunk"
+        }
+    ]
+}
