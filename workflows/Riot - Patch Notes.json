@@ -1,46 +1,10 @@
 {
     "createdAt": "2024-09-25T21:20:52.431Z",
-    "updatedAt": "2025-03-30T18:21:21.000Z",
+    "updatedAt": "2025-04-15T08:08:51.000Z",
     "id": "c3QrzISqRohMxXPb",
     "name": "Riot - Patch Notes",
     "active": true,
     "nodes": [
-        {
-            "parameters": {
-                "resource": "message",
-                "guildId": {
-                    "__rl": true,
-                    "value": "702577437850206298",
-                    "mode": "list",
-                    "cachedResultName": "TiSnake",
-                    "cachedResultUrl": "https://discord.com/channels/702577437850206298"
-                },
-                "channelId": {
-                    "__rl": true,
-                    "value": "711584353703952435",
-                    "mode": "list",
-                    "cachedResultName": "wadabot",
-                    "cachedResultUrl": "https://discord.com/channels/702577437850206298/711584353703952435"
-                },
-                "content": "=Nouveau {{ $json.title }} - {{ $json.version_print }}\nhttps://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-{{ $json[\"version\"]  }}",
-                "options": {}
-            },
-            "id": "f5ed15fe-e825-4bae-8ebe-c576b53547fc",
-            "name": "Discord",
-            "type": "n8n-nodes-base.discord",
-            "typeVersion": 2,
-            "position": [
-                1180,
-                180
-            ],
-            "webhookId": "a5c3d857-dd13-45da-bcce-75a6b372c5c2",
-            "credentials": {
-                "discordBotApi": {
-                    "id": "xd5GBOjpfOLDyBSR",
-                    "name": "Discord Bot account"
-                }
-            }
-        },
         {
             "parameters": {
                 "mode": "runOnceForEachItem",
@@ -53,7 +17,7 @@
             "typeVersion": 2,
             "position": [
                 920,
-                180
+                160
             ]
         },
         {
@@ -68,44 +32,8 @@
             "typeVersion": 2,
             "position": [
                 920,
-                440
+                500
             ]
-        },
-        {
-            "parameters": {
-                "resource": "message",
-                "guildId": {
-                    "__rl": true,
-                    "value": "702577437850206298",
-                    "mode": "list",
-                    "cachedResultName": "TiSnake",
-                    "cachedResultUrl": "https://discord.com/channels/702577437850206298"
-                },
-                "channelId": {
-                    "__rl": true,
-                    "value": "711584353703952435",
-                    "mode": "list",
-                    "cachedResultName": "wadabot",
-                    "cachedResultUrl": "https://discord.com/channels/702577437850206298/711584353703952435"
-                },
-                "content": "=Nouveau {{ $json.title }} - {{ $json[\"version_print\"] }} \nhttps://www.leagueoflegends.com/fr-fr/news/game-updates/patch-{{ $json[\"version\"]  }}-notes/",
-                "options": {}
-            },
-            "id": "7cd78c7e-4407-4050-8904-22769da1beac",
-            "name": "Discord1",
-            "type": "n8n-nodes-base.discord",
-            "typeVersion": 2,
-            "position": [
-                1180,
-                440
-            ],
-            "webhookId": "64597e50-5a2a-41ea-80d5-72e19a94a44c",
-            "credentials": {
-                "discordBotApi": {
-                    "id": "xd5GBOjpfOLDyBSR",
-                    "name": "Discord Bot account"
-                }
-            }
         },
         {
             "parameters": {
@@ -206,6 +134,114 @@
                 340
             ],
             "webhookId": "420c36a1-0fda-4026-854f-0fcb56c43b94"
+        },
+        {
+            "parameters": {
+                "resource": "message",
+                "guildId": {
+                    "__rl": true,
+                    "value": "361960679042973697",
+                    "mode": "list",
+                    "cachedResultName": "Wada Corp",
+                    "cachedResultUrl": "https://discord.com/channels/361960679042973697"
+                },
+                "channelId": {
+                    "__rl": true,
+                    "value": "931920576057073714",
+                    "mode": "list",
+                    "cachedResultName": "🤖_bot",
+                    "cachedResultUrl": "https://discord.com/channels/361960679042973697/931920576057073714"
+                },
+                "content": "=Nouveau {{ $json.title }} - {{ $json[\"version_print\"] }} \nhttps://www.leagueoflegends.com/fr-fr/news/game-updates/patch-{{ $json[\"version\"]  }}-notes/",
+                "options": {}
+            },
+            "id": "7cd78c7e-4407-4050-8904-22769da1beac",
+            "name": "Wada Corp",
+            "type": "n8n-nodes-base.discord",
+            "typeVersion": 2,
+            "position": [
+                1180,
+                600
+            ],
+            "webhookId": "64597e50-5a2a-41ea-80d5-72e19a94a44c",
+            "credentials": {
+                "discordBotApi": {
+                    "id": "xd5GBOjpfOLDyBSR",
+                    "name": "Discord Bot account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "message",
+                "guildId": {
+                    "__rl": true,
+                    "value": "702577437850206298",
+                    "mode": "list",
+                    "cachedResultName": "TiSnake",
+                    "cachedResultUrl": "https://discord.com/channels/702577437850206298"
+                },
+                "channelId": {
+                    "__rl": true,
+                    "value": "711584353703952435",
+                    "mode": "list",
+                    "cachedResultName": "wadabot",
+                    "cachedResultUrl": "https://discord.com/channels/702577437850206298/711584353703952435"
+                },
+                "content": "=Nouveau {{ $json.title }} - {{ $json.version_print }}\nhttps://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-{{ $json[\"version\"]  }}",
+                "options": {}
+            },
+            "id": "f5ed15fe-e825-4bae-8ebe-c576b53547fc",
+            "name": "TiSnake1",
+            "type": "n8n-nodes-base.discord",
+            "typeVersion": 2,
+            "position": [
+                1180,
+                160
+            ],
+            "webhookId": "a5c3d857-dd13-45da-bcce-75a6b372c5c2",
+            "credentials": {
+                "discordBotApi": {
+                    "id": "xd5GBOjpfOLDyBSR",
+                    "name": "Discord Bot account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "message",
+                "guildId": {
+                    "__rl": true,
+                    "value": "702577437850206298",
+                    "mode": "list",
+                    "cachedResultName": "TiSnake",
+                    "cachedResultUrl": "https://discord.com/channels/702577437850206298"
+                },
+                "channelId": {
+                    "__rl": true,
+                    "value": "711584353703952435",
+                    "mode": "list",
+                    "cachedResultName": "wadabot",
+                    "cachedResultUrl": "https://discord.com/channels/702577437850206298/711584353703952435"
+                },
+                "content": "=Nouveau {{ $json.title }} - {{ $json.version_print }}\nhttps://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-{{ $json[\"version\"]  }}",
+                "options": {}
+            },
+            "id": "3015bd49-acfc-49c3-a64f-e073dda14120",
+            "name": "TiSnake2",
+            "type": "n8n-nodes-base.discord",
+            "typeVersion": 2,
+            "position": [
+                1180,
+                420
+            ],
+            "webhookId": "a5c3d857-dd13-45da-bcce-75a6b372c5c2",
+            "credentials": {
+                "discordBotApi": {
+                    "id": "xd5GBOjpfOLDyBSR",
+                    "name": "Discord Bot account"
+                }
+            }
         }
     ],
     "connections": {
@@ -213,7 +249,7 @@
             "main": [
                 [
                     {
-                        "node": "Discord",
+                        "node": "TiSnake1",
                         "type": "main",
                         "index": 0
                     }
@@ -224,7 +260,12 @@
             "main": [
                 [
                     {
-                        "node": "Discord1",
+                        "node": "Wada Corp",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "TiSnake2",
                         "type": "main",
                         "index": 0
                     }
@@ -276,7 +317,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "be5294ad-5eaa-4b58-8bd8-a2f5378e027d",
+    "versionId": "dfa82f57-1637-492b-bd2d-b672b93f202f",
     "triggerCount": 1,
     "tags": [
         {
