@@ -1,6 +1,6 @@
 {
     "createdAt": "2024-09-19T23:34:38.621Z",
-    "updatedAt": "2025-04-07T20:52:28.000Z",
+    "updatedAt": "2025-04-16T23:47:01.000Z",
     "id": "jTrTbAb3Q41qyoaM",
     "name": "My workflow",
     "active": false,
@@ -11,8 +11,8 @@
             "name": "When clicking ‘Test workflow’",
             "type": "n8n-nodes-base.manualTrigger",
             "position": [
-                20,
-                460
+                -40,
+                320
             ],
             "typeVersion": 1
         },
@@ -36,11 +36,38 @@
             "typeVersion": 4.2,
             "position": [
                 0,
-                0
+                60
             ],
             "id": "a9b20695-bab4-41be-a789-a32d4254cbf7",
             "name": "ConvertAPI HTTP Request",
             "extendsCredential": "convertApi"
+        },
+        {
+            "parameters": {
+                "path": "6c52acf9-ff8a-4160-a7e4-b76cf403ae0f"
+            },
+            "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
+            "typeVersion": 1,
+            "position": [
+                240,
+                -40
+            ],
+            "id": "ebac0d21-ad65-4bbc-bc07-fb6c8e406e07",
+            "name": "MCP Server Trigger",
+            "webhookId": "6c52acf9-ff8a-4160-a7e4-b76cf403ae0f"
+        },
+        {
+            "parameters": {
+                "sseEndpoint": "http://192.168.1.112/mcp-test/6c52acf9-ff8a-4160-a7e4-b76cf403ae0f/sse"
+            },
+            "type": "@n8n/n8n-nodes-langchain.mcpClientTool",
+            "typeVersion": 1,
+            "position": [
+                620,
+                -80
+            ],
+            "id": "3361596a-5342-4da9-b854-fd9d411ee84d",
+            "name": "MCP Client"
         }
     ],
     "connections": {
@@ -58,7 +85,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "90c6ef5b-bc2e-4f1b-8ead-e80920d172d1",
+    "versionId": "fd56bd41-1f58-48ec-bb50-c7c242ab03bd",
     "triggerCount": 0,
     "tags": []
 }
