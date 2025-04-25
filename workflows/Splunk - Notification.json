@@ -1,6 +1,6 @@
 {
     "createdAt": "2024-09-28T09:11:06.127Z",
-    "updatedAt": "2025-04-22T09:35:40.000Z",
+    "updatedAt": "2025-04-25T00:24:13.000Z",
     "id": "gTBkibbRHEFPmn1l",
     "name": "Splunk - Notification",
     "active": true,
@@ -305,6 +305,11 @@
                         "node": "If",
                         "type": "main",
                         "index": 0
+                    },
+                    {
+                        "node": "Telegram1",
+                        "type": "main",
+                        "index": 0
                     }
                 ]
             ]
@@ -329,7 +334,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "538ffc49-cc51-4b2c-90c9-7c81c6efd671",
+    "versionId": "17660500-673d-415a-9744-d9f499f6520e",
     "triggerCount": 2,
     "tags": [
         {
