@@ -1,6 +1,6 @@
 {
     "createdAt": "2024-09-19T23:34:38.621Z",
-    "updatedAt": "2025-04-16T23:47:01.000Z",
+    "updatedAt": "2025-05-15T13:05:15.000Z",
     "id": "jTrTbAb3Q41qyoaM",
     "name": "My workflow",
     "active": false,
@@ -11,8 +11,8 @@
             "name": "When clicking ‘Test workflow’",
             "type": "n8n-nodes-base.manualTrigger",
             "position": [
-                -40,
-                320
+                -400,
+                280
             ],
             "typeVersion": 1
         },
@@ -35,8 +35,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                0,
-                60
+                -300,
+                -80
             ],
             "id": "a9b20695-bab4-41be-a789-a32d4254cbf7",
             "name": "ConvertAPI HTTP Request",
@@ -68,12 +68,182 @@
             ],
             "id": "3361596a-5342-4da9-b854-fd9d411ee84d",
             "name": "MCP Client"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 1.9,
+            "position": [
+                280,
+                260
+            ],
+            "id": "4ddb1ac8-22ee-4282-afeb-2205f1da9416",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+            "typeVersion": 1,
+            "position": [
+                100,
+                540
+            ],
+            "id": "aaa19f1a-530a-44b6-9da3-f862dd92f4cf",
+            "name": "OpenRouter Chat Model",
+            "credentials": {
+                "openRouterApi": {
+                    "id": "eJL3ulSkeT8Q0dwT",
+                    "name": "OpenRouter account"
+                }
+            }
+        },
+        {
+            "parameters": {},
+            "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+            "typeVersion": 1.5,
+            "position": [
+                280,
+                560
+            ],
+            "id": "abd88013-ffa6-49c3-877c-c24a60bb2c59",
+            "name": "Redis Chat Memory"
+        },
+        {
+            "parameters": {
+                "base": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": ""
+                },
+                "table": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": ""
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.airtableTool",
+            "typeVersion": 2.1,
+            "position": [
+                420,
+                560
+            ],
+            "id": "0627d815-05d4-407b-a91b-8ca75dd79376",
+            "name": "Airtable"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.formTrigger",
+            "typeVersion": 2.2,
+            "position": [
+                -60,
+                340
+            ],
+            "id": "1f3452dc-01f7-47af-b4a3-ea1c5209dd7e",
+            "name": "On form submission",
+            "webhookId": "425cb5fa-4a19-43bd-b918-1c23e52f89ea"
+        },
+        {
+            "parameters": {
+                "resource": "product",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.shopify",
+            "typeVersion": 1,
+            "position": [
+                1080,
+                280
+            ],
+            "id": "e72ad358-31e9-42d9-8692-1f4ec970b8c7",
+            "name": "Shopify"
+        },
+        {
+            "parameters": {
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {},
+                        {},
+                        {}
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                820,
+                140
+            ],
+            "id": "e745790e-dddc-4067-b153-2ddeb05d6dbd",
+            "name": "HTTP Request"
         }
     ],
     "connections": {
         "When clicking ‘Test workflow’": {
             "main": [
                 []
+            ]
+        },
+        "OpenRouter Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Redis Chat Memory": {
+            "ai_memory": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_memory",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Airtable": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "On form submission": {
+            "main": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Shopify",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
             ]
         }
     },
@@ -85,7 +255,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "fd56bd41-1f58-48ec-bb50-c7c242ab03bd",
+    "versionId": "a105d59c-1fc0-4de7-b3ca-451ca2891ffe",
     "triggerCount": 0,
     "tags": []
 }
