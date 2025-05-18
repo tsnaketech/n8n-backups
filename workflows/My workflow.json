@@ -1,6 +1,6 @@
 {
     "createdAt": "2024-09-19T23:34:38.621Z",
-    "updatedAt": "2025-05-15T14:24:40.000Z",
+    "updatedAt": "2025-05-17T15:29:38.000Z",
     "id": "jTrTbAb3Q41qyoaM",
     "name": "My workflow",
     "active": false,
@@ -253,7 +253,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "94de1fef-3e58-4ecf-a9ee-b8052929fefc",
+    "versionId": "307b19d0-c303-4312-b239-6f65bf16fecb",
     "triggerCount": 0,
     "tags": []
 }
