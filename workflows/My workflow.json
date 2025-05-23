@@ -1,6 +1,6 @@
 {
     "createdAt": "2024-09-19T23:34:38.621Z",
-    "updatedAt": "2025-05-17T15:29:38.000Z",
+    "updatedAt": "2025-05-23T00:49:03.000Z",
     "id": "jTrTbAb3Q41qyoaM",
     "name": "My workflow",
     "active": false,
@@ -192,6 +192,32 @@
                     "name": "Telegram account"
                 }
             }
+        },
+        {
+            "parameters": {
+                "pollTimes": {
+                    "item": [
+                        {
+                            "mode": "everyMinute"
+                        }
+                    ]
+                },
+                "filters": {}
+            },
+            "type": "n8n-nodes-base.gmailTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "57fb1fb7-0447-4aec-aae4-0e2ada326558",
+            "name": "Gmail Trigger",
+            "credentials": {
+                "gmailOAuth2": {
+                    "id": "urD1e0Zl583iD3kM",
+                    "name": "Gmail account"
+                }
+            }
         }
     ],
     "connections": {
@@ -253,7 +279,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "307b19d0-c303-4312-b239-6f65bf16fecb",
+    "versionId": "184eff53-0bb4-4c30-9fcb-925af3de367d",
     "triggerCount": 0,
     "tags": []
 }
