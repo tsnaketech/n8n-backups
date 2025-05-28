@@ -1,0 +1,77 @@
+{
+    "createdAt": "2025-05-27T21:55:06.402Z",
+    "updatedAt": "2025-05-27T23:11:11.000Z",
+    "id": "kx94Z2Th3dyVsVrw",
+    "name": "Simple notification on Telegram",
+    "active": true,
+    "nodes": [
+        {
+            "parameters": {
+                "path": "simple-notification",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "aa795329-6fc0-4c2e-9b37-98b722f66cdf",
+            "name": "Webhook",
+            "webhookId": "4f7d2d03-1665-4186-a453-a5e6567abd68"
+        },
+        {
+            "parameters": {
+                "chatId": "1037310358",
+                "text": "={{ $json.body.diff }}",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                220,
+                0
+            ],
+            "id": "3e894bfb-62bb-4f57-9cab-26716d9289b1",
+            "name": "Telegram",
+            "webhookId": "e8f8b499-5646-41c2-9408-1ed9b4ae64fd",
+            "credentials": {
+                "telegramApi": {
+                    "id": "rUrqlq4srZZdKyG1",
+                    "name": "SimpleNotification"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Telegram",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "8403b836-d837-4bb8-bc9b-c578dc4bbeee",
+    "triggerCount": 1,
+    "tags": [
+        {
+            "createdAt": "2025-05-27T23:11:08.154Z",
+            "updatedAt": "2025-05-27T23:11:08.154Z",
+            "id": "RbrMFPQcaXrwH6iv",
+            "name": "notification"
+        }
+    ]
+}
