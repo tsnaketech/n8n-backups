@@ -1,6 +1,6 @@
 {
     "createdAt": "2024-09-25T21:20:52.431Z",
-    "updatedAt": "2025-04-15T08:08:51.000Z",
+    "updatedAt": "2025-05-27T10:27:10.000Z",
     "id": "c3QrzISqRohMxXPb",
     "name": "Riot - Patch Notes",
     "active": true,
@@ -224,7 +224,7 @@
                     "cachedResultName": "wadabot",
                     "cachedResultUrl": "https://discord.com/channels/702577437850206298/711584353703952435"
                 },
-                "content": "=Nouveau {{ $json.title }} - {{ $json.version_print }}\nhttps://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-{{ $json[\"version\"]  }}",
+                "content": "=Nouveau {{ $json.title }} - {{ $json[\"version_print\"] }} \nhttps://www.leagueoflegends.com/fr-fr/news/game-updates/patch-{{ $json[\"version\"]  }}-notes/",
                 "options": {}
             },
             "id": "3015bd49-acfc-49c3-a64f-e073dda14120",
@@ -317,7 +317,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "dfa82f57-1637-492b-bd2d-b672b93f202f",
+    "versionId": "d12a85e1-9c4c-45aa-a5c3-23d12cfc25bf",
     "triggerCount": 1,
     "tags": [
         {
