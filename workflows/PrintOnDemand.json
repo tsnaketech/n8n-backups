@@ -4,6 +4,7 @@
     "id": "tRFzsJxVrAlUqrrn",
     "name": "PrintOnDemand",
     "active": false,
+    "isArchived": false,
     "nodes": [],
     "connections": {},
     "settings": {
