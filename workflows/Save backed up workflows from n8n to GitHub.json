@@ -4,6 +4,7 @@
     "id": "YWECdarx8fM6a4Ss",
     "name": "Save backed up workflows from n8n to GitHub",
     "active": true,
+    "isArchived": false,
     "nodes": [
         {
             "parameters": {},
