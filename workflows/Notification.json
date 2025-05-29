@@ -1,0 +1,361 @@
+{
+    "createdAt": "2025-05-27T21:55:06.402Z",
+    "updatedAt": "2025-05-29T01:57:37.000Z",
+    "id": "kx94Z2Th3dyVsVrw",
+    "name": "Notification",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "simple-notification",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2,
+            "position": [
+                -100,
+                0
+            ],
+            "id": "aa795329-6fc0-4c2e-9b37-98b722f66cdf",
+            "name": "Webhook",
+            "webhookId": "4f7d2d03-1665-4186-a453-a5e6567abd68"
+        },
+        {
+            "parameters": {
+                "chatId": "1037310358",
+                "text": "={{ $json.body.diff }}",
+                "additionalFields": {
+                    "appendAttribution": false
+                }
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                500,
+                220
+            ],
+            "id": "3e894bfb-62bb-4f57-9cab-26716d9289b1",
+            "name": "Telegram",
+            "webhookId": "e8f8b499-5646-41c2-9408-1ed9b4ae64fd",
+            "credentials": {
+                "telegramApi": {
+                    "id": "rUrqlq4srZZdKyG1",
+                    "name": "SimpleNotification"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "loose",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json.body.snapshot }}",
+                                        "rightValue": "epic",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "contains"
+                                        },
+                                        "id": "9f41d976-dd20-4210-8652-991b7412b7fc"
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        }
+                    ]
+                },
+                "looseTypeValidation": true,
+                "options": {
+                    "fallbackOutput": "extra"
+                }
+            },
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 3.2,
+            "position": [
+                180,
+                0
+            ],
+            "id": "07dacf5a-9e19-4891-9142-311e88929ac2",
+            "name": "Switch"
+        },
+        {
+            "parameters": {
+                "language": "python",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport json\nconvert = json.loads(_input.first().json.body.snapshot)\nreturn convert"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                500,
+                -600
+            ],
+            "id": "808f4e25-6124-46d0-8c02-8202a7f49dc5",
+            "name": "Text to JSON"
+        },
+        {
+            "parameters": {
+                "language": "python",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfrom datetime import datetime, timedelta\nseven_days_ago = datetime.now() - timedelta(days=7)\ngames = []\nfor item in _input.all():\n  game = {}\n  time = datetime.strptime(item.json.effectiveDate, \"%Y-%m-%dT%H:%M:%S.%fZ\")\n  if time < datetime.now() and seven_days_ago < time:\n    game[\"title\"] = item.json.title\n    game[\"effectiveDate\"] = item.json.effectiveDate\n    \n    startDate = item.json.promotions.promotionalOffers[0].promotionalOffers[0].startDate\n    endDate = item.json.promotions.promotionalOffers[0].promotionalOffers[0].endDate\n    dt_startDate = datetime.strptime(startDate, \"%Y-%m-%dT%H:%M:%S.%fZ\")\n    dt_endDate = datetime.strptime(endDate, \"%Y-%m-%dT%H:%M:%S.%fZ\")\n    game[\"startDate\"] = dt_startDate.strftime(\"%B %d at %H:%M:%S\")\n    game[\"endDate\"] = dt_endDate.strftime(\"%B %d at %H:%M:%S\")\n    \n    game[\"image\"] = item.json.keyImages[1].url\n    games.append(game)\nreturn games"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                780,
+                -600
+            ],
+            "id": "bfd3caed-1193-4415-8c15-8d322522e253",
+            "name": "Get Free Games"
+        },
+        {
+            "parameters": {
+                "batchSize": "=1",
+                "options": {
+                    "reset": false
+                }
+            },
+            "type": "n8n-nodes-base.splitInBatches",
+            "typeVersion": 3,
+            "position": [
+                1040,
+                -600
+            ],
+            "id": "5d085f6a-9df8-42bf-97f4-796e9280b4fb",
+            "name": "Loop Over Items",
+            "executeOnce": false,
+            "retryOnFail": false,
+            "onError": "continueRegularOutput"
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.image }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1340,
+                -580
+            ],
+            "id": "e4dd9677-6867-496e-b5be-7879a4b36288",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "resource": "message",
+                "guildId": {
+                    "__rl": true,
+                    "value": "702577437850206298",
+                    "mode": "list",
+                    "cachedResultName": "TiSnake",
+                    "cachedResultUrl": "https://discord.com/channels/702577437850206298"
+                },
+                "channelId": {
+                    "__rl": true,
+                    "value": "711584353703952435",
+                    "mode": "list",
+                    "cachedResultName": "wadabot",
+                    "cachedResultUrl": "https://discord.com/channels/702577437850206298/711584353703952435"
+                },
+                "content": "=EpicGames FreeGames - From {{ $json.startDate }} to {{ $json.endDate }}\n\n**{{ $json.title }}**\n",
+                "options": {},
+                "files": {
+                    "values": [
+                        {}
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.discord",
+            "typeVersion": 2,
+            "position": [
+                1580,
+                -580
+            ],
+            "id": "0efafb46-16bd-4338-889e-f5bc42ac4662",
+            "name": "TiSnake",
+            "webhookId": "9976e035-5cf3-46c6-952b-42466e0ba250",
+            "credentials": {
+                "discordBotApi": {
+                    "id": "xd5GBOjpfOLDyBSR",
+                    "name": "Discord Bot account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "content": "## EpicGames - FreeGames\n",
+                "height": 400,
+                "width": 1380,
+                "color": 5
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                420,
+                -760
+            ],
+            "id": "2a4596fa-c936-4571-a74b-b24fc21b50c5",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "resource": "message",
+                "guildId": {
+                    "__rl": true,
+                    "value": "361960679042973697",
+                    "mode": "list",
+                    "cachedResultName": "Wada Corp",
+                    "cachedResultUrl": "https://discord.com/channels/361960679042973697"
+                },
+                "channelId": {
+                    "__rl": true,
+                    "value": "931920576057073714",
+                    "mode": "list",
+                    "cachedResultName": "🤖_bot",
+                    "cachedResultUrl": "https://discord.com/channels/361960679042973697/931920576057073714"
+                },
+                "content": "=EpicGames FreeGames - From {{ $json.startDate }} to {{ $json.endDate }}\n\n**{{ $json.title }}**\n",
+                "options": {},
+                "files": {
+                    "values": [
+                        {}
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.discord",
+            "typeVersion": 2,
+            "position": [
+                1580,
+                -740
+            ],
+            "id": "7a4a8e84-2698-4aaa-98b7-8746d5138fd5",
+            "name": "WadaCorp",
+            "webhookId": "9976e035-5cf3-46c6-952b-42466e0ba250",
+            "credentials": {
+                "discordBotApi": {
+                    "id": "xd5GBOjpfOLDyBSR",
+                    "name": "Discord Bot account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Webhook": {
+            "main": [
+                [
+                    {
+                        "node": "Switch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Switch": {
+            "main": [
+                [
+                    {
+                        "node": "Text to JSON",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Telegram",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Text to JSON": {
+            "main": [
+                [
+                    {
+                        "node": "Get Free Games",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Free Games": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Over Items",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Loop Over Items": {
+            "main": [
+                [],
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "main": [
+                [
+                    {
+                        "node": "TiSnake",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "WadaCorp",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "TiSnake": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Over Items",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "5d613464-fcc8-446f-b0e4-0a613a98ed79",
+    "triggerCount": 1,
+    "tags": [
+        {
+            "createdAt": "2025-05-27T23:11:08.154Z",
+            "updatedAt": "2025-05-27T23:11:08.154Z",
+            "id": "RbrMFPQcaXrwH6iv",
+            "name": "notification"
+        }
+    ]
+}
