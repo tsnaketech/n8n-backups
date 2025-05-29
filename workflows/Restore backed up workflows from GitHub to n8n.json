@@ -4,6 +4,7 @@
     "id": "xOTtK1CYu6OBwj9o",
     "name": "Restore backed up workflows from GitHub to n8n",
     "active": false,
+    "isArchived": false,
     "nodes": [
         {
             "parameters": {},
