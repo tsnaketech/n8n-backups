@@ -1,9 +1,10 @@
 {
     "createdAt": "2024-09-19T23:34:38.621Z",
-    "updatedAt": "2025-05-23T00:49:03.000Z",
+    "updatedAt": "2025-05-28T12:42:22.000Z",
     "id": "jTrTbAb3Q41qyoaM",
     "name": "My workflow",
     "active": false,
+    "isArchived": false,
     "nodes": [
         {
             "parameters": {},
@@ -49,8 +50,8 @@
             "type": "@n8n/n8n-nodes-langchain.mcpTrigger",
             "typeVersion": 1,
             "position": [
-                240,
-                -40
+                280,
+                -120
             ],
             "id": "ebac0d21-ad65-4bbc-bc07-fb6c8e406e07",
             "name": "MCP Server Trigger",
@@ -279,7 +280,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "184eff53-0bb4-4c30-9fcb-925af3de367d",
+    "versionId": "c56e3200-f82d-444d-9b2a-c4a874361a51",
     "triggerCount": 0,
     "tags": []
 }
