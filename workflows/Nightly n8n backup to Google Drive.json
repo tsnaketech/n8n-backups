@@ -1,9 +1,10 @@
 {
     "createdAt": "2025-04-06T14:53:11.801Z",
-    "updatedAt": "2025-04-14T23:10:25.000Z",
+    "updatedAt": "2025-05-28T15:26:54.000Z",
     "id": "hCb0B7jLmzY3khOX",
     "name": "Nightly n8n backup to Google Drive",
-    "active": true,
+    "active": false,
+    "isArchived": false,
     "nodes": [
         {
             "parameters": {
