@@ -4,6 +4,7 @@
     "id": "gTBkibbRHEFPmn1l",
     "name": "Splunk - Notification",
     "active": true,
+    "isArchived": false,
     "nodes": [
         {
             "parameters": {
