@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-05-27T21:55:06.402Z",
-    "updatedAt": "2025-05-29T01:57:37.000Z",
+    "updatedAt": "2025-06-04T23:33:27.000Z",
     "id": "kx94Z2Th3dyVsVrw",
     "name": "Notification",
     "active": true,
@@ -15,8 +15,8 @@
             "type": "n8n-nodes-base.webhook",
             "typeVersion": 2,
             "position": [
-                -100,
-                0
+                -140,
+                -300
             ],
             "id": "aa795329-6fc0-4c2e-9b37-98b722f66cdf",
             "name": "Webhook",
@@ -34,7 +34,7 @@
             "typeVersion": 1.2,
             "position": [
                 500,
-                220
+                -280
             ],
             "id": "3e894bfb-62bb-4f57-9cab-26716d9289b1",
             "name": "Telegram",
@@ -82,8 +82,8 @@
             "type": "n8n-nodes-base.switch",
             "typeVersion": 3.2,
             "position": [
-                180,
-                0
+                140,
+                -300
             ],
             "id": "07dacf5a-9e19-4891-9142-311e88929ac2",
             "name": "Switch"
@@ -246,6 +246,136 @@
                     "name": "Discord Bot account"
                 }
             }
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                -60,
+                60
+            ],
+            "id": "3ada0ba4-a7cb-4214-93dd-323a482b129f",
+            "name": "When clicking ‘Execute workflow’"
+        },
+        {
+            "parameters": {
+                "url": "https://store.steampowered.com/search/?maxprice=free&category1=998&specials=1&hidef2p=1&ndl=1",
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "text"
+                        }
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                220,
+                60
+            ],
+            "id": "9acd8a11-2390-49e3-bdd7-21ca6fe79df4",
+            "name": "HTTP Request1"
+        },
+        {
+            "parameters": {
+                "textsWithManipulations": {
+                    "textsWithManipulationsValues": [
+                        {
+                            "dataSources": {
+                                "dataSource": [
+                                    {
+                                        "text": "={{ $json.data }}",
+                                        "writeOperation": "toFile",
+                                        "mimeType": "text/html"
+                                    }
+                                ]
+                            },
+                            "manipulations": {
+                                "manipulation": [
+                                    {
+                                        "action": "replace",
+                                        "replaceMode": "regex",
+                                        "regex": "/\\n/g"
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-text-manipulation.textManipulation",
+            "typeVersion": 1,
+            "position": [
+                500,
+                60
+            ],
+            "id": "b5dac6c2-fcfe-4fda-85ff-fc811a21a8ac",
+            "name": "TextManipulation"
+        },
+        {
+            "parameters": {
+                "operation": "extractHtmlContent",
+                "sourceData": "binary",
+                "extractionValues": {
+                    "values": [
+                        {
+                            "key": "search_result",
+                            "cssSelector": "#search_result_container"
+                        }
+                    ]
+                },
+                "options": {
+                    "trimValues": true,
+                    "cleanUpText": false
+                }
+            },
+            "type": "n8n-nodes-base.html",
+            "typeVersion": 1.2,
+            "position": [
+                800,
+                60
+            ],
+            "id": "2c0ef3b0-a0d5-42d5-b0e5-77775d63c52a",
+            "name": "HTML3"
+        },
+        {
+            "parameters": {
+                "language": "python",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport re\nimport json\nfrom typing import List, Dict, Optional\n\ndef parse_steam_games(text: str) -> List[Dict]:\n    \"\"\"\n    Parse Steam games data from raw text format\n    \"\"\"\n    # Regex pour séparer les éléments (lookahead positif)\n    separator_pattern = r'(?=\\[https://shared\\.cloudflare\\.steamstatic\\.com/store_item_assets/steam/apps/)'\n    \n    # Séparer les éléments\n    elements = re.split(separator_pattern, text)\n    elements = [elem.strip() for elem in elements if elem.strip()]\n    \n    games = []\n    \n    for element in elements:\n        game_data = parse_single_game(element)\n        if game_data:\n            games.append(game_data)\n    \n    return games\n\ndef parse_single_game(element: str) -> Optional[Dict]:\n    \"\"\"\n    Parse a single game element\n    \"\"\"\n    lines = [line.strip() for line in element.split('\\n') if line.strip()]\n    \n    if len(lines) < 4:\n        return None\n    \n    try:\n        game = {}\n        \n        # Extract image URL et app ID\n        image_url_match = re.search(r'\\[https://shared\\.cloudflare\\.steamstatic\\.com/store_item_assets/steam/apps/(\\d+)/([^\\]]+)\\]', lines[0])\n        if image_url_match:\n            game['app_id'] = image_url_match.group(1)\n            game['image_url'] = lines[0].strip('[]')\n        \n        # Title (ligne après l'URL de l'image)\n        game['title'] = lines[1] if len(lines) > 1 else \"\"\n        \n        # Date (ligne après le titre)\n        game['date'] = lines[2] if len(lines) > 2 else \"\"\n        \n        # Parse discount, prices, and store URL\n        prices = []\n        discount = None\n        store_url = None\n        \n        for line in lines[3:]:\n            # Discount percentage\n            if re.match(r'-?\\d+%', line):\n                discount = line\n            # Price (format XX,XX€)\n            elif re.match(r'\\d+,\\d+€', line):\n                prices.append(line)\n            # Store URL\n            elif 'store.steampowered.com' in line:\n                store_url = line.strip('[]')\n        \n        game['discount'] = discount\n        game['original_price'] = prices[0] if len(prices) > 1 else None\n        game['current_price'] = prices[-1] if prices else None\n        game['store_url'] = store_url\n        \n        # Calculer si c'est gratuit\n        game['is_free'] = game['current_price'] == '0,00€'\n        \n        return game\n        \n    except Exception as e:\n        print(f\"Erreur lors du parsing: {e}\")\n        return None\n\n\ngames = parse_steam_games(_input.first().json.search_result)\n\nreturn games"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1080,
+                60
+            ],
+            "id": "e5836b5d-c65a-44e3-809b-18da60e1f358",
+            "name": "Code1"
+        },
+        {
+            "parameters": {
+                "authentication": "nocoDbApiToken",
+                "operation": "create",
+                "projectId": "p1zsm9ckegtx6k6",
+                "table": "ml8fpkjqhrhqwvb",
+                "dataToSend": "autoMapInputData"
+            },
+            "type": "n8n-nodes-base.nocoDb",
+            "typeVersion": 3,
+            "position": [
+                1300,
+                60
+            ],
+            "id": "fc6a8f66-9bba-4954-9559-0461db79343e",
+            "name": "NocoDB",
+            "credentials": {
+                "nocoDbApiToken": {
+                    "id": "2FSJIjcnclw7k16X",
+                    "name": "NocoDB Token account"
+                }
+            }
         }
     ],
     "connections": {
@@ -338,6 +468,61 @@
                     }
                 ]
             ]
+        },
+        "When clicking ‘Execute workflow’": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request1": {
+            "main": [
+                [
+                    {
+                        "node": "TextManipulation",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "TextManipulation": {
+            "main": [
+                [
+                    {
+                        "node": "HTML3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTML3": {
+            "main": [
+                [
+                    {
+                        "node": "Code1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code1": {
+            "main": [
+                [
+                    {
+                        "node": "NocoDB",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
         }
     },
     "settings": {
@@ -348,7 +533,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "5d613464-fcc8-446f-b0e4-0a613a98ed79",
+    "versionId": "a0d7552c-a788-40b4-b640-374367c8d604",
     "triggerCount": 1,
     "tags": [
         {
