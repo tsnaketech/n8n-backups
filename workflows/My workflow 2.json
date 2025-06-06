@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-06-04T23:34:23.911Z",
-    "updatedAt": "2025-06-04T23:56:33.000Z",
+    "updatedAt": "2025-06-05T23:46:05.000Z",
     "id": "j8xdbZGFknq9GQkB",
     "name": "My workflow 2",
     "active": false,
@@ -20,7 +20,7 @@
         {
             "parameters": {
                 "mode": "raw",
-                "jsonOutput": "{\n  \"NOCODB_API_TOKEN\": \"ndu_5y1cZyRtiwqXbzhpE70C8iGUiy9tlhe5KLVG\",\n  \"NOCODB_BASE_URL\": \"http://192.168.1.116:8146\", \n  \"TABLE_ID\": \"ml8fpkjqhrhqwvb\",\n  \"OLD_COLUMN_ID\": \"id\",\n  \"NEW_COLUMN_ID\": \"app_id\"\n}",
+                "jsonOutput": "{\n  \"NOCODB_API_TOKEN\": \"ndu_5y1cZyRtiwqXbzhpE70C8iGUiy9tlhe5KLVG\",\n  \"NOCODB_BASE_URL\": \"http://192.168.1.116:8146\", \n  \"TABLE_ID\": \"ml8fpkjqhrhqwvb\",\n  \"OLD_COLUMN_TITLE\": \"Id\",\n  \"NEW_COLUMN_TITLE\": \"app_id\"\n}",
                 "options": {}
             },
             "id": "cf34bff5-e455-4ab4-ae15-970448d1991a",
@@ -72,17 +72,20 @@
                     "conditions": [
                         {
                             "id": "condition1",
-                            "leftValue": "={{ $json.columns.find(col => col.id === {{ $node.Configuration.json.NEW_COLUMN_ID }}) }}",
+                            "leftValue": "={{ $json.columns.find(col => col.title === $('Configuration').item.json.NEW_COLUMN_TITLE) }}",
                             "rightValue": "",
                             "operator": {
                                 "type": "object",
-                                "operation": "notEmpty"
+                                "operation": "notEmpty",
+                                "singleValue": true
                             }
                         }
                     ],
                     "combinator": "and"
                 },
-                "options": {}
+                "options": {
+                    "looseTypeValidation": false
+                }
             },
             "id": "0ebfe7ba-9189-4558-b77a-a03db5c8055c",
             "name": "Validate New Column Exists",
@@ -96,15 +99,12 @@
         {
             "parameters": {
                 "method": "PATCH",
-                "url": "={{ $node.Configuration.json.NOCODB_BASE_URL }}/api/v1/db/meta/tables/{{ $node.Configuration.json.TABLE_ID }}/columns/{{ $node.Configuration.json.OLD_COLUMN_ID }}",
+                "url": "={{ $node.Configuration.json.NOCODB_BASE_URL }}/api/v2/meta/columns/{{ $json.current_schema.primary_key.id }}",
                 "authentication": "genericCredentialType",
                 "genericAuthType": "httpHeaderAuth",
                 "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {}
-                    ]
-                },
+                "specifyBody": "json",
+                "jsonBody": "=[ \n  {  \n    \"title\": \"{{ $json.current_schema.primary_key.title }}\",\n    \"pk\": \"false\",\n    \"un\": false\n  } \n] ",
                 "options": {}
             },
             "id": "fe8b2bbf-8598-4cc1-a010-7aa3d2363634",
@@ -113,21 +113,24 @@
             "typeVersion": 4,
             "position": [
                 460,
-                120
-            ]
+                200
+            ],
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "3sytPF58vLXwSQtC",
+                    "name": "Header Auth account"
+                }
+            }
         },
         {
             "parameters": {
                 "method": "PATCH",
-                "url": "={{ $node.Configuration.json.NOCODB_BASE_URL }}/api/v1/db/meta/tables/{{ $node.Configuration.json.TABLE_ID }}/columns/{{ $node.Configuration.json.NEW_COLUMN_ID }}",
+                "url": "={{ $node.Configuration.json.NOCODB_BASE_URL }}/api/v2/meta/columns/{{ $('Create Backup & Validate').item.json.current_schema.target_column.id }}",
                 "authentication": "genericCredentialType",
                 "genericAuthType": "httpHeaderAuth",
                 "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {}
-                    ]
-                },
+                "specifyBody": "json",
+                "jsonBody": "=[ \n  {  \n    \"title\": \"{{ $('Create Backup & Validate').item.json.current_schema.target_column.title }}\",\n    \"pk\": true,\n    \"rqd\": true,\n    \"un\": true\n  } \n] ",
                 "options": {}
             },
             "id": "5d113e91-e402-40af-87b6-b8c238e8260e",
@@ -136,12 +139,18 @@
             "typeVersion": 4,
             "position": [
                 680,
-                120
-            ]
+                200
+            ],
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "3sytPF58vLXwSQtC",
+                    "name": "Header Auth account"
+                }
+            }
         },
         {
             "parameters": {
-                "url": "={{ $node.Configuration.json.NOCODB_BASE_URL }}/api/v1/db/meta/tables/{{ $node.Configuration.json.TABLE_ID }}/columns",
+                "url": "={{ $node.Configuration.json.NOCODB_BASE_URL }}/api/v1/db/meta/tables/{{ $node.Configuration.json.TABLE_ID }}",
                 "authentication": "genericCredentialType",
                 "genericAuthType": "httpHeaderAuth",
                 "options": {}
@@ -152,12 +161,18 @@
             "typeVersion": 4,
             "position": [
                 900,
-                120
-            ]
+                200
+            ],
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "3sytPF58vLXwSQtC",
+                    "name": "Header Auth account"
+                }
+            }
         },
         {
             "parameters": {
-                "jsCode": "// Créer un rapport des modifications\nconst columns = $input.first().json.list;\nconst config = $node(\"Configuration\").json;\n\nconst oldPrimaryKey = columns.find(col => col.id === config.OLD_COLUMN_ID);\nconst newPrimaryKey = columns.find(col => col.id === config.NEW_COLUMN_ID);\n\nconst report = {\n  success: true,\n  timestamp: new Date().toISOString(),\n  table_id: config.TABLE_ID,\n  changes: {\n    old_primary_key: {\n      id: oldPrimaryKey?.id,\n      title: oldPrimaryKey?.title,\n      is_primary: oldPrimaryKey?.pk || false\n    },\n    new_primary_key: {\n      id: newPrimaryKey?.id,\n      title: newPrimaryKey?.title,\n      is_primary: newPrimaryKey?.pk || false\n    }\n  },\n  validation: {\n    old_pk_removed: !oldPrimaryKey?.pk,\n    new_pk_set: newPrimaryKey?.pk === true,\n    new_pk_required: newPrimaryKey?.rqd === true,\n    new_pk_unique: newPrimaryKey?.un === true\n  }\n};\n\nreturn { json: report };"
+                "jsCode": "// Créer un rapport des modifications\nconst columns = $input.first().json.columns;\nconst config = $('Configuration').first().json;\n\nconst oldPrimaryKey = columns.find(col => col.title === config.OLD_COLUMN_TITLE);\nconst newPrimaryKey = columns.find(col => col.title === config.NEW_COLUMN_TITLE);\n\nconst report = {\n  success: true,\n  timestamp: new Date().toISOString(),\n  table_id: config.TABLE_ID,\n  changes: {\n    old_primary_key: {\n      id: oldPrimaryKey?.id,\n      title: oldPrimaryKey?.title,\n      is_primary: oldPrimaryKey?.pk || false\n    },\n    new_primary_key: {\n      id: newPrimaryKey?.id,\n      title: newPrimaryKey?.title,\n      is_primary: newPrimaryKey?.pk || false\n    }\n  },\n  validation: {\n    old_pk_removed: !oldPrimaryKey?.pk,\n    new_pk_set: newPrimaryKey?.pk === true,\n    new_pk_required: newPrimaryKey?.rqd === true,\n    new_pk_unique: newPrimaryKey?.un === true\n  }\n};\n\nreturn { json: report };"
             },
             "id": "7ec89ec3-0e3f-49b7-9fa1-0a218c80a937",
             "name": "Generate Report",
@@ -165,7 +180,7 @@
             "typeVersion": 2,
             "position": [
                 1120,
-                120
+                200
             ]
         },
         {
@@ -181,7 +196,7 @@
         },
         {
             "parameters": {
-                "jsCode": "// Backup de la configuration actuelle avant modification\nconst columns = $input.first().json.list;\nconst config = $node(\"Configuration\").json;\n\nconst currentPrimaryKey = columns.find(col => col.pk === true);\nconst targetColumn = columns.find(col => col.id === config.NEW_COLUMN_ID);\n\nconst backup = {\n  timestamp: new Date().toISOString(),\n  table_id: config.TABLE_ID,\n  current_schema: {\n    primary_key: currentPrimaryKey,\n    target_column: targetColumn,\n    all_columns: columns.map(col => ({\n      id: col.id,\n      title: col.title,\n      uidt: col.uidt,\n      pk: col.pk,\n      rqd: col.rqd,\n      un: col.un\n    }))\n  },\n  validation_checks: {\n    target_column_exists: !!targetColumn,\n    target_has_unique_constraint: targetColumn?.un === true,\n    target_is_required: targetColumn?.rqd === true,\n    current_pk_column: currentPrimaryKey?.title\n  }\n};\n\n// Vérifications de sécurité\nif (!targetColumn) {\n  throw new Error(`Colonne cible ${config.NEW_COLUMN_ID} introuvable`);\n}\n\nif (targetColumn.pk === true) {\n  throw new Error(`La colonne ${targetColumn.title} est déjà la clé primaire`);\n}\n\nreturn { json: backup };"
+                "jsCode": "// Backup de la configuration actuelle avant modification\nconst columns = $input.first().json.columns;\nconst config = $('Configuration').first().json;\n\nconst currentPrimaryKey = columns.find(col => col.pk === true);\nconst targetColumn = columns.find(col => col.title === config.NEW_COLUMN_TITLE);\n\nconst backup = {\n  timestamp: new Date().toISOString(),\n  table_id: config.TABLE_ID,\n  table_name: $input.first().json.table_name,\n  current_schema: {\n    primary_key: currentPrimaryKey,\n    target_column: targetColumn,\n    all_columns: columns.map(col => ({\n      id: col.id,\n      title: col.title,\n      uidt: col.uidt,\n      pk: col.pk,\n      rqd: col.rqd,\n      un: col.un\n    }))\n  },\n  validation_checks: {\n    target_column_exists: !!targetColumn,\n    target_has_unique_constraint: targetColumn?.un === true,\n    target_is_required: targetColumn?.rqd === true,\n    current_pk_column: currentPrimaryKey?.title\n  }\n};\n\n// Vérifications de sécurité\nif (!targetColumn) {\n  throw new Error(`Colonne cible ${config.NEW_COLUMN_TITLE} introuvable`);\n}\n\nif (targetColumn.pk === true) {\n  throw new Error(`La colonne ${targetColumn.title} est déjà la clé primaire`);\n}\n\nreturn { json: backup };"
             },
             "id": "58117d3a-170a-4f9a-9beb-f821c05a4efe",
             "name": "Create Backup & Validate",
@@ -296,7 +311,7 @@
     "staticData": null,
     "meta": null,
     "pinData": {},
-    "versionId": "68c9fa41-ebf1-4c86-b72d-199032ec9f14",
+    "versionId": "698afa33-4427-4422-8a82-0ff116ffea4c",
     "triggerCount": 0,
     "tags": []
 }
