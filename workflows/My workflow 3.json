@@ -1,0 +1,439 @@
+{
+    "createdAt": "2025-06-05T23:46:55.974Z",
+    "updatedAt": "2025-06-05T23:58:04.000Z",
+    "id": "VKYpGCCiItx12YaV",
+    "name": "My workflow 3",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {},
+            "id": "228b8fa1-63ff-41c1-b65e-07d9fe4c8563",
+            "name": "When clicking 'Execute Workflow'",
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                240,
+                -80
+            ]
+        },
+        {
+            "parameters": {
+                "mode": "raw",
+                "jsonOutput": "{\n  \"NOCODB_API_TOKEN\": \"ndu_5y1cZyRtiwqXbzhpE70C8iGUiy9tlhe5KLVG\",\n  \"NOCODB_BASE_URL\": \"http://192.168.1.116:8146\", \n  \"BASE_ID\": \"p1zsm9ckegtx6k6\",\n  \"TABLE_NAME\": \"StreamGames\",\n  \"NEW_PRIMARY_KEY_COLUMN\": \"app_id\",\n  \"NEW_PRIMARY_KEY_TYPE\": \"SingleLineText\"\n}",
+                "options": {}
+            },
+            "id": "75b8a598-8506-4dd2-879d-9a7a9b9dbe7e",
+            "name": "Configuration",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3,
+            "position": [
+                460,
+                -80
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{ $node.Configuration.json.NOCODB_BASE_URL }}/api/v2/meta/bases/{{ $node.Configuration.json.BASE_ID }}/tables",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "options": {}
+            },
+            "id": "f149d8b8-1173-439d-81ea-c860badad017",
+            "name": "Get All Tables",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                680,
+                -80
+            ],
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "3sytPF58vLXwSQtC",
+                    "name": "Header Auth account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsCode": "// Trouver la table par nom\nconst tables = $input.first().json.list;\nconst config = $('Configuration').first().json.list;\n\nconst targetTable = tables.find(table => table.table_name === config.TABLE_NAME);\n\nif (!targetTable) {\n  throw new Error(`Table '${config.TABLE_NAME}' introuvable dans la base`);\n}\n\nreturn {\n  json: {\n    table_id: targetTable.id,\n    table_name: targetTable.table_name,\n    table_title: targetTable.title,\n    found: true\n  }\n};"
+            },
+            "id": "41c0bf32-379b-43f6-b386-04bfa1cf2ff1",
+            "name": "Find Target Table",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                900,
+                -80
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{ $node.Configuration.json.NOCODB_BASE_URL }}/api/v2/meta/bases/{{ $node.Configuration.json.BASE_ID }}/tables/{{ $json.table_id }}/columns",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "options": {}
+            },
+            "id": "88aa4368-c029-466f-bb34-4cf6deabeaea",
+            "name": "Get Table Schema",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1120,
+                -80
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{ $node.Configuration.json.NOCODB_BASE_URL }}/api/v2/tables/{{ $node['Find Target Table'].json.table_id }}/records",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "limit",
+                            "value": "10000"
+                        },
+                        {
+                            "name": "offset",
+                            "value": "0"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "687df6b9-e0ac-4551-ad8f-36dc36589808",
+            "name": "Backup All Data",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1340,
+                -80
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Créer la nouvelle structure de table avec la nouvelle clé primaire\nconst columns = $node('Get Table Schema').json.list;\nconst tableInfo = $node('Find Target Table').json;\nconst config = $node('Configuration').json;\nconst data = $input.first().json;\n\n// Filtrer les colonnes système\nconst userColumns = columns.filter(col => \n  !col.system && \n  col.column_name !== 'id' && \n  col.column_name !== 'created_at' && \n  col.column_name !== 'updated_at'\n);\n\n// Créer la nouvelle structure avec la nouvelle PK en premier\nconst newTableStructure = {\n  table_name: `${tableInfo.table_name}_new_${Date.now()}`,\n  title: `${tableInfo.table_title} (New PK)`,\n  columns: [\n    {\n      column_name: config.NEW_PRIMARY_KEY_COLUMN,\n      title: config.NEW_PRIMARY_KEY_COLUMN,\n      uidt: config.NEW_PRIMARY_KEY_TYPE,\n      pk: true,\n      rqd: true,\n      unique: true\n    },\n    ...userColumns.map(col => ({\n      column_name: col.column_name,\n      title: col.title,\n      uidt: col.uidt,\n      rqd: col.rqd || false,\n      unique: col.unique || false,\n      pk: false, // Pas de PK multiple\n      ...(col.dtxp && { dtxp: col.dtxp }),\n      ...(col.dtxs && { dtxs: col.dtxs }),\n      ...(col.cc && { cc: col.cc }),\n      ...(col.cdf && { cdf: col.cdf })\n    }))\n  ]\n};\n\nreturn {\n  json: {\n    new_table_structure: newTableStructure,\n    original_data: data,\n    original_columns: columns,\n    backup_info: {\n      original_table_id: tableInfo.table_id,\n      original_table_name: tableInfo.table_name,\n      record_count: data.list ? data.list.length : 0,\n      timestamp: new Date().toISOString()\n    }\n  }\n};"
+            },
+            "id": "39be362d-d830-40a8-9db7-6c7de8a01d8b",
+            "name": "Prepare New Table Structure",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1560,
+                -80
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $node.Configuration.json.NOCODB_BASE_URL }}/api/v2/meta/bases/{{ $node.Configuration.json.BASE_ID }}/tables",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {}
+                    ]
+                },
+                "options": {}
+            },
+            "id": "142102e2-2e63-417e-a0a0-5a2bbb6e8c4a",
+            "name": "Create New Table",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1780,
+                -80
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Préparer les données pour l'insertion dans la nouvelle table\nconst newTableInfo = $input.first().json;\nconst backupData = $node('Prepare New Table Structure').json;\nconst config = $node('Configuration').json;\n\nif (!backupData.original_data.list || backupData.original_data.list.length === 0) {\n  return {\n    json: {\n      message: \"Aucune donnée à migrer\",\n      new_table_id: newTableInfo.id,\n      records_to_migrate: 0\n    }\n  };\n}\n\n// Générer des valeurs pour la nouvelle clé primaire si nécessaire\nconst records = backupData.original_data.list.map((record, index) => {\n  const newRecord = { ...record };\n  \n  // Supprimer l'ancienne clé primaire 'id' si elle existe\n  delete newRecord.id;\n  delete newRecord.Id;\n  \n  // Ajouter une valeur pour la nouvelle clé primaire si elle n'existe pas\n  if (!newRecord[config.NEW_PRIMARY_KEY_COLUMN]) {\n    // Générer une valeur unique basée sur l'index et timestamp\n    switch (config.NEW_PRIMARY_KEY_TYPE) {\n      case 'SingleLineText':\n        newRecord[config.NEW_PRIMARY_KEY_COLUMN] = `record_${index + 1}_${Date.now()}`;\n        break;\n      case 'Number':\n        newRecord[config.NEW_PRIMARY_KEY_COLUMN] = index + 1;\n        break;\n      case 'AutoNumber':\n        // AutoNumber se gère automatiquement\n        break;\n      default:\n        newRecord[config.NEW_PRIMARY_KEY_COLUMN] = `${index + 1}`;\n    }\n  }\n  \n  return newRecord;\n});\n\nreturn {\n  json: {\n    new_table_id: newTableInfo.id,\n    new_table_name: newTableInfo.table_name,\n    records_to_migrate: records.length,\n    prepared_records: records,\n    migration_ready: true\n  }\n};"
+            },
+            "id": "3ae2b4b0-6c5a-4014-87d7-aa40a8323cb0",
+            "name": "Prepare Data Migration",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                2000,
+                -80
+            ]
+        },
+        {
+            "parameters": {
+                "batchSize": 100,
+                "options": {}
+            },
+            "id": "0cad0a4b-bc4b-4838-83b0-108f32700d9c",
+            "name": "Split Records into Batches",
+            "type": "n8n-nodes-base.splitInBatches",
+            "typeVersion": 3,
+            "position": [
+                2220,
+                -80
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "={{ $node['Prepare Data Migration'].json.new_table_id ? $node.Configuration.json.NOCODB_BASE_URL + '/api/v2/tables/' + $node['Prepare Data Migration'].json.new_table_id + '/records' : '' }}",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {}
+                    ]
+                },
+                "options": {}
+            },
+            "id": "58b9045d-512d-4624-9440-55ad31b9a864",
+            "name": "Insert Data Batch",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                2440,
+                -80
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Attendre que tous les lots soient traités\nconst allBatches = $input.all();\nconst migrationInfo = $node('Prepare Data Migration').json;\n\nlet totalInserted = 0;\nlet errors = [];\n\nallBatches.forEach((batch, index) => {\n  if (batch.json && batch.json.list) {\n    totalInserted += batch.json.list.length;\n  } else if (batch.json && batch.json.error) {\n    errors.push(`Batch ${index + 1}: ${batch.json.error}`);\n  }\n});\n\nconst migrationReport = {\n  success: errors.length === 0,\n  migration_completed: new Date().toISOString(),\n  new_table_id: migrationInfo.new_table_id,\n  new_table_name: migrationInfo.new_table_name,\n  statistics: {\n    total_records_expected: migrationInfo.records_to_migrate,\n    total_records_inserted: totalInserted,\n    batches_processed: allBatches.length,\n    errors_count: errors.length\n  },\n  errors: errors,\n  next_steps: [\n    \"1. Vérifiez les données dans la nouvelle table\",\n    \"2. Mettez à jour vos applications pour utiliser la nouvelle table\",\n    \"3. Supprimez l'ancienne table quand vous êtes sûr\"\n  ]\n};\n\nreturn { json: migrationReport };"
+            },
+            "id": "6b74807b-db24-4545-bbbe-3f844c536933",
+            "name": "Generate Migration Report",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                2660,
+                -80
+            ]
+        },
+        {
+            "parameters": {
+                "method": "PATCH",
+                "url": "={{ $node.Configuration.json.NOCODB_BASE_URL }}/api/v2/meta/bases/{{ $node.Configuration.json.BASE_ID }}/tables/{{ $node['Find Target Table'].json.table_id }}",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {}
+                    ]
+                },
+                "options": {}
+            },
+            "id": "1374a1f4-9004-4e05-8527-0010b51b2d37",
+            "name": "Rename Original Table",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                2880,
+                -80
+            ]
+        },
+        {
+            "parameters": {
+                "method": "PATCH",
+                "url": "={{ $node.Configuration.json.NOCODB_BASE_URL }}/api/v2/meta/bases/{{ $node.Configuration.json.BASE_ID }}/tables/{{ $node['Generate Migration Report'].json.new_table_id }}",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {}
+                    ]
+                },
+                "options": {}
+            },
+            "id": "c29e4f01-52d4-4542-a306-d3b789323d00",
+            "name": "Rename New Table to Original Name",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                3100,
+                -80
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Rapport final complet\nconst migrationReport = $node('Generate Migration Report').json;\nconst originalTableRename = $node('Rename Original Table').json;\nconst newTableRename = $input.first().json;\n\nconst finalReport = {\n  ...migrationReport,\n  table_swap_completed: true,\n  final_status: {\n    new_primary_key_column: $node('Configuration').json.NEW_PRIMARY_KEY_COLUMN,\n    original_table_backed_up: true,\n    new_table_active: true,\n    original_table_backup_name: originalTableRename.table_name,\n    active_table_name: newTableRename.table_name\n  },\n  completion_timestamp: new Date().toISOString(),\n  success_message: \"✅ Migration terminée avec succès!\"\n};\n\nreturn { json: finalReport };"
+            },
+            "id": "64b1a887-e3df-4145-83a0-801ecbdd11d9",
+            "name": "Final Report",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                3320,
+                -80
+            ]
+        }
+    ],
+    "connections": {
+        "When clicking 'Execute Workflow'": {
+            "main": [
+                [
+                    {
+                        "node": "Configuration",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Configuration": {
+            "main": [
+                [
+                    {
+                        "node": "Get All Tables",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get All Tables": {
+            "main": [
+                [
+                    {
+                        "node": "Find Target Table",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Find Target Table": {
+            "main": [
+                [
+                    {
+                        "node": "Get Table Schema",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Table Schema": {
+            "main": [
+                [
+                    {
+                        "node": "Backup All Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Backup All Data": {
+            "main": [
+                [
+                    {
+                        "node": "Prepare New Table Structure",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Prepare New Table Structure": {
+            "main": [
+                [
+                    {
+                        "node": "Create New Table",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create New Table": {
+            "main": [
+                [
+                    {
+                        "node": "Prepare Data Migration",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Prepare Data Migration": {
+            "main": [
+                [
+                    {
+                        "node": "Split Records into Batches",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Split Records into Batches": {
+            "main": [
+                [
+                    {
+                        "node": "Insert Data Batch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Insert Data Batch": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Migration Report",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Migration Report": {
+            "main": [
+                [
+                    {
+                        "node": "Rename Original Table",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Rename Original Table": {
+            "main": [
+                [
+                    {
+                        "node": "Rename New Table to Original Name",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Rename New Table to Original Name": {
+            "main": [
+                [
+                    {
+                        "node": "Final Report",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "5a3d2003-c1c8-4778-aad9-ff7fc1fa4547",
+    "triggerCount": 0,
+    "tags": []
+}
