@@ -1,0 +1,19 @@
+{
+    "createdAt": "2025-06-06T20:25:30.273Z",
+    "updatedAt": "2025-06-06T20:25:30.273Z",
+    "id": "YPjY5Fm5h3SpijZI",
+    "name": "Tiktok",
+    "active": false,
+    "isArchived": false,
+    "nodes": [],
+    "connections": {},
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "19cfc042-6aaf-46fc-8872-d7676bcfd413",
+    "triggerCount": 0,
+    "tags": []
+}
