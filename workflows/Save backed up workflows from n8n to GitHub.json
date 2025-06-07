@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-04-06T15:57:03.917Z",
-    "updatedAt": "2025-04-06T22:25:39.000Z",
+    "updatedAt": "2025-06-06T20:25:51.000Z",
     "id": "YWECdarx8fM6a4Ss",
     "name": "Save backed up workflows from n8n to GitHub",
     "active": true,
@@ -219,8 +219,8 @@
             "name": "Error output to normal output",
             "type": "n8n-nodes-base.noOp",
             "position": [
-                1780,
-                520
+                1800,
+                460
             ],
             "typeVersion": 1
         },
@@ -450,6 +450,7 @@
             ],
             "id": "810b5345-f389-440d-b84e-1842abd1bda0",
             "name": "Create file",
+            "webhookId": "3630d7df-c834-461e-983a-3d6e116094fe",
             "credentials": {
                 "githubApi": {
                     "id": "tn3ndHG3IRtsw5oS",
@@ -489,6 +490,7 @@
             ],
             "id": "cef0f31d-6f23-4c3c-a430-d4976b82bc2a",
             "name": "New file version",
+            "webhookId": "6f171c4e-f41a-4db7-922f-386667eaaeb4",
             "credentials": {
                 "githubApi": {
                     "id": "tn3ndHG3IRtsw5oS",
@@ -522,6 +524,7 @@
             ],
             "id": "becf1e4a-5fb1-4ed8-96d4-4407862b6e88",
             "name": "Get file",
+            "webhookId": "fdbc7f30-e74c-41ce-8cab-f8ce3e8a5c9b",
             "credentials": {
                 "githubApi": {
                     "id": "tn3ndHG3IRtsw5oS",
@@ -823,7 +826,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "a2a944bd-e590-4a7f-96cf-550459a6602f",
+    "versionId": "88623763-9cea-4f13-b682-30a419641333",
     "triggerCount": 1,
     "tags": [
         {
