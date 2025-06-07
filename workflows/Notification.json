@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-05-27T21:55:06.402Z",
-    "updatedAt": "2025-06-04T23:33:27.000Z",
+    "updatedAt": "2025-06-06T20:24:02.000Z",
     "id": "kx94Z2Th3dyVsVrw",
     "name": "Notification",
     "active": true,
@@ -33,7 +33,7 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                500,
+                1740,
                 -280
             ],
             "id": "3e894bfb-62bb-4f57-9cab-26716d9289b1",
@@ -195,7 +195,7 @@
                 "content": "## EpicGames - FreeGames\n",
                 "height": 400,
                 "width": 1380,
-                "color": 5
+                "color": 6
             },
             "type": "n8n-nodes-base.stickyNote",
             "typeVersion": 1,
@@ -252,11 +252,175 @@
             "type": "n8n-nodes-base.manualTrigger",
             "typeVersion": 1,
             "position": [
-                -60,
+                -160,
                 60
             ],
             "id": "3ada0ba4-a7cb-4214-93dd-323a482b129f",
             "name": "When clicking ‘Execute workflow’"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "57e84377-4471-478a-94f7-cf270e2d5ec7",
+                            "leftValue": "={{  $('Get Games Saved').all() }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "array",
+                                "operation": "empty",
+                                "singleValue": true
+                            }
+                        },
+                        {
+                            "id": "403006a5-8d7b-43b2-829c-9e13d37bbb7a",
+                            "leftValue": "={{  $('Get Games Saved').all().filter(item => item.json.app_id === $json.app_id ) }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "array",
+                                "operation": "empty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "or"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                1300,
+                180
+            ],
+            "id": "eedc8463-0347-4ae5-93a7-7301869695f8",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitInBatches",
+            "typeVersion": 3,
+            "position": [
+                1040,
+                160
+            ],
+            "id": "61c4e3b2-b96a-4262-be2c-107eca067ee1",
+            "name": "Loop Over Items1"
+        },
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "triggerAtHour": 18
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -160,
+                240
+            ],
+            "id": "61fa984c-2d29-45b5-b545-a964624c72e7",
+            "name": "Schedule Trigger"
+        },
+        {
+            "parameters": {
+                "resource": "message",
+                "guildId": {
+                    "__rl": true,
+                    "value": "702577437850206298",
+                    "mode": "list",
+                    "cachedResultName": "TiSnake",
+                    "cachedResultUrl": "https://discord.com/channels/702577437850206298"
+                },
+                "channelId": {
+                    "__rl": true,
+                    "value": "711584353703952435",
+                    "mode": "list",
+                    "cachedResultName": "wadabot",
+                    "cachedResultUrl": "https://discord.com/channels/702577437850206298/711584353703952435"
+                },
+                "content": "=SteamGames FreeGames - {{ $json.current_price }}\n\n**{{ $json.title }}**\n\n{{ $json.store_url }}\n",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.discord",
+            "typeVersion": 2,
+            "position": [
+                1840,
+                60
+            ],
+            "id": "f6a6eb22-e664-4b4b-b03f-e077d4045ac9",
+            "name": "TiSnake1",
+            "webhookId": "9976e035-5cf3-46c6-952b-42466e0ba250",
+            "credentials": {
+                "discordBotApi": {
+                    "id": "xd5GBOjpfOLDyBSR",
+                    "name": "Discord Bot account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "content": "## SteamGames - FreeGames\n",
+                "height": 580,
+                "width": 2280,
+                "color": 5
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -260,
+                -120
+            ],
+            "id": "52f5a1d3-fb8a-47ec-b44e-8f482324ed05",
+            "name": "Sticky Note1"
+        },
+        {
+            "parameters": {
+                "resource": "message",
+                "guildId": {
+                    "__rl": true,
+                    "value": "361960679042973697",
+                    "mode": "list",
+                    "cachedResultName": "Wada Corp",
+                    "cachedResultUrl": "https://discord.com/channels/361960679042973697"
+                },
+                "channelId": {
+                    "__rl": true,
+                    "value": "931920576057073714",
+                    "mode": "list",
+                    "cachedResultName": "🤖_bot",
+                    "cachedResultUrl": "https://discord.com/channels/361960679042973697/931920576057073714"
+                },
+                "content": "=SteamGames FreeGames - {{ $json.current_price }}\n\n**{{ $json.title }}**\n\n{{ $json.store_url }}\n",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.discord",
+            "typeVersion": 2,
+            "position": [
+                1840,
+                -100
+            ],
+            "id": "66073280-fd18-478e-a8e9-d115b178c250",
+            "name": "WadaCorp1",
+            "webhookId": "9976e035-5cf3-46c6-952b-42466e0ba250",
+            "credentials": {
+                "discordBotApi": {
+                    "id": "xd5GBOjpfOLDyBSR",
+                    "name": "Discord Bot account"
+                }
+            }
         },
         {
             "parameters": {
@@ -272,11 +436,11 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                220,
-                60
+                80,
+                160
             ],
             "id": "9acd8a11-2390-49e3-bdd7-21ca6fe79df4",
-            "name": "HTTP Request1"
+            "name": "Steam FreeGames"
         },
         {
             "parameters": {
@@ -308,11 +472,11 @@
             "type": "n8n-nodes-text-manipulation.textManipulation",
             "typeVersion": 1,
             "position": [
-                500,
-                60
+                260,
+                160
             ],
             "id": "b5dac6c2-fcfe-4fda-85ff-fc811a21a8ac",
-            "name": "TextManipulation"
+            "name": "Generate HTML File"
         },
         {
             "parameters": {
@@ -334,42 +498,89 @@
             "type": "n8n-nodes-base.html",
             "typeVersion": 1.2,
             "position": [
-                800,
-                60
+                440,
+                160
             ],
             "id": "2c0ef3b0-a0d5-42d5-b0e5-77775d63c52a",
-            "name": "HTML3"
+            "name": "Get Search Result"
+        },
+        {
+            "parameters": {
+                "authentication": "nocoDbApiToken",
+                "operation": "getAll",
+                "projectId": "p1zsm9ckegtx6k6",
+                "table": "mourgo27chrw6cp",
+                "returnAll": true,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.nocoDb",
+            "typeVersion": 3,
+            "position": [
+                740,
+                60
+            ],
+            "id": "8a96ae9f-3966-4b99-8a0c-838c163928ad",
+            "name": "Get Games Saved",
+            "credentials": {
+                "nocoDbApiToken": {
+                    "id": "2FSJIjcnclw7k16X",
+                    "name": "NocoDB Token account"
+                }
+            }
         },
         {
             "parameters": {
                 "language": "python",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport re\nimport json\nfrom typing import List, Dict, Optional\n\ndef parse_steam_games(text: str) -> List[Dict]:\n    \"\"\"\n    Parse Steam games data from raw text format\n    \"\"\"\n    # Regex pour séparer les éléments (lookahead positif)\n    separator_pattern = r'(?=\\[https://shared\\.cloudflare\\.steamstatic\\.com/store_item_assets/steam/apps/)'\n    \n    # Séparer les éléments\n    elements = re.split(separator_pattern, text)\n    elements = [elem.strip() for elem in elements if elem.strip()]\n    \n    games = []\n    \n    for element in elements:\n        game_data = parse_single_game(element)\n        if game_data:\n            games.append(game_data)\n    \n    return games\n\ndef parse_single_game(element: str) -> Optional[Dict]:\n    \"\"\"\n    Parse a single game element\n    \"\"\"\n    lines = [line.strip() for line in element.split('\\n') if line.strip()]\n    \n    if len(lines) < 4:\n        return None\n    \n    try:\n        game = {}\n        \n        # Extract image URL et app ID\n        image_url_match = re.search(r'\\[https://shared\\.cloudflare\\.steamstatic\\.com/store_item_assets/steam/apps/(\\d+)/([^\\]]+)\\]', lines[0])\n        if image_url_match:\n            game['app_id'] = image_url_match.group(1)\n            game['image_url'] = lines[0].strip('[]')\n        \n        # Title (ligne après l'URL de l'image)\n        game['title'] = lines[1] if len(lines) > 1 else \"\"\n        \n        # Date (ligne après le titre)\n        game['date'] = lines[2] if len(lines) > 2 else \"\"\n        \n        # Parse discount, prices, and store URL\n        prices = []\n        discount = None\n        store_url = None\n        \n        for line in lines[3:]:\n            # Discount percentage\n            if re.match(r'-?\\d+%', line):\n                discount = line\n            # Price (format XX,XX€)\n            elif re.match(r'\\d+,\\d+€', line):\n                prices.append(line)\n            # Store URL\n            elif 'store.steampowered.com' in line:\n                store_url = line.strip('[]')\n        \n        game['discount'] = discount\n        game['original_price'] = prices[0] if len(prices) > 1 else None\n        game['current_price'] = prices[-1] if prices else None\n        game['store_url'] = store_url\n        \n        # Calculer si c'est gratuit\n        game['is_free'] = game['current_price'] == '0,00€'\n        \n        return game\n        \n    except Exception as e:\n        print(f\"Erreur lors du parsing: {e}\")\n        return None\n\n\ngames = parse_steam_games(_input.first().json.search_result)\n\nreturn games"
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport re\nimport json\nfrom typing import List, Dict, Optional\n\ndef parse_steam_games(text: str) -> List[Dict]:\n    \"\"\"\n    Parse Steam games data from raw text format\n    \"\"\"\n    # Regex pour séparer les éléments (lookahead positif)\n    separator_pattern = r'(?=\\[https://shared\\.cloudflare\\.steamstatic\\.com/store_item_assets/steam/apps/)'\n    \n    # Séparer les éléments\n    elements = re.split(separator_pattern, text)\n    elements = [elem.strip() for elem in elements if elem.strip()]\n    \n    games = []\n    \n    for element in elements:\n        game_data = parse_single_game(element)\n        if game_data:\n            games.append(game_data)\n    \n    return games\n\ndef parse_single_game(element: str) -> Optional[Dict]:\n    \"\"\"\n    Parse a single game element\n    \"\"\"\n    lines = [line.strip() for line in element.split('\\n') if line.strip()]\n    \n    if len(lines) < 4:\n        return None\n    \n    try:\n        game = {}\n        \n        # Extract image URL et app ID\n        image_url_match = re.search(r'\\[https://shared\\.cloudflare\\.steamstatic\\.com/store_item_assets/steam/apps/(\\d+)/([^\\]]+)\\]', lines[0])\n        if image_url_match:\n            game['app_id'] = int(image_url_match.group(1))\n            game['image_url'] = lines[0].strip('[]')\n        \n        # Title (ligne après l'URL de l'image)\n        game['title'] = lines[1] if len(lines) > 1 else \"\"\n        \n        # Date (ligne après le titre)\n        game['date'] = lines[2] if len(lines) > 2 else \"\"\n        \n        # Parse discount, prices, and store URL\n        prices = []\n        discount = None\n        store_url = None\n        \n        for line in lines[3:]:\n            # Discount percentage\n            if re.match(r'-?\\d+%', line):\n                discount = line\n            # Price (format XX,XX€)\n            elif re.match(r'\\d+,\\d+€', line):\n                prices.append(line)\n            # Store URL\n            elif 'store.steampowered.com' in line:\n                store_url = line.strip('[]')\n        \n        game['discount'] = discount\n        game['original_price'] = prices[0] if len(prices) > 1 else None\n        game['current_price'] = prices[-1] if prices else None\n        game['store_url'] = store_url\n        \n        # Calculer si c'est gratuit\n        game['is_free'] = game['current_price'] == '0,00€'\n        \n        return game\n        \n    except Exception as e:\n        print(f\"Erreur lors du parsing: {e}\")\n        return None\n\n\ngames = parse_steam_games(_('Get Search Result').first().json.search_result)\n\nreturn games"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                1080,
-                60
+                740,
+                260
             ],
             "id": "e5836b5d-c65a-44e3-809b-18da60e1f358",
-            "name": "Code1"
+            "name": "Load JSON"
+        },
+        {
+            "parameters": {
+                "authentication": "nocoDbApiToken",
+                "operation": "update",
+                "projectId": "p1zsm9ckegtx6k6",
+                "table": "mourgo27chrw6cp",
+                "dataToSend": "autoMapInputData"
+            },
+            "type": "n8n-nodes-base.nocoDb",
+            "typeVersion": 3,
+            "position": [
+                1600,
+                240
+            ],
+            "id": "fc6a8f66-9bba-4954-9559-0461db79343e",
+            "name": "Update Game",
+            "credentials": {
+                "nocoDbApiToken": {
+                    "id": "2FSJIjcnclw7k16X",
+                    "name": "NocoDB Token account"
+                }
+            }
         },
         {
             "parameters": {
                 "authentication": "nocoDbApiToken",
                 "operation": "create",
                 "projectId": "p1zsm9ckegtx6k6",
-                "table": "ml8fpkjqhrhqwvb",
+                "table": "mourgo27chrw6cp",
                 "dataToSend": "autoMapInputData"
             },
             "type": "n8n-nodes-base.nocoDb",
             "typeVersion": 3,
             "position": [
-                1300,
-                60
+                1600,
+                -40
             ],
-            "id": "fc6a8f66-9bba-4954-9559-0461db79343e",
-            "name": "NocoDB",
+            "id": "ec4a0480-a705-4eff-b0c4-e71b24751edf",
+            "name": "Add Game",
             "credentials": {
                 "nocoDbApiToken": {
                     "id": "2FSJIjcnclw7k16X",
@@ -473,51 +684,134 @@
             "main": [
                 [
                     {
-                        "node": "HTTP Request1",
+                        "node": "Steam FreeGames",
                         "type": "main",
                         "index": 0
                     }
                 ]
             ]
         },
-        "HTTP Request1": {
+        "Loop Over Items1": {
             "main": [
+                [],
                 [
                     {
-                        "node": "TextManipulation",
+                        "node": "If",
                         "type": "main",
                         "index": 0
                     }
                 ]
             ]
         },
-        "TextManipulation": {
+        "If": {
             "main": [
                 [
                     {
-                        "node": "HTML3",
+                        "node": "Add Game",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Update Game",
                         "type": "main",
                         "index": 0
                     }
                 ]
             ]
         },
-        "HTML3": {
+        "Schedule Trigger": {
             "main": [
                 [
                     {
-                        "node": "Code1",
+                        "node": "Steam FreeGames",
                         "type": "main",
                         "index": 0
                     }
                 ]
             ]
         },
-        "Code1": {
+        "Steam FreeGames": {
             "main": [
                 [
                     {
-                        "node": "NocoDB",
+                        "node": "Generate HTML File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate HTML File": {
+            "main": [
+                [
+                    {
+                        "node": "Get Search Result",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Search Result": {
+            "main": [
+                [
+                    {
+                        "node": "Get Games Saved",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Load JSON",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Games Saved": {
+            "main": [
+                []
+            ]
+        },
+        "Load JSON": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Over Items1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update Game": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Over Items1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add Game": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Over Items1",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "TiSnake1",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "WadaCorp1",
                         "type": "main",
                         "index": 0
                     }
@@ -528,13 +822,17 @@
     "settings": {
         "executionOrder": "v1"
     },
-    "staticData": null,
+    "staticData": {
+        "node:Schedule Trigger": {
+            "recurrenceRules": []
+        }
+    },
     "meta": {
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "a0d7552c-a788-40b4-b640-374367c8d604",
-    "triggerCount": 1,
+    "versionId": "f725ccd3-dec2-44ae-a6b9-19e6631c92ab",
+    "triggerCount": 2,
     "tags": [
         {
             "createdAt": "2025-05-27T23:11:08.154Z",
