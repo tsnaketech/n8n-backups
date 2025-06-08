@@ -1,6 +1,6 @@
 {
     "createdAt": "2024-09-19T23:34:38.621Z",
-    "updatedAt": "2025-05-28T12:42:22.000Z",
+    "updatedAt": "2025-06-07T18:33:51.000Z",
     "id": "jTrTbAb3Q41qyoaM",
     "name": "My workflow",
     "active": false,
@@ -12,8 +12,8 @@
             "name": "When clicking ‘Test workflow’",
             "type": "n8n-nodes-base.manualTrigger",
             "position": [
-                -400,
-                280
+                -220,
+                220
             ],
             "typeVersion": 1
         },
@@ -36,8 +36,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                -300,
-                -80
+                0,
+                -140
             ],
             "id": "a9b20695-bab4-41be-a789-a32d4254cbf7",
             "name": "ConvertAPI HTTP Request",
@@ -144,8 +144,8 @@
             "type": "n8n-nodes-base.shopify",
             "typeVersion": 1,
             "position": [
-                1080,
-                280
+                720,
+                260
             ],
             "id": "e72ad358-31e9-42d9-8692-1f4ec970b8c7",
             "name": "Shopify"
@@ -165,8 +165,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                820,
-                140
+                860,
+                -40
             ],
             "id": "e745790e-dddc-4067-b153-2ddeb05d6dbd",
             "name": "HTTP Request"
@@ -181,8 +181,8 @@
             "type": "n8n-nodes-base.telegramTrigger",
             "typeVersion": 1.2,
             "position": [
-                -100,
-                200
+                -220,
+                0
             ],
             "id": "10677d7a-4af4-4bee-8ddb-ae78a4f18b82",
             "name": "Telegram Trigger",
@@ -191,32 +191,6 @@
                 "telegramApi": {
                     "id": "t5jP1rX1Q7rEmgPc",
                     "name": "Telegram account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "pollTimes": {
-                    "item": [
-                        {
-                            "mode": "everyMinute"
-                        }
-                    ]
-                },
-                "filters": {}
-            },
-            "type": "n8n-nodes-base.gmailTrigger",
-            "typeVersion": 1.2,
-            "position": [
-                0,
-                0
-            ],
-            "id": "57fb1fb7-0447-4aec-aae4-0e2ada326558",
-            "name": "Gmail Trigger",
-            "credentials": {
-                "gmailOAuth2": {
-                    "id": "urD1e0Zl583iD3kM",
-                    "name": "Gmail account"
                 }
             }
         }
@@ -280,7 +254,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "c56e3200-f82d-444d-9b2a-c4a874361a51",
+    "versionId": "3204e8e6-a9ef-466b-9b76-7ef09388026d",
     "triggerCount": 0,
     "tags": []
 }
