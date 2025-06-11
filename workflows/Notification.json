@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-05-27T21:55:06.402Z",
-    "updatedAt": "2025-06-06T20:24:02.000Z",
+    "updatedAt": "2025-06-10T20:47:20.000Z",
     "id": "kx94Z2Th3dyVsVrw",
     "name": "Notification",
     "active": true,
@@ -218,10 +218,10 @@
                 },
                 "channelId": {
                     "__rl": true,
-                    "value": "931920576057073714",
+                    "value": "487662936744132628",
                     "mode": "list",
-                    "cachedResultName": "🤖_bot",
-                    "cachedResultUrl": "https://discord.com/channels/361960679042973697/931920576057073714"
+                    "cachedResultName": "👌_bonplan",
+                    "cachedResultUrl": "https://discord.com/channels/361960679042973697/487662936744132628"
                 },
                 "content": "=EpicGames FreeGames - From {{ $json.startDate }} to {{ $json.endDate }}\n\n**{{ $json.title }}**\n",
                 "options": {},
@@ -320,7 +320,8 @@
                 "rule": {
                     "interval": [
                         {
-                            "triggerAtHour": 18
+                            "field": "cronExpression",
+                            "expression": "* * 18 * *"
                         }
                     ]
                 }
@@ -351,14 +352,14 @@
                     "cachedResultName": "wadabot",
                     "cachedResultUrl": "https://discord.com/channels/702577437850206298/711584353703952435"
                 },
-                "content": "=SteamGames FreeGames - {{ $json.current_price }}\n\n**{{ $json.title }}**\n\n{{ $json.store_url }}\n",
+                "content": "=SteamGames FreeGames - {{ $json.current_price }}\n\n**{{ $json.title }}**\n\nhttps://steamdb.info/app/{{ $json.app_id }}/\n\n{{ $json.store_url }}\n",
                 "options": {}
             },
             "type": "n8n-nodes-base.discord",
             "typeVersion": 2,
             "position": [
                 1840,
-                60
+                40
             ],
             "id": "f6a6eb22-e664-4b4b-b03f-e077d4045ac9",
             "name": "TiSnake1",
@@ -398,19 +399,19 @@
                 },
                 "channelId": {
                     "__rl": true,
-                    "value": "931920576057073714",
+                    "value": "487662936744132628",
                     "mode": "list",
-                    "cachedResultName": "🤖_bot",
-                    "cachedResultUrl": "https://discord.com/channels/361960679042973697/931920576057073714"
+                    "cachedResultName": "👌_bonplan",
+                    "cachedResultUrl": "https://discord.com/channels/361960679042973697/487662936744132628"
                 },
-                "content": "=SteamGames FreeGames - {{ $json.current_price }}\n\n**{{ $json.title }}**\n\n{{ $json.store_url }}\n",
+                "content": "=SteamGames FreeGames - {{ $json.current_price }}\n\n**{{ $json.title }}**\n\nhttps://steamdb.info/app/{{ $json.app_id }}/\n\n{{ $json.store_url }}\n",
                 "options": {}
             },
             "type": "n8n-nodes-base.discord",
             "typeVersion": 2,
             "position": [
                 1840,
-                -100
+                -120
             ],
             "id": "66073280-fd18-478e-a8e9-d115b178c250",
             "name": "WadaCorp1",
@@ -831,7 +832,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "f725ccd3-dec2-44ae-a6b9-19e6631c92ab",
+    "versionId": "bfcd46e7-fe8f-4dae-bc7f-d136b601a4c2",
     "triggerCount": 2,
     "tags": [
         {
