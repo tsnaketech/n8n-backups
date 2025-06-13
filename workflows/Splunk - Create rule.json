@@ -1,0 +1,26 @@
+{
+    "createdAt": "2025-06-12T22:33:12.972Z",
+    "updatedAt": "2025-06-12T22:42:28.000Z",
+    "id": "FqLlvpzyhNlRYtkn",
+    "name": "Splunk - Create rule",
+    "active": false,
+    "isArchived": false,
+    "nodes": [],
+    "connections": {},
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "cf0a1a09-3ff5-496a-9db0-785c11c6b861",
+    "triggerCount": 0,
+    "tags": [
+        {
+            "createdAt": "2025-03-07T09:51:44.106Z",
+            "updatedAt": "2025-03-07T09:51:44.106Z",
+            "id": "hrujP4Cg0eJXvNqE",
+            "name": "splunk"
+        }
+    ]
+}
