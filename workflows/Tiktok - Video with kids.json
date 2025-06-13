@@ -1,0 +1,779 @@
+{
+    "createdAt": "2025-06-06T20:25:30.273Z",
+    "updatedAt": "2025-06-12T23:25:26.000Z",
+    "id": "YPjY5Fm5h3SpijZI",
+    "name": "Tiktok - Video with kids",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "tiktok-transform",
+                "options": {}
+            },
+            "id": "db72418c-59b4-437b-9dd5-1aa9f4ee27ed",
+            "name": "Webhook TikTok",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                -1160,
+                -180
+            ],
+            "webhookId": "tiktok-webhook"
+        },
+        {
+            "parameters": {
+                "functionCode": "// Script Python pour détecter les visages avec MediaPipe\nconst workflow_id = $(\"Process Download\").first().json.workflow_id\nconst pythonScript = `\nimport cv2\nimport mediapipe as mp\nimport json\nimport glob\nimport os\nfrom pathlib import Path\n\nmp_face_detection = mp.solutions.face_detection\nmp_drawing = mp.solutions.drawing_utils\n\nframes_path = '/tmp/frames_${workflow_id}/*.png'\nfaces_detection_path = '/tmp/faces_${workflow_id}.json'\nfile = Path(faces_detection_path)\nfile.touch(exist_ok=True)\nresults = []\n\nwith mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence=0.5) as face_detection:\n    frame_files = sorted(glob.glob(frames_path))\n    \n    for i, frame_path in enumerate(frame_files):\n        image = cv2.imread(frame_path)\n        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)\n        \n        detection_results = face_detection.process(image_rgb)\n        \n        if detection_results.detections:\n            for j, detection in enumerate(detection_results.detections):\n                bbox = detection.location_data.relative_bounding_box\n                results.append({'frame_number': i,'face_id': j,'timestamp': i * 0.5,'bbox': {'x': bbox.xmin,'y': bbox.ymin,'width': bbox.width,'height': bbox.height},'confidence': detection.score[0],'frame_path': frame_path})\n\nwith open(faces_detection_path, 'w') as f:\n    json.dump(results, f)\n\nprint(json.dumps({'faces_detected': len(results), 'output_file': faces_detection_path}))\n`;\n\nreturn {\n  json: {\n    python_script: pythonScript,\n    workflow_id: workflow_id\n  }\n};"
+            },
+            "id": "78c80c32-0826-4a48-988f-6b645ec9f08a",
+            "name": "Préparer Détection Visages",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                -1480,
+                460
+            ]
+        },
+        {
+            "parameters": {
+                "command": "=echo \"{{ $json.python_script }}\" > /tmp/face_detection.py\npython3 /tmp/face_detection.py"
+            },
+            "id": "25c8e10a-e314-4ccd-94ab-d5eab43379be",
+            "name": "Détecter Visages",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -880,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Lire et traiter les résultats de détection\nconst fs = require('fs');\nconst workflowId = $(\"Edit Download\").first().json.workflow_id;\nconst facesFile = `/tmp/faces_${workflowId}.json`;\n\ntry {\n  const facesData = JSON.parse(fs.readFileSync(facesFile, 'utf8'));\n  \n  // Grouper les visages par position pour identifier les différentes personnes\n  const speakers = [];\n  const threshold = 0.3; // Seuil de similarité de position\n  \n  facesData.forEach(face => {\n    let assigned = false;\n    \n    for (let speaker of speakers) {\n      const avgX = speaker.faces.reduce((sum, f) => sum + f.bbox.x, 0) / speaker.faces.length;\n      const avgY = speaker.faces.reduce((sum, f) => sum + f.bbox.y, 0) / speaker.faces.length;\n      \n      if (Math.abs(face.bbox.x - avgX) < threshold && Math.abs(face.bbox.y - avgY) < threshold) {\n        speaker.faces.push(face);\n        assigned = true;\n        break;\n      }\n    }\n    \n    if (!assigned) {\n      speakers.push({\n        speaker_id: speakers.length,\n        faces: [face],\n        avg_position: { x: face.bbox.x, y: face.bbox.y }\n      });\n    }\n  });\n  \n  return speakers.map(speaker => ({\n    json: {\n      speaker_id: speaker.speaker_id,\n      face_count: speaker.faces.length,\n      first_appearance: speaker.faces[0].timestamp,\n      last_appearance: speaker.faces[speaker.faces.length - 1].timestamp,\n      avg_position: speaker.avg_position,\n      sample_frame: speaker.faces[0].frame_path,\n      workflow_id: workflowId\n    }\n  }));\n  \n} catch (error) {\n  throw new Error(`Erreur lecture détection: ${error.message}`);\n}"
+            },
+            "id": "1baad5aa-f5b5-4dd2-a00e-5cc239437b99",
+            "name": "Traiter Visages Détectés",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                -660,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Préparer la transformation en avatar enfant\nconst speakerData = $input.first().json;\n\n// Extraire le visage de l'image de référence\nconst extractCommand = `ffmpeg -i \"${speakerData.sample_frame}\" -vf \"crop=w*${speakerData.avg_position.x + 0.2}:h*${speakerData.avg_position.y + 0.2}:w*${speakerData.avg_position.x}:h*${speakerData.avg_position.y}\" /tmp/face_${speakerData.workflow_id}_${speakerData.speaker_id}.png`;\n\nreturn {\n  json: {\n    extract_command: extractCommand,\n    face_file: `/tmp/face_${speakerData.workflow_id}_${speakerData.speaker_id}.png`,\n    speaker_id: speakerData.speaker_id,\n    workflow_id: speakerData.workflow_id\n  }\n};"
+            },
+            "id": "20b3a7cf-b6a2-4728-ae77-89821a00ed7b",
+            "name": "Préparer Extraction Visage",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                -440,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "command": "{{ $json.extract_command }}"
+            },
+            "id": "b19584ab-4c5d-4909-8794-a3d6fe56ddb0",
+            "name": "Extraire Visage",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -220,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.replicate.com/v1/predictions",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Token YOUR_REPLICATE_TOKEN"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "version",
+                            "value": "ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4"
+                        },
+                        {
+                            "name": "input",
+                            "value": "={\"image\": \"data:image/png;base64,{{ $binary.data.toString('base64') }}\", \"prompt\": \"cute child cartoon character, pixar disney style, bright colors, animated, friendly face\", \"num_outputs\": 1}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "73516958-94e2-4646-9a1e-654c399d4546",
+            "name": "Transformer en Enfant",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                0,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Préparer l'animation avec Wav2Lip\nconst transformResult = $input.first().json;\nconst speakerData = $('Préparer Extraction Visage').first().json;\n\n// Commande Wav2Lip pour animer le visage\nconst wav2lipCommand = `python wav2lip/inference.py --checkpoint_path checkpoints/wav2lip.pth --face \"${transformResult.output[0]}\" --audio \"/tmp/audio_${speakerData.workflow_id}.wav\" --outfile \"/tmp/animated_${speakerData.workflow_id}_${speakerData.speaker_id}.mp4\"`;\n\nreturn {\n  json: {\n    wav2lip_command: wav2lipCommand,\n    animated_file: `/tmp/animated_${speakerData.workflow_id}_${speakerData.speaker_id}.mp4`,\n    child_avatar: transformResult.output[0],\n    speaker_id: speakerData.speaker_id,\n    workflow_id: speakerData.workflow_id\n  }\n};"
+            },
+            "id": "bee72df1-22bd-4ae1-8e80-1bf876a7e2e2",
+            "name": "Préparer Animation",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                -1100,
+                840
+            ]
+        },
+        {
+            "parameters": {
+                "command": "{{ $json.wav2lip_command }}"
+            },
+            "id": "ae4cf970-cbf9-4ffd-8cb2-3c59e1b15928",
+            "name": "Animer Visage",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -880,
+                840
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Assembler la vidéo finale\nconst animationData = $input.all();\nconst workflowId = animationData[0].json.workflow_id;\n\n// Créer la commande FFmpeg pour assembler toutes les animations\nlet overlayFilter = '[0:v]';\nlet inputs = `-i /tmp/video_${workflowId}.mp4`;\n\nanimationData.forEach((data, index) => {\n  inputs += ` -i \"${data.json.animated_file}\"`;\n  const nextIndex = index + 1;\n  const outputLabel = index === animationData.length - 1 ? '[out]' : `[v${nextIndex}]`;\n  overlayFilter += `overlay=0:0:enable='between(t,${data.json.start_time || 0},${data.json.end_time || 999})'${outputLabel}`;\n  if (index < animationData.length - 1) {\n    overlayFilter = `${outputLabel}`;\n  }\n});\n\nconst finalCommand = `ffmpeg ${inputs} -filter_complex \"${overlayFilter}\" -map \"[out]\" -map 0:a -c:a copy /tmp/final_${workflowId}.mp4`;\n\nreturn {\n  json: {\n    final_command: finalCommand,\n    final_video: `/tmp/final_${workflowId}.mp4`,\n    workflow_id: workflowId,\n    speakers_count: animationData.length\n  }\n};"
+            },
+            "id": "60766743-d785-48f8-8a51-e3a3c00e82a3",
+            "name": "Préparer Assemblage Final",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                -660,
+                840
+            ]
+        },
+        {
+            "parameters": {
+                "command": "{{ $json.final_command }}"
+            },
+            "id": "b0f33305-a1c6-42d0-abe9-91c0f6aa814f",
+            "name": "Assembler Vidéo Finale",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -440,
+                840
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Réponse finale avec les résultats\nconst finalData = $input.first().json;\n\nreturn {\n  json: {\n    success: true,\n    message: \"Transformation terminée avec succès\",\n    final_video_path: finalData.final_video,\n    workflow_id: finalData.workflow_id,\n    speakers_processed: finalData.speakers_count,\n    download_url: `http://your-server.com/download/${finalData.workflow_id}`,\n    processing_time: new Date().toISOString()\n  }\n};"
+            },
+            "id": "542a89e4-19ab-4b1b-8b9f-9922a056366a",
+            "name": "Réponse Finale",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                -220,
+                840
+            ]
+        },
+        {
+            "parameters": {
+                "content": "## Requirements:\n\n\nInstall dependencies\n\n```bash\nsudo apt update\nsudo apt install -y python3 python3-pip ffmpeg wget\n```\n\nInstall MediaPipe\n```bash\npip install mediapipe opencv-python\n```\n\nInstall Wav2Lip (optional - can be replaced by Replicate)\n```bash\ngit clone https://github.com/Rudrabha/Wav2Lip.git\ncd Wav2Lip\npip install -r requirements.txt\n```",
+                "height": 560,
+                "width": 520
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -2260,
+                120
+            ],
+            "id": "3c06e575-1c85-4952-9084-c902934431f6",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                -1160,
+                0
+            ],
+            "id": "eb4efad9-4ad3-499a-9b5e-73a2d7d1173e",
+            "name": "When chat message received",
+            "webhookId": "ef570008-fd84-428a-bb68-4b5133a8990d"
+        },
+        {
+            "parameters": {
+                "type": "SHA256",
+                "value": "={{ $json.data.id }}{{ $json.data.title }}",
+                "dataPropertyName": "hash"
+            },
+            "type": "n8n-nodes-base.crypto",
+            "typeVersion": 1,
+            "position": [
+                -440,
+                -380
+            ],
+            "id": "47f9c2cc-1f78-42ff-bcd3-65b151e66d05",
+            "name": "Crypto"
+        },
+        {
+            "parameters": {
+                "operation": "append",
+                "documentId": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": ""
+                },
+                "sheetName": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": ""
+                }
+            },
+            "type": "n8n-nodes-base.googleSheets",
+            "typeVersion": 4.6,
+            "position": [
+                -220,
+                -500
+            ],
+            "id": "aba50d9c-12fa-4bef-a914-961143144460",
+            "name": "Google Sheets",
+            "onError": "continueRegularOutput"
+        },
+        {
+            "parameters": {
+                "height": 380,
+                "width": 1280
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -1120,
+                240
+            ],
+            "id": "b25c02c7-5abd-4cbf-b555-c5501cc13454",
+            "name": "Sticky Note1"
+        },
+        {
+            "parameters": {
+                "height": 380,
+                "width": 1280
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -1120,
+                680
+            ],
+            "id": "072c399c-5e8e-44fa-b9ae-b8c241038757",
+            "name": "Sticky Note2"
+        },
+        {
+            "parameters": {
+                "authentication": "nocoDbApiToken",
+                "operation": "create"
+            },
+            "type": "n8n-nodes-base.nocoDb",
+            "typeVersion": 3,
+            "position": [
+                -220,
+                -280
+            ],
+            "id": "d5698175-cba9-4a0a-9a11-bb2d49c34c83",
+            "name": "NocoDB",
+            "credentials": {
+                "nocoDbApiToken": {
+                    "id": "2FSJIjcnclw7k16X",
+                    "name": "NocoDB Token account"
+                }
+            },
+            "onError": "continueRegularOutput"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Script Python pour détecter les visages avec MediaPipe\nconst workflow_id = $(\"Process Download\").first().json.workflow_id\nconst pythonScript = `\nimport cv2\nimport json\nimport glob\n\n# Utiliser les modèles OpenCV pré-entraînés\nface_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')\n\nframes_path = '/tmp/frames_${workflow_id}/*.png'\nfaces_detection_path = '/tmp/faces_${workflow_id}.json'\nresults = []\n\nframe_files = sorted(glob.glob(frames_path))\n\nfor i, frame_path in enumerate(frame_files):\n    image = cv2.imread(frame_path)\n    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)\n    \n    faces = face_cascade.detectMultiScale(gray, 1.1, 4)\n    \n    for j, (x, y, w, h) in enumerate(faces):\n        # Convertir en coordonnées relatives\n        height, width = image.shape[:2]\n        results.append({\n            'frame_number': i,\n            'face_id': j,\n            'timestamp': i * 0.5,\n            'bbox': {\n                'x': x / width,\n                'y': y / height,\n                'width': w / width,\n                'height': h / height\n            },\n            'confidence': 0.8,  # OpenCV ne donne pas de score\n            'frame_path': frame_path\n        })\n        \nwith open(faces_detection_path, 'w') as f:\n    json.dump(results, f)\n\nprint(json.dumps({'faces_detected': len(results), 'output_file': faces_detection_path}))\n`;\n\nreturn {\n  json: {\n    python_script: pythonScript,\n    workflow_id: workflow_id\n  }\n};"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -1540,
+                640
+            ],
+            "id": "f8bf6d34-6466-4315-b347-7a193dfe4a6d",
+            "name": "Code"
+        },
+        {
+            "parameters": {
+                "functionCode": "// Script Python pour détecter les visages avec MediaPipe\nconst workflow_id = $(\"Edit Download\").first().json.workflow_id\nconst pythonScript = `\nimport cv2\nimport mediapipe as mp\nimport json\nimport glob\nimport os\nfrom pathlib import Path\n\nmp_face_detection = mp.solutions.face_detection\nmp_drawing = mp.solutions.drawing_utils\n\nframes_path = '/tmp/frames_${workflow_id}/*.png'\nfaces_detection_path = '/tmp/faces_${workflow_id}.json'\nfile = Path(faces_detection_path)\nfile.touch(exist_ok=True)\nresults = []\n\nwith mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence=0.5) as face_detection:\n    frame_files = sorted(glob.glob(frames_path))\n    \n    for i, frame_path in enumerate(frame_files):\n        image = cv2.imread(frame_path)\n        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)\n        \n        detection_results = face_detection.process(image_rgb)\n        \n        if detection_results.detections:\n            for j, detection in enumerate(detection_results.detections):\n                bbox = detection.location_data.relative_bounding_box\n                results.append({'frame_number': i,'face_id': j,'timestamp': i * 0.5,'bbox': {'x': bbox.xmin,'y': bbox.ymin,'width': bbox.width,'height': bbox.height},'confidence': detection.score[0],'frame_path': frame_path})\n\nwith open(faces_detection_path, 'w') as f:\n    json.dump(results, f)\n\nprint(json.dumps({'faces_detected': len(results), 'output_file': faces_detection_path}))\n`;\n\nreturn {\n  json: {\n    python_script: pythonScript,\n    workflow_id: $(\"Edit Download\").first().json.workflow_id\n  }\n};"
+            },
+            "id": "ca620915-4f3b-45b1-b45d-89e1a22c33e0",
+            "name": "Préparer Détection Visages1",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                240,
+                460
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Validation et extraction de l'URL TikTok\nconst input = $input.first().json;\nconst tiktokUrl = input.url || input.tiktok_url || input.chatInput;\n\nif (!tiktokUrl) {\n  throw new Error('URL TikTok manquante');\n}\n\n// Vérification format URL TikTok\nif (!tiktokUrl.includes('tiktok.com')) {\n  throw new Error('URL TikTok invalide');\n}\n\nreturn {\n  json: {\n    tiktok_url: tiktokUrl,\n    timestamp: new Date().toISOString(),\n    workflow_id: `workflow_${Date.now()}`\n  }\n};"
+            },
+            "id": "03381ea7-c87c-44a8-8fa3-7142d570cf02",
+            "name": "Validate Input",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -900,
+                -100
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://tikwm.com/api/",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "url",
+                            "value": "={{ $json.tiktok_url }}"
+                        },
+                        {
+                            "name": "hd",
+                            "value": "1"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "95353939-a2b1-45f2-97aa-244abf5d08af",
+            "name": "Download TikTok",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                -660,
+                -100
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Traitement de la réponse de téléchargement\nconst response = $input.first().json;\n\nif (response.code !== 0) {\n  throw new Error('Échec du téléchargement TikTok');\n}\n\nconst data = response.data;\n                               \nreturn {\n  json: {\n    video_url: data.hdplay || data.play,\n    video_title: data.title,\n    duration: data.duration,\n    author: data.author.nickname,\n    workflow_id: $('Validate Input').first().json.workflow_id,\n    download_success: true\n  }\n};"
+            },
+            "id": "220253b5-470c-4bff-97bd-5f92ec13578a",
+            "name": "Process Download",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -440,
+                -100
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Créer liste des frames à traiter\nconst workflow_id = $(\"Process Download\").first().json.workflow_id\nconst data = $input.first().json;\nconst frameCount = 15; // Optimisé pour les coûts\nconst frames = [];\n\nfor (let i = 1; i <= frameCount; i++) {\n  frames.push({\n    // ...data,\n    frame_number: i,\n    frame_path: `/tmp/${workflow_id}/frames/frame_${String(i).padStart(3, '0')}.png`,\n    timestamp: (i-1) * 1.0\n  });\n}\n\nreturn frames;"
+            },
+            "id": "12d29f29-a3ab-425b-a9cf-00fe02766fac",
+            "name": "Prepare Frames",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -1400,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.azure_endpoint }}/face/v1.0/detect",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "detectionModel",
+                            "value": "detection_03"
+                        },
+                        {
+                            "name": "recognitionModel",
+                            "value": "recognition_04"
+                        },
+                        {
+                            "name": "returnFaceId",
+                            "value": "true"
+                        },
+                        {
+                            "name": "returnFaceLandmarks",
+                            "value": "true"
+                        },
+                        {
+                            "name": "returnFaceAttributes",
+                            "value": "qualityForRecognition,headPose,blur"
+                        }
+                    ]
+                },
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Ocp-Apim-Subscription-Key",
+                            "value": "={{ $json.azure_key }}"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={ \"url\": \"file://\" + $json.frame_path }",
+                "options": {
+                    "timeout": 30000
+                }
+            },
+            "id": "6dab2453-b2c5-4edc-88b4-a049dfd39d28",
+            "name": "Detect Faces",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                -880,
+                240
+            ],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "command": "=mkdir -p /tmp/frames_{{ $(\"Process Download\").first().json.workflow_id }};\nffmpeg -i /tmp/video_{{ $(\"Process Download\").first().json.workflow_id }}.mp4 -vf fps=2 /tmp/frames_{{ $(\"Process Download\").first().json.workflow_id }}/frame_%04d.png"
+            },
+            "id": "c42f61a5-2ebb-4b07-80a2-01174f1e3837",
+            "name": "Extract Frames",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                0,
+                -20
+            ]
+        },
+        {
+            "parameters": {
+                "command": "=ffmpeg -i /tmp/video_{{ $(\"Process Download\").first().json.workflow_id }}.mp4 -vn -acodec pcm_s16le /tmp/audio_{{ $(\"Process Download\").first().json.workflow_id }}.wav"
+            },
+            "id": "6f98d8a7-6fa7-4024-a121-e3b208b2a0c7",
+            "name": "Extract Audio",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                0,
+                -180
+            ]
+        },
+        {
+            "parameters": {
+                "command": "=wget -O /tmp/video_{{ $json.workflow_id }}.mp4 \"{{ $json.video_url }}\""
+            },
+            "id": "ef3939a1-6244-42fa-a701-cf5220081a64",
+            "name": "Save Video",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -220,
+                -100
+            ],
+            "alwaysOutputData": true,
+            "notesInFlow": false
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -660,
+                240
+            ],
+            "id": "a1ded187-6675-4f32-876a-1df063d73369",
+            "name": "Edit Fields"
+        }
+    ],
+    "connections": {
+        "Webhook TikTok": {
+            "main": [
+                []
+            ]
+        },
+        "Préparer Détection Visages": {
+            "main": [
+                []
+            ]
+        },
+        "Détecter Visages": {
+            "main": [
+                [
+                    {
+                        "node": "Traiter Visages Détectés",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Traiter Visages Détectés": {
+            "main": [
+                [
+                    {
+                        "node": "Préparer Extraction Visage",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Préparer Extraction Visage": {
+            "main": [
+                [
+                    {
+                        "node": "Extraire Visage",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extraire Visage": {
+            "main": [
+                [
+                    {
+                        "node": "Transformer en Enfant",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Transformer en Enfant": {
+            "main": [
+                [
+                    {
+                        "node": "Préparer Animation",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Préparer Animation": {
+            "main": [
+                [
+                    {
+                        "node": "Animer Visage",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Animer Visage": {
+            "main": [
+                [
+                    {
+                        "node": "Préparer Assemblage Final",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Préparer Assemblage Final": {
+            "main": [
+                [
+                    {
+                        "node": "Assembler Vidéo Finale",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Assembler Vidéo Finale": {
+            "main": [
+                [
+                    {
+                        "node": "Réponse Finale",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "Validate Input",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Crypto": {
+            "main": [
+                [
+                    {
+                        "node": "Google Sheets",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "NocoDB",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code": {
+            "main": [
+                [
+                    {
+                        "node": "Détecter Visages",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Validate Input": {
+            "main": [
+                [
+                    {
+                        "node": "Download TikTok",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Download TikTok": {
+            "main": [
+                [
+                    {
+                        "node": "Crypto",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Process Download",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Process Download": {
+            "main": [
+                [
+                    {
+                        "node": "Save Video",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Prepare Frames": {
+            "main": [
+                [
+                    {
+                        "node": "Detect Faces",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract Frames": {
+            "main": [
+                [
+                    {
+                        "node": "Préparer Détection Visages",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Code",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Prepare Frames",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save Video": {
+            "main": [
+                [
+                    {
+                        "node": "Extract Audio",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Extract Frames",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Detect Faces": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "9cd899cd-1029-4d3a-8374-1f4a504d5cbb",
+    "triggerCount": 0,
+    "tags": [
+        {
+            "createdAt": "2025-06-12T22:30:19.800Z",
+            "updatedAt": "2025-06-12T22:30:19.800Z",
+            "id": "zK4NNNGJwtgLyYkK",
+            "name": "tiktok"
+        }
+    ]
+}
