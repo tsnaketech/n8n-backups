@@ -1,0 +1,26 @@
+{
+    "createdAt": "2025-04-11T07:18:32.130Z",
+    "updatedAt": "2025-06-12T22:34:54.000Z",
+    "id": "tRFzsJxVrAlUqrrn",
+    "name": "POD - PrintOnDemand",
+    "active": false,
+    "isArchived": false,
+    "nodes": [],
+    "connections": {},
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "8c54786c-2921-45ed-b933-543d90f6efbe",
+    "triggerCount": 0,
+    "tags": [
+        {
+            "createdAt": "2025-05-27T23:11:47.224Z",
+            "updatedAt": "2025-05-27T23:11:47.224Z",
+            "id": "P4GPKPoaJBRKjz79",
+            "name": "pod"
+        }
+    ]
+}
