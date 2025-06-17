@@ -1,53 +1,11 @@
 {
     "createdAt": "2025-06-15T12:51:29.112Z",
-    "updatedAt": "2025-06-15T23:06:46.000Z",
+    "updatedAt": "2025-06-16T20:51:16.000Z",
     "id": "zBoCvjKGz5O7rgbs",
     "name": "Level ONE",
     "active": false,
     "isArchived": false,
     "nodes": [
-        {
-            "parameters": {
-                "url": "https://internal.users.n8n.cloud/webhook/custom-erp",
-                "authentication": "genericCredentialType",
-                "genericAuthType": "httpHeaderAuth",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "unique_id",
-                            "value": "474442bdfbe861b66a08fbeaf2cb543d"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                40,
-                20
-            ],
-            "id": "48ab21e7-2048-4235-acfd-89bca6a10479",
-            "name": "HTTP Request1",
-            "credentials": {
-                "httpHeaderAuth": {
-                    "id": "jaLnVREriWuH3M0P",
-                    "name": "Level ONE"
-                }
-            }
-        },
-        {
-            "parameters": {},
-            "type": "n8n-nodes-base.manualTrigger",
-            "typeVersion": 1,
-            "position": [
-                -160,
-                20
-            ],
-            "id": "eb43e5d5-b3f5-42be-a110-7124be786cf1",
-            "name": "When clicking ‘Execute workflow’"
-        },
         {
             "parameters": {
                 "operation": "create",
@@ -60,10 +18,10 @@
                 },
                 "table": {
                     "__rl": true,
-                    "value": "tblEjGUYDWKsQnMF4",
+                    "value": "tbl2YGZ0Ejd5zWadR",
                     "mode": "list",
-                    "cachedResultName": "orders",
-                    "cachedResultUrl": "https://airtable.com/appAk01JZEi3tBjlM/tblEjGUYDWKsQnMF4"
+                    "cachedResultName": "processingOrders",
+                    "cachedResultUrl": "https://airtable.com/appAk01JZEi3tBjlM/tbl2YGZ0Ejd5zWadR"
                 },
                 "columns": {
                     "mappingMode": "autoMapInputData",
@@ -82,41 +40,8 @@
                             "removed": false
                         },
                         {
-                            "id": "customerID",
-                            "displayName": "customerID",
-                            "required": false,
-                            "defaultMatch": false,
-                            "canBeUsedToMatch": true,
-                            "display": true,
-                            "type": "number",
-                            "readOnly": false,
-                            "removed": false
-                        },
-                        {
                             "id": "employeeName",
                             "displayName": "employeeName",
-                            "required": false,
-                            "defaultMatch": false,
-                            "canBeUsedToMatch": true,
-                            "display": true,
-                            "type": "string",
-                            "readOnly": false,
-                            "removed": false
-                        },
-                        {
-                            "id": "orderPrice",
-                            "displayName": "orderPrice",
-                            "required": false,
-                            "defaultMatch": false,
-                            "canBeUsedToMatch": true,
-                            "display": true,
-                            "type": "number",
-                            "readOnly": false,
-                            "removed": false
-                        },
-                        {
-                            "id": "orderStatus",
-                            "displayName": "orderStatus",
                             "required": false,
                             "defaultMatch": false,
                             "canBeUsedToMatch": true,
@@ -134,8 +59,8 @@
             "type": "n8n-nodes-base.airtable",
             "typeVersion": 2.1,
             "position": [
-                500,
-                -20
+                960,
+                -80
             ],
             "id": "6ee3e290-9b9c-4f66-8ae4-d925b41bb7eb",
             "name": "Airtable",
@@ -159,7 +84,17 @@
                         {
                             "id": "c0af51be-ded6-4bb0-a8f6-b0eaa4e3404a",
                             "leftValue": "={{ $json.orderStatus }}",
-                            "rightValue": "booked",
+                            "rightValue": "processing",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals",
+                                "name": "filter.operator.equals"
+                            }
+                        },
+                        {
+                            "id": "31fbc86b-7c53-429d-b39f-a99c407cc733",
+                            "leftValue": "={{ $json.employeeName }}",
+                            "rightValue": "Mario",
                             "operator": {
                                 "type": "string",
                                 "operation": "equals",
@@ -179,21 +114,182 @@
             ],
             "id": "49c2fc88-6c87-4a12-8779-f80edb2f2e87",
             "name": "If"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "74ba28ff-d7d6-42ed-a0a9-0688c93add48",
+                            "name": "orderID",
+                            "value": "={{ $json.orderID }}",
+                            "type": "number"
+                        },
+                        {
+                            "id": "29683d90-259b-4ea0-98a6-c48a0febd011",
+                            "name": "employeeName",
+                            "value": "={{ $json.employeeName }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                760,
+                -80
+            ],
+            "id": "d1472276-d5fb-4228-b154-2784dbd175da",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "jsCode": "let items = $input.all();\nlet totalBooked = items.length;\nlet bookedSum = 0;\n\nfor (let i=0; i < items.length; i++) {\n  bookedSum = bookedSum + items[i].json.orderPrice;\n}\n\nreturn [{ json: {totalBooked, bookedSum} }];"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                560,
+                220
+            ],
+            "id": "085c8a38-c24e-4d36-8c6f-f8752a6119e1",
+            "name": "Code"
+        },
+        {
+            "parameters": {
+                "authentication": "webhook",
+                "content": "=This week we've {{$json[\"totalBooked\"]}} booked orders with a total value of {{$json[\"bookedSum\"]}}. My Unique ID: {{ $('HTTP Request').params[\"headerParameters\"][\"parameters\"][0][\"value\"] }}\n",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.discord",
+            "typeVersion": 2,
+            "position": [
+                760,
+                220
+            ],
+            "id": "94510766-8138-4d04-8692-f95400f30ba1",
+            "name": "Discord",
+            "webhookId": "9520886f-4a83-4275-ae1d-ae6b3fd2a7ec",
+            "credentials": {
+                "discordWebhookApi": {
+                    "id": "LGrWBflaPflDO75r",
+                    "name": "Discord Webhook account"
+                }
+            },
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "url": "https://internal.users.n8n.cloud/webhook/custom-erp",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "unique_id",
+                            "value": "474442bdfbe861b66a08fbeaf2cb543d"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                40,
+                20
+            ],
+            "id": "48ab21e7-2048-4235-acfd-89bca6a10479",
+            "name": "HTTP Request",
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "jaLnVREriWuH3M0P",
+                    "name": "Level ONE"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "weeks",
+                            "triggerAtDay": [
+                                1
+                            ],
+                            "triggerAtHour": 9
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -160,
+                20
+            ],
+            "id": "b4e69409-2e6f-49b6-8667-133902333887",
+            "name": "Schedule Trigger"
+        },
+        {
+            "parameters": {
+                "jsCode": "let items = $input.all();\nlet totalBooked = items.length;\nlet bookedSum = 0;\n\nfor (let i=0; i < items.length; i++) {\n  bookedSum = bookedSum + items[i].json.orderPrice;\n}\n\nreturn [{ json: {totalBooked, bookedSum} }];"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                560,
+                -80
+            ],
+            "id": "5f8ead68-442b-41ba-8c65-2483a607c85d",
+            "name": "Code1"
         }
     ],
     "connections": {
-        "When clicking ‘Execute workflow’": {
+        "If": {
             "main": [
                 [
                     {
-                        "node": "HTTP Request1",
+                        "node": "Code1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Code",
                         "type": "main",
                         "index": 0
                     }
                 ]
             ]
         },
-        "HTTP Request1": {
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Airtable",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code": {
+            "main": [
+                [
+                    {
+                        "node": "Discord",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
             "main": [
                 [
                     {
@@ -204,11 +300,22 @@
                 ]
             ]
         },
-        "If": {
+        "Schedule Trigger": {
             "main": [
                 [
                     {
-                        "node": "Airtable",
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code1": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
                         "type": "main",
                         "index": 0
                     }
@@ -217,14 +324,17 @@
         }
     },
     "settings": {
-        "executionOrder": "v1"
+        "executionOrder": "v1",
+        "timezone": "Europe/Paris",
+        "saveManualExecutions": true,
+        "callerPolicy": "workflowsFromSameOwner"
     },
     "staticData": null,
     "meta": {
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "627f85db-a45b-4177-b9f6-cc038b194e94",
+    "versionId": "f8a9c198-0065-4192-b17e-d88f2b8b1b90",
     "triggerCount": 0,
     "tags": []
 }
