@@ -1,0 +1,19 @@
+{
+    "createdAt": "2025-06-17T07:17:36.077Z",
+    "updatedAt": "2025-06-17T07:17:36.077Z",
+    "id": "GpaOaxHt1EaH0F5T",
+    "name": "Level TWO",
+    "active": false,
+    "isArchived": false,
+    "nodes": [],
+    "connections": {},
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "54929662-7e5e-4746-86a2-fc52481a0fe6",
+    "triggerCount": 0,
+    "tags": []
+}
