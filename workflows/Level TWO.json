@@ -1,19 +1,134 @@
 {
     "createdAt": "2025-06-17T07:17:36.077Z",
-    "updatedAt": "2025-06-17T07:17:36.077Z",
+    "updatedAt": "2025-06-18T21:39:56.000Z",
     "id": "GpaOaxHt1EaH0F5T",
     "name": "Level TWO",
     "active": false,
     "isArchived": false,
-    "nodes": [],
-    "connections": {},
+    "nodes": [
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "03234a5b-4c64-4ca3-97b9-6d0ae0946c14",
+            "name": "When clicking ‘Execute workflow’"
+        },
+        {
+            "parameters": {
+                "url": "https://blog.n8n.io/",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                220,
+                -100
+            ],
+            "id": "27eb6ab2-9b57-4b92-a376-7ad67d16b027",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "operation": "extractHtmlContent",
+                "extractionValues": {
+                    "values": [
+                        {
+                            "cssSelector": ".post .item-title"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.html",
+            "typeVersion": 1.2,
+            "position": [
+                480,
+                -100
+            ],
+            "id": "902863b6-e6dd-48b3-8ee9-f3f2c2927f0c",
+            "name": "HTML"
+        },
+        {
+            "parameters": {
+                "url": "https://pokeapi.co/api/v2/pokemon",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                220,
+                140
+            ],
+            "id": "4cb2ded8-4707-4e31-87fa-16c41fdcd73c",
+            "name": "HTTP Request1"
+        },
+        {
+            "parameters": {
+                "mode": "jsonToxml",
+                "dataPropertyName": "={{ $json }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.xml",
+            "typeVersion": 1,
+            "position": [
+                480,
+                140
+            ],
+            "id": "2f8609fc-d53c-42a1-9391-c4d332971a07",
+            "name": "XML"
+        }
+    ],
+    "connections": {
+        "When clicking ‘Execute workflow’": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request1",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "main": [
+                [
+                    {
+                        "node": "HTML",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request1": {
+            "main": [
+                [
+                    {
+                        "node": "XML",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
     "settings": {
         "executionOrder": "v1"
     },
     "staticData": null,
     "meta": null,
     "pinData": {},
-    "versionId": "54929662-7e5e-4746-86a2-fc52481a0fe6",
+    "versionId": "d17bd3f8-7190-4713-bb1b-20f9b133e62b",
     "triggerCount": 0,
     "tags": []
 }
