@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-06-17T07:17:36.077Z",
-    "updatedAt": "2025-06-18T21:39:56.000Z",
+    "updatedAt": "2025-06-22T23:25:37.000Z",
     "id": "GpaOaxHt1EaH0F5T",
     "name": "Level TWO",
     "active": false,
@@ -11,75 +11,574 @@
             "type": "n8n-nodes-base.manualTrigger",
             "typeVersion": 1,
             "position": [
-                0,
-                0
+                -80,
+                420
             ],
             "id": "03234a5b-4c64-4ca3-97b9-6d0ae0946c14",
             "name": "When clicking ‘Execute workflow’"
         },
         {
             "parameters": {
-                "url": "https://blog.n8n.io/",
+                "operation": "search",
+                "base": {
+                    "__rl": true,
+                    "value": "appZHeOIPtLjBeH7l",
+                    "mode": "list",
+                    "cachedResultName": "Level TWO",
+                    "cachedResultUrl": "https://airtable.com/appZHeOIPtLjBeH7l"
+                },
+                "table": {
+                    "__rl": true,
+                    "value": "tbldkvsNtCsz9xYnf",
+                    "mode": "list",
+                    "cachedResultName": "customers",
+                    "cachedResultUrl": "https://airtable.com/appZHeOIPtLjBeH7l/tbldkvsNtCsz9xYnf"
+                },
                 "options": {}
             },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
+            "type": "n8n-nodes-base.airtable",
+            "typeVersion": 2.1,
             "position": [
-                220,
-                -100
+                200,
+                -300
             ],
-            "id": "27eb6ab2-9b57-4b92-a376-7ad67d16b027",
-            "name": "HTTP Request"
+            "id": "946646da-457e-46f3-9cb0-f1aeaec4694d",
+            "name": "Airtable1",
+            "credentials": {
+                "airtableTokenApi": {
+                    "id": "X6jrSAkc62Mri9ZJ",
+                    "name": "Level ONE"
+                }
+            }
         },
         {
             "parameters": {
-                "operation": "extractHtmlContent",
-                "extractionValues": {
-                    "values": [
+                "url": "https://restcountries.com/v3.1/all",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
                         {
-                            "cssSelector": ".post .item-title"
+                            "name": "fields",
+                            "value": "name,region,subregion"
                         }
                     ]
                 },
                 "options": {}
             },
-            "type": "n8n-nodes-base.html",
-            "typeVersion": 1.2,
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
             "position": [
-                480,
-                -100
+                200,
+                -80
             ],
-            "id": "902863b6-e6dd-48b3-8ee9-f3f2c2927f0c",
-            "name": "HTML"
+            "id": "44da2a85-8a8c-4add-b00b-442091f50930",
+            "name": "HTTP Request"
         },
         {
             "parameters": {
-                "url": "https://pokeapi.co/api/v2/pokemon",
+                "mode": "combine",
+                "advanced": true,
+                "mergeByFields": {
+                    "values": [
+                        {
+                            "field1": "customerCountry",
+                            "field2": "name.common"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                440,
+                -180
+            ],
+            "id": "f2e29aa6-058b-4db6-9c4d-6ab6f8ddf8cd",
+            "name": "Merge"
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "base": {
+                    "__rl": true,
+                    "value": "appZHeOIPtLjBeH7l",
+                    "mode": "list",
+                    "cachedResultName": "Level TWO",
+                    "cachedResultUrl": "https://airtable.com/appZHeOIPtLjBeH7l"
+                },
+                "table": {
+                    "__rl": true,
+                    "value": "tbldkvsNtCsz9xYnf",
+                    "mode": "list",
+                    "cachedResultName": "customers",
+                    "cachedResultUrl": "https://airtable.com/appZHeOIPtLjBeH7l/tbldkvsNtCsz9xYnf"
+                },
+                "columns": {
+                    "mappingMode": "defineBelow",
+                    "value": {
+                        "subregion": "={{ $json.subregion }}",
+                        "region": "={{ $json.region }}",
+                        "customerSince": "={{ $json.customerSince }}",
+                        "customerEmail": "={{ $json.customerEmail }}",
+                        "customerCountry": "={{ $json.customerCountry }}",
+                        "customerID": "={{ $json.customerID }}"
+                    },
+                    "matchingColumns": [
+                        "customerID"
+                    ],
+                    "schema": [
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": true,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "customerID",
+                            "displayName": "customerID",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "number",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "customerCountry",
+                            "displayName": "customerCountry",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "customerEmail",
+                            "displayName": "customerEmail",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "customerSince",
+                            "displayName": "customerSince",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "dateTime",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "region",
+                            "displayName": "region",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "subregion",
+                            "displayName": "subregion",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": false,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.airtable",
+            "typeVersion": 2.1,
+            "position": [
+                660,
+                -180
+            ],
+            "id": "0c39a4bb-67b9-4360-9dff-b25703a5eb0d",
+            "name": "Airtable",
+            "credentials": {
+                "airtableTokenApi": {
+                    "id": "X6jrSAkc62Mri9ZJ",
+                    "name": "Level ONE"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "content": "### Workflow 1",
+                "height": 420,
+                "width": 1020
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -100,
+                -340
+            ],
+            "id": "a460e88e-f9f4-41d3-b07a-fc5ce8f8228c",
+            "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "content": "### Workflow 2",
+                "height": 640,
+                "width": 2080
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -100,
+                140
+            ],
+            "id": "506715d0-8d76-4b8d-9e73-d58c03c78f83",
+            "name": "Sticky Note1"
+        },
+        {
+            "parameters": {
+                "url": "https://internal.users.n8n.cloud/webhook/custom-erp",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "unique_id",
+                            "value": "474442bdfbe861b66a08fbeaf2cb543d"
+                        }
+                    ]
+                },
                 "options": {}
             },
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                220,
-                140
+                200,
+                320
             ],
-            "id": "4cb2ded8-4707-4e31-87fa-16c41fdcd73c",
-            "name": "HTTP Request1"
+            "id": "1d885afe-5c14-4a32-b1eb-e6fb6683bbb4",
+            "name": "HTTP Request1",
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "jaLnVREriWuH3M0P",
+                    "name": "n8n Course"
+                }
+            }
         },
         {
             "parameters": {
-                "mode": "jsonToxml",
-                "dataPropertyName": "={{ $json }}",
+                "operation": "search",
+                "base": {
+                    "__rl": true,
+                    "value": "appZHeOIPtLjBeH7l",
+                    "mode": "list",
+                    "cachedResultName": "Level TWO",
+                    "cachedResultUrl": "https://airtable.com/appZHeOIPtLjBeH7l"
+                },
+                "table": {
+                    "__rl": true,
+                    "value": "tbldkvsNtCsz9xYnf",
+                    "mode": "list",
+                    "cachedResultName": "customers",
+                    "cachedResultUrl": "https://airtable.com/appZHeOIPtLjBeH7l/tbldkvsNtCsz9xYnf"
+                },
                 "options": {}
             },
-            "type": "n8n-nodes-base.xml",
+            "type": "n8n-nodes-base.airtable",
+            "typeVersion": 2.1,
+            "position": [
+                200,
+                520
+            ],
+            "id": "b3eb7ee4-bc40-4492-8df2-b5bf74dd5b90",
+            "name": "Airtable2",
+            "credentials": {
+                "airtableTokenApi": {
+                    "id": "X6jrSAkc62Mri9ZJ",
+                    "name": "Level ONE"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "fieldsToMatchString": "customerID",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                460,
+                420
+            ],
+            "id": "0ea41697-4e23-413f-b81a-5d1011471b92",
+            "name": "Merge1"
+        },
+        {
+            "parameters": {
+                "sortFieldsUi": {
+                    "sortField": [
+                        {
+                            "fieldName": "orderPrice",
+                            "order": "descending"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.sort",
             "typeVersion": 1,
             "position": [
-                480,
-                140
+                680,
+                420
             ],
-            "id": "2f8609fc-d53c-42a1-9391-c4d332971a07",
-            "name": "XML"
+            "id": "9adb6d30-dc6a-4f0c-bd94-43909dd6cfcb",
+            "name": "Sort"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "2142ff35-bdbd-4d2c-8d77-0a88d419b81d",
+                            "leftValue": "={{ $json.region }}",
+                            "rightValue": "Americas",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals",
+                                "name": "filter.operator.equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                880,
+                300
+            ],
+            "id": "543a1698-3db7-4e54-afaf-bbdbd18be777",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "operation": "toJson",
+                "mode": "each",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                1100,
+                300
+            ],
+            "id": "a14958b5-0050-4957-9179-b24961373d43",
+            "name": "Convert to File"
+        },
+        {
+            "parameters": {
+                "sendTo": "poubello@outlook.com",
+                "subject": "Level TWO Workflow 2",
+                "message": "Americas",
+                "options": {
+                    "attachmentsUi": {
+                        "attachmentsBinary": [
+                            {}
+                        ]
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.gmail",
+            "typeVersion": 2.1,
+            "position": [
+                1320,
+                300
+            ],
+            "id": "bc1af550-5f70-4d9a-a9b5-bd30e91f35c3",
+            "name": "Gmail",
+            "webhookId": "68d0ec09-3f2d-4fcc-9c3e-58627b73cd48",
+            "credentials": {
+                "gmailOAuth2": {
+                    "id": "urD1e0Zl583iD3kM",
+                    "name": "Gmail account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "authentication": "webhook",
+                "content": "=I sent the file using email with the label ID {{ $json.id }}. My ID: 265e125a39dbfbedb7c8b941a408b5d4",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.discord",
+            "typeVersion": 2,
+            "position": [
+                1540,
+                300
+            ],
+            "id": "abd5af97-7b08-4fb3-8983-6a7ba5cc0c03",
+            "name": "Discord",
+            "webhookId": "8a858f20-ef6f-4c16-b1f1-e20dcb68df87",
+            "credentials": {
+                "discordWebhookApi": {
+                    "id": "LGrWBflaPflDO75r",
+                    "name": "Discord Webhook account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "batchSize": 5,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.splitInBatches",
+            "typeVersion": 3,
+            "position": [
+                880,
+                540
+            ],
+            "id": "56433fe0-0417-4551-96aa-99adc479ad21",
+            "name": "Loop Over Items"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "90695151-1230-467e-aef7-2e16570967d2",
+                            "name": "customerEmail",
+                            "value": "={{ $json.customerEmail }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "2f5a38d3-3556-4215-896c-6a4ded33cda8",
+                            "name": "customerRegion",
+                            "value": "={{ $json.region }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "5826b5ec-b477-4232-a301-cc1290f2b9c0",
+                            "name": "customerSince",
+                            "value": "={{ $json.customerSince }}",
+                            "type": "string"
+                        },
+                        {
+                            "id": "3efccfc9-4be7-4373-be5f-2d3aa7e15a9a",
+                            "name": "orderPrice",
+                            "value": "={{ $json.orderPrice }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1120,
+                540
+            ],
+            "id": "9befa443-a068-43e1-bea1-fafb31f9d311",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "operation": "formatDate",
+                "date": "={{ $json.customerSince }}",
+                "outputFieldName": "customerSince",
+                "options": {
+                    "includeInputFields": true
+                }
+            },
+            "type": "n8n-nodes-base.dateTime",
+            "typeVersion": 2,
+            "position": [
+                1320,
+                540
+            ],
+            "id": "6fe57688-a928-4848-810c-90a0dea56921",
+            "name": "Date & Time"
+        },
+        {
+            "parameters": {
+                "binaryPropertyName": "={{$runIndex > 0 ? 'file_low_orders':'file_high_orders'}}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.convertToFile",
+            "typeVersion": 1.1,
+            "position": [
+                1540,
+                540
+            ],
+            "id": "f827652a-d1db-45c2-916f-abedcbca86c5",
+            "name": "Convert to File1"
+        },
+        {
+            "parameters": {
+                "authentication": "webhook",
+                "content": "=I created the spreadsheet {{$runIndex > 0 ? 'file_low_orders':'file_high_orders'}}. My ID: 265e125a39dbfbedb7c8b941a408b5d4",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.discord",
+            "typeVersion": 2,
+            "position": [
+                1760,
+                540
+            ],
+            "id": "2158018d-9fa2-443e-b902-b78a3e590f46",
+            "name": "Discord1",
+            "webhookId": "8a858f20-ef6f-4c16-b1f1-e20dcb68df87",
+            "credentials": {
+                "discordWebhookApi": {
+                    "id": "LGrWBflaPflDO75r",
+                    "name": "Discord Webhook account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "content": "### Workflow 3",
+                "height": 420,
+                "width": 2080
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "typeVersion": 1,
+            "position": [
+                -100,
+                860
+            ],
+            "id": "33ae0917-b547-4352-abe4-291a64300443",
+            "name": "Sticky Note2"
         }
     ],
     "connections": {
@@ -92,7 +591,7 @@
                         "index": 0
                     },
                     {
-                        "node": "HTTP Request",
+                        "node": "Airtable2",
                         "type": "main",
                         "index": 0
                     }
@@ -103,7 +602,29 @@
             "main": [
                 [
                     {
-                        "node": "HTML",
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Airtable1": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge": {
+            "main": [
+                [
+                    {
+                        "node": "Airtable",
                         "type": "main",
                         "index": 0
                     }
@@ -114,7 +635,134 @@
             "main": [
                 [
                     {
-                        "node": "XML",
+                        "node": "Merge1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Airtable2": {
+            "main": [
+                [
+                    {
+                        "node": "Merge1",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Merge1": {
+            "main": [
+                [
+                    {
+                        "node": "Sort",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Sort": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Loop Over Items",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to File": {
+            "main": [
+                [
+                    {
+                        "node": "Gmail",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Gmail": {
+            "main": [
+                [
+                    {
+                        "node": "Discord",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Loop Over Items": {
+            "main": [
+                [],
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Date & Time",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Date & Time": {
+            "main": [
+                [
+                    {
+                        "node": "Convert to File1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Convert to File1": {
+            "main": [
+                [
+                    {
+                        "node": "Discord1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Discord1": {
+            "main": [
+                [
+                    {
+                        "node": "Loop Over Items",
                         "type": "main",
                         "index": 0
                     }
@@ -126,9 +774,11 @@
         "executionOrder": "v1"
     },
     "staticData": null,
-    "meta": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
     "pinData": {},
-    "versionId": "d17bd3f8-7190-4713-bb1b-20f9b133e62b",
+    "versionId": "6f1f8503-1667-4ea6-b10e-addf08414299",
     "triggerCount": 0,
     "tags": []
 }
