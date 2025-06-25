@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-06-06T20:25:30.273Z",
-    "updatedAt": "2025-06-12T23:25:26.000Z",
+    "updatedAt": "2025-06-24T23:53:58.000Z",
     "id": "YPjY5Fm5h3SpijZI",
     "name": "Tiktok - Video with kids",
     "active": false,
@@ -403,64 +403,6 @@
         },
         {
             "parameters": {
-                "url": "={{ $json.azure_endpoint }}/face/v1.0/detect",
-                "sendQuery": true,
-                "queryParameters": {
-                    "parameters": [
-                        {
-                            "name": "detectionModel",
-                            "value": "detection_03"
-                        },
-                        {
-                            "name": "recognitionModel",
-                            "value": "recognition_04"
-                        },
-                        {
-                            "name": "returnFaceId",
-                            "value": "true"
-                        },
-                        {
-                            "name": "returnFaceLandmarks",
-                            "value": "true"
-                        },
-                        {
-                            "name": "returnFaceAttributes",
-                            "value": "qualityForRecognition,headPose,blur"
-                        }
-                    ]
-                },
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Ocp-Apim-Subscription-Key",
-                            "value": "={{ $json.azure_key }}"
-                        },
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={ \"url\": \"file://\" + $json.frame_path }",
-                "options": {
-                    "timeout": 30000
-                }
-            },
-            "id": "6dab2453-b2c5-4edc-88b4-a049dfd39d28",
-            "name": "Detect Faces",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.1,
-            "position": [
-                -880,
-                240
-            ],
-            "continueOnFail": true
-        },
-        {
-            "parameters": {
                 "command": "=mkdir -p /tmp/frames_{{ $(\"Process Download\").first().json.workflow_id }};\nffmpeg -i /tmp/video_{{ $(\"Process Download\").first().json.workflow_id }}.mp4 -vf fps=2 /tmp/frames_{{ $(\"Process Download\").first().json.workflow_id }}/frame_%04d.png"
             },
             "id": "c42f61a5-2ebb-4b07-80a2-01174f1e3837",
@@ -512,6 +454,22 @@
             ],
             "id": "a1ded187-6675-4f32-876a-1df063d73369",
             "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "binaryData": true,
+                "additionalFields": {
+                    "attributes": []
+                }
+            },
+            "type": "n8n-nodes-base.awsRekognition",
+            "typeVersion": 1,
+            "position": [
+                -940,
+                260
+            ],
+            "id": "5717885f-670a-4eea-b12e-1b14be2c1c6f",
+            "name": "AWS Rekognition"
         }
     ],
     "connections": {
@@ -704,7 +662,12 @@
             "main": [
                 [
                     {
-                        "node": "Detect Faces",
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "AWS Rekognition",
                         "type": "main",
                         "index": 0
                     }
@@ -747,17 +710,6 @@
                     }
                 ]
             ]
-        },
-        "Detect Faces": {
-            "main": [
-                [
-                    {
-                        "node": "Edit Fields",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
         }
     },
     "settings": {
@@ -766,7 +718,7 @@
     "staticData": null,
     "meta": null,
     "pinData": {},
-    "versionId": "9cd899cd-1029-4d3a-8374-1f4a504d5cbb",
+    "versionId": "a75fc914-6e40-4a5a-ad00-eda9dd6be142",
     "triggerCount": 0,
     "tags": [
         {
