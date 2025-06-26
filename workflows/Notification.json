@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-05-27T21:55:06.402Z",
-    "updatedAt": "2025-06-22T15:36:21.000Z",
+    "updatedAt": "2025-06-25T21:37:23.000Z",
     "id": "kx94Z2Th3dyVsVrw",
     "name": "Notification",
     "active": true,
@@ -321,7 +321,7 @@
                     "interval": [
                         {
                             "field": "cronExpression",
-                            "expression": "* * 18 * *"
+                            "expression": "* */6 * * *"
                         }
                     ]
                 }
@@ -832,7 +832,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "c570d847-3e49-4761-960f-1b290b25d4ef",
+    "versionId": "98c489f7-e4cc-41ab-9b4d-b4744d8c1664",
     "triggerCount": 2,
     "tags": [
         {
