@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-06-06T20:25:30.273Z",
-    "updatedAt": "2025-06-24T23:53:58.000Z",
+    "updatedAt": "2025-06-25T23:45:56.000Z",
     "id": "YPjY5Fm5h3SpijZI",
     "name": "Tiktok - Video with kids",
     "active": false,
@@ -719,7 +719,7 @@
     "meta": null,
     "pinData": {},
     "versionId": "a75fc914-6e40-4a5a-ad00-eda9dd6be142",
-    "triggerCount": 0,
+    "triggerCount": 2,
     "tags": [
         {
             "createdAt": "2025-06-12T22:30:19.800Z",
