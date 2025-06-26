@@ -1,11 +1,299 @@
 {
     "createdAt": "2025-06-24T21:44:08.407Z",
-    "updatedAt": "2025-06-24T23:45:19.000Z",
+    "updatedAt": "2025-06-26T00:02:22.000Z",
     "id": "Ax4f71cfD5CapcAb",
     "name": "Instagram - Get data",
     "active": false,
     "isArchived": false,
     "nodes": [
+        {
+            "parameters": {
+                "language": "python",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport re\nitems = _input.first().json\npattern = re.compile(r\"https://www.instagram.com/([^/?]+)\")\nreturn { \"username\": pattern.match(items[\"chatInput\"]).group(1)}"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                200,
+                0
+            ],
+            "id": "0164d631-d601-4c09-a429-0c27f78b8ca5",
+            "name": "Code"
+        },
+        {
+            "parameters": {
+                "mode": "raw",
+                "jsonOutput": "={\n  \"id\": {{ $json.data.user.id }},\n  \"username\": \"{{ $json.data.user.username }}\",\n  \"name\": \"{{ $json.data.user.full_name }}\",\n  \"profile\": \"https://www.instagram.com/{{ $json.data.user.username }}\",\n  \"bio_links\": \"{{ $json.data.user.bio_links[0].url }}\",\n  \"followers\": {{ $json.data.user.edge_followed_by.count }},\n  \"follow\": {{ $json.data.user.edge_follow.count }},\n  \"picture\": [\n          {\"url\": \"{{ $json.data.user.profile_pic_url_hd }}\"},\n          {\"url\": \"{{ $json.data.user.edge_owner_to_timeline_media.edges[0].node.display_url }}\"},\n          {\"url\": \"{{ $json.data.user.edge_owner_to_timeline_media.edges[1].node.display_url }}\"}\n      ],\n  \"is_private\": \"{{ $json.data.user.is_private }}\",\n  \"is_business_account\": \"{{ $json.data.user.is_business_account }}\",\n  \"is_joined_recently\": \"{{ $json.data.user.is_joined_recently }}\"\n}\n",
+                "includeOtherFields": true,
+                "include": "selected",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                600,
+                0
+            ],
+            "id": "1053784b-5b47-473f-a0bf-5af5ba0918bf",
+            "name": "Edit Fields",
+            "alwaysOutputData": true
+        },
+        {
+            "parameters": {
+                "operation": "upsert",
+                "base": {
+                    "__rl": true,
+                    "value": "appf960v55i3Pdlv9",
+                    "mode": "list",
+                    "cachedResultName": "Instagram",
+                    "cachedResultUrl": "https://airtable.com/appf960v55i3Pdlv9"
+                },
+                "table": {
+                    "__rl": true,
+                    "value": "tblB0gvtE2Q2VFki3",
+                    "mode": "list",
+                    "cachedResultName": "Table 1",
+                    "cachedResultUrl": "https://airtable.com/appf960v55i3Pdlv9/tblB0gvtE2Q2VFki3"
+                },
+                "columns": {
+                    "mappingMode": "autoMapInputData",
+                    "value": {},
+                    "matchingColumns": [
+                        "username"
+                    ],
+                    "schema": [
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": true,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": true,
+                            "removed": false
+                        },
+                        {
+                            "id": "id",
+                            "displayName": "id",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "number",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "username",
+                            "displayName": "username",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "name",
+                            "displayName": "name",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "profile",
+                            "displayName": "profile",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "bio_links",
+                            "displayName": "bio_links",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "string",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "followers",
+                            "displayName": "followers",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "number",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "follow",
+                            "displayName": "follow",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "number",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "picture",
+                            "displayName": "picture",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "array",
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "is_private",
+                            "displayName": "is_private",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "options",
+                            "options": [
+                                {
+                                    "name": "true",
+                                    "value": "true"
+                                },
+                                {
+                                    "name": "false",
+                                    "value": "false"
+                                }
+                            ],
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "is_business_account",
+                            "displayName": "is_business_account",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "options",
+                            "options": [
+                                {
+                                    "name": "true",
+                                    "value": "true"
+                                },
+                                {
+                                    "name": "false",
+                                    "value": "false"
+                                }
+                            ],
+                            "readOnly": false,
+                            "removed": false
+                        },
+                        {
+                            "id": "is_joined_recently",
+                            "displayName": "is_joined_recently",
+                            "required": false,
+                            "defaultMatch": false,
+                            "canBeUsedToMatch": true,
+                            "display": true,
+                            "type": "options",
+                            "options": [
+                                {
+                                    "name": "true",
+                                    "value": "true"
+                                },
+                                {
+                                    "name": "false",
+                                    "value": "false"
+                                }
+                            ],
+                            "readOnly": false,
+                            "removed": false
+                        }
+                    ],
+                    "attemptToConvertTypes": false,
+                    "convertFieldsToString": false
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.airtable",
+            "typeVersion": 2.1,
+            "position": [
+                800,
+                0
+            ],
+            "id": "439d6056-e331-40af-b4dc-8a6eb8c3177e",
+            "name": "Airtable",
+            "credentials": {
+                "airtableTokenApi": {
+                    "id": "FVwl5FUvH6ZKh3ki",
+                    "name": "Airtable Datasets"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "=https://www.instagram.com/api/v1/users/web_profile_info/",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "username",
+                            "value": "={{ $json.username }}"
+                        }
+                    ]
+                },
+                "sendHeaders": true,
+                "specifyHeaders": "json",
+                "jsonHeaders": "={\n    \"Accept\": \"*/*\",\n    \"Accept-Encoding\": \"gzip, deflate, br\",\n    \"Accept-Language\": \"fr,en-US;q=0.9,en;q=0.8\",\n    \"Cache-Control\": \"max-age=0\",\n    \"Connection\": \"keep-alive\",\n    \"Host\": \"www.instagram.com\",\n    \"Referer\": \"https://www.instagram.com/{{ $json.username }}\",\n    \"User-Agent\": \"Mozilla/5.0 (Linux; Android 12; SM-N970F Build/SP1A.210812.016; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/135.0.7049.89 Mobile Safari/537.36 Instagram 376.1.0.55.68 Android (31/12; 420dpi; 1080x2064; samsung; SM-N970F; d1; exynos9825; cs_CZ; 722818375; IABMV/1)\"\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                400,
+                0
+            ],
+            "id": "e35c0548-9acf-438b-a37a-c7caa54e14a7",
+            "name": "HTTP Request",
+            "alwaysOutputData": false
+        },
+        {
+            "parameters": {
+                "updates": [
+                    "message"
+                ],
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.telegramTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                100
+            ],
+            "id": "2b078371-dcb1-4e11-b809-88c8d58db97e",
+            "name": "Telegram Trigger",
+            "webhookId": "cbd9dfb8-297d-4be8-ad04-8b0cd7b0c5c0",
+            "credentials": {
+                "telegramApi": {
+                    "id": "AlCMwgvN0vx0V3z2",
+                    "name": "InstaSets"
+                }
+            }
+        },
         {
             "parameters": {
                 "options": {}
@@ -14,42 +302,48 @@
             "typeVersion": 1.1,
             "position": [
                 0,
-                0
+                -100
             ],
-            "id": "6d2e9991-c59b-4125-b347-5966d507e354",
+            "id": "4538681a-34ae-43b8-b934-cf6a5b01aebc",
             "name": "When chat message received",
-            "webhookId": "2ae2414e-e79e-4202-9430-143b7f5ad726"
-        },
-        {
-            "parameters": {
-                "language": "python",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport re\nitems = _input.first().json\npattern = re.compile(r\"https://www.instagram.com/([^?]+)\")\nreturn { \"pseudo\": pattern.match(items[\"chatInput\"]).group(1)}"
-            },
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                220,
-                0
-            ],
-            "id": "0164d631-d601-4c09-a429-0c27f78b8ca5",
-            "name": "Code"
-        },
-        {
-            "parameters": {
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                440,
-                0
-            ],
-            "id": "fbb58901-752d-4dee-99b6-c2ae79ecbb8f",
-            "name": "HTTP Request"
+            "webhookId": "551c6c5e-9e7c-49d4-8708-63472a48969f"
         }
     ],
     "connections": {
-        "When chat message received": {
+        "Code": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Airtable",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "main": [
+                [
+                    {
+                        "node": "Edit Fields",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Telegram Trigger": {
             "main": [
                 [
                     {
@@ -60,11 +354,11 @@
                 ]
             ]
         },
-        "Code": {
+        "When chat message received": {
             "main": [
                 [
                     {
-                        "node": "HTTP Request",
+                        "node": "Code",
                         "type": "main",
                         "index": 0
                     }
@@ -76,9 +370,11 @@
         "executionOrder": "v1"
     },
     "staticData": null,
-    "meta": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
     "pinData": {},
-    "versionId": "be5eac3e-9bdd-4ef6-a94e-ac0f49494de4",
-    "triggerCount": 0,
+    "versionId": "7addedab-681c-4dea-9ba3-3ed79567e179",
+    "triggerCount": 1,
     "tags": []
 }
