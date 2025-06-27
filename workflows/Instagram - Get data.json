@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-06-24T21:44:08.407Z",
-    "updatedAt": "2025-06-26T00:02:22.000Z",
+    "updatedAt": "2025-06-26T23:06:40.000Z",
     "id": "Ax4f71cfD5CapcAb",
     "name": "Instagram - Get data",
     "active": false,
@@ -247,6 +247,8 @@
         {
             "parameters": {
                 "url": "=https://www.instagram.com/api/v1/users/web_profile_info/",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
                 "sendQuery": true,
                 "queryParameters": {
                     "parameters": [
@@ -258,7 +260,7 @@
                 },
                 "sendHeaders": true,
                 "specifyHeaders": "json",
-                "jsonHeaders": "={\n    \"Accept\": \"*/*\",\n    \"Accept-Encoding\": \"gzip, deflate, br\",\n    \"Accept-Language\": \"fr,en-US;q=0.9,en;q=0.8\",\n    \"Cache-Control\": \"max-age=0\",\n    \"Connection\": \"keep-alive\",\n    \"Host\": \"www.instagram.com\",\n    \"Referer\": \"https://www.instagram.com/{{ $json.username }}\",\n    \"User-Agent\": \"Mozilla/5.0 (Linux; Android 12; SM-N970F Build/SP1A.210812.016; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/135.0.7049.89 Mobile Safari/537.36 Instagram 376.1.0.55.68 Android (31/12; 420dpi; 1080x2064; samsung; SM-N970F; d1; exynos9825; cs_CZ; 722818375; IABMV/1)\"\n}",
+                "jsonHeaders": "={\n    \"Accept\": \"*/*\",\n    \"Accept-Encoding\": \"gzip, deflate, br\",\n    \"Accept-Language\": \"fr,en-US;q=0.9,en;q=0.8\",\n    \"Cache-Control\": \"max-age=0\",\n    \"Content-Type\": \"application/json\",\n    \"Connection\": \"keep-alive\",\n    \"Host\": \"www.instagram.com\",\n    \"Referer\": \"https://www.instagram.com/{{ $json.username }}\",\n    \"User-Agent\": \"Mozilla/5.0 (Linux; Android 12; SM-N970F Build/SP1A.210812.016; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/135.0.7049.89 Mobile Safari/537.36 Instagram 376.1.0.55.68 Android (31/12; 420dpi; 1080x2064; samsung; SM-N970F; d1; exynos9825; cs_CZ; 722818375; IABMV/1)\"\n}",
                 "options": {}
             },
             "type": "n8n-nodes-base.httpRequest",
@@ -269,7 +271,17 @@
             ],
             "id": "e35c0548-9acf-438b-a37a-c7caa54e14a7",
             "name": "HTTP Request",
-            "alwaysOutputData": false
+            "alwaysOutputData": false,
+            "credentials": {
+                "httpBearerAuth": {
+                    "id": "ls5PXGXbJwYMvUHK",
+                    "name": "Instagram "
+                },
+                "httpHeaderAuth": {
+                    "id": "LNV6CcCwAh4LLHyi",
+                    "name": "Header Auth account 2"
+                }
+            }
         },
         {
             "parameters": {
@@ -307,6 +319,54 @@
             "id": "4538681a-34ae-43b8-b934-cf6a5b01aebc",
             "name": "When chat message received",
             "webhookId": "551c6c5e-9e7c-49d4-8708-63472a48969f"
+        },
+        {
+            "parameters": {
+                "graphApiVersion": "v22.0",
+                "node": "=asiavix19",
+                "options": {
+                    "fields": {
+                        "field": [
+                            {
+                                "name": "id"
+                            },
+                            {
+                                "name": "username"
+                            },
+                            {
+                                "name": "name"
+                            },
+                            {
+                                "name": "biography"
+                            },
+                            {
+                                "name": "followers_count"
+                            },
+                            {
+                                "name": "follows_count"
+                            },
+                            {
+                                "name": "media"
+                            }
+                        ]
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.facebookGraphApi",
+            "typeVersion": 1,
+            "position": [
+                400,
+                -160
+            ],
+            "id": "f0e91f61-49c8-4e93-b750-babc80de8636",
+            "name": "Facebook Graph API",
+            "credentials": {
+                "facebookGraphApi": {
+                    "id": "wXmos9gmbFrp5Xsq",
+                    "name": "App n8n access"
+                }
+            },
+            "onError": "continueRegularOutput"
         }
     ],
     "connections": {
@@ -315,6 +375,11 @@
                 [
                     {
                         "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Facebook Graph API",
                         "type": "main",
                         "index": 0
                     }
@@ -364,6 +429,11 @@
                     }
                 ]
             ]
+        },
+        "Facebook Graph API": {
+            "main": [
+                []
+            ]
         }
     },
     "settings": {
@@ -374,7 +444,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "7addedab-681c-4dea-9ba3-3ed79567e179",
+    "versionId": "3b83a2d0-3a4a-455f-9c84-b3294a1e80c3",
     "triggerCount": 1,
     "tags": []
 }
