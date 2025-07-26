@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-06-24T21:44:08.407Z",
-    "updatedAt": "2025-07-24T23:52:58.000Z",
+    "updatedAt": "2025-07-25T23:58:44.000Z",
     "id": "Ax4f71cfD5CapcAb",
     "name": "Instagram - Get data",
     "active": false,
@@ -246,7 +246,7 @@
         },
         {
             "parameters": {
-                "url": "=https://www.instagram.com/api/v1/users/web_profile_info/",
+                "url": "=https://i.instagram.com/api/v1/users/web_profile_info/",
                 "authentication": "genericCredentialType",
                 "genericAuthType": "httpHeaderAuth",
                 "sendQuery": true,
@@ -520,7 +520,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "d83d87dd-3137-4358-9bc4-dd58c65a1c9a",
+    "versionId": "b7dc9dd9-b360-4117-9077-d0951a68ef7c",
     "triggerCount": 1,
     "tags": []
 }
