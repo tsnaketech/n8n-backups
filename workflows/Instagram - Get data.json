@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-06-24T21:44:08.407Z",
-    "updatedAt": "2025-07-25T23:58:44.000Z",
+    "updatedAt": "2025-07-31T07:32:11.000Z",
     "id": "Ax4f71cfD5CapcAb",
     "name": "Instagram - Get data",
     "active": false,
@@ -323,7 +323,7 @@
         },
         {
             "parameters": {
-                "graphApiVersion": "v22.0",
+                "graphApiVersion": "v23.0",
                 "node": "=asiavix19",
                 "options": {
                     "fields": {
@@ -520,7 +520,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "b7dc9dd9-b360-4117-9077-d0951a68ef7c",
+    "versionId": "18106998-a98f-4b11-b2da-7120cb20a351",
     "triggerCount": 1,
     "tags": []
 }
