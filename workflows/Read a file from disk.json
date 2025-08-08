@@ -1,0 +1,58 @@
+{
+    "createdAt": "2025-08-07T22:29:06.847Z",
+    "updatedAt": "2025-08-07T22:29:06.847Z",
+    "id": "4FHKSio0wF5775em",
+    "name": "Read a file from disk",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {},
+            "name": "On clicking 'execute'",
+            "type": "n8n-nodes-base.manualTrigger",
+            "position": [
+                368,
+                240
+            ],
+            "typeVersion": 1,
+            "id": "87ca26f8-9771-4300-a710-c005cbfa902f"
+        },
+        {
+            "parameters": {
+                "filePath": "/tmp/workflow_1754604908484/frames/frame_001.png"
+            },
+            "name": "Read Binary File",
+            "type": "n8n-nodes-base.readBinaryFile",
+            "position": [
+                640,
+                176
+            ],
+            "typeVersion": 1,
+            "id": "945cb07c-2bc1-4cdf-87dc-eab4615f4ab7"
+        }
+    ],
+    "connections": {
+        "On clicking 'execute'": {
+            "main": [
+                [
+                    {
+                        "node": "Read Binary File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateId": "577"
+    },
+    "pinData": {},
+    "versionId": "41e0bc0b-64f9-49a7-866b-cb2b90e0a9b7",
+    "triggerCount": 0,
+    "tags": []
+}
