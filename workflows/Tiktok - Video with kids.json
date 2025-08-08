@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-06-06T20:25:30.273Z",
-    "updatedAt": "2025-07-26T00:06:33.000Z",
+    "updatedAt": "2025-08-07T22:48:23.000Z",
     "id": "YPjY5Fm5h3SpijZI",
     "name": "Tiktok - Video with kids",
     "active": false,
@@ -392,7 +392,7 @@
         },
         {
             "parameters": {
-                "jsCode": "// Créer liste des frames à traiter\nconst workflow_id = $(\"Process Download\").first().json.workflow_id\nconst data = $input.first().json;\nconst frameCount = 15; // Optimisé pour les coûts\nconst frames = [];\n\nfor (let i = 1; i <= frameCount; i++) {\n  frames.push({\n    // ...data,\n    frame_number: i,\n    frame_path: `/tmp/${workflow_id}/frames/frame_${String(i).padStart(3, '0')}.png`,\n    timestamp: (i-1) * 1.0\n  });\n}\n\nreturn frames;"
+                "jsCode": "// Créer liste des frames à traiter\nconst workflow_id = $(\"Process Download\").first().json.workflow_id\nconst data = $input.first().json;\nconst frameCount = 15; // Optimisé pour les coûts\nconst frames = [];\n\nfor (let i = 1; i <= frameCount; i++) {\n  frames.push({\n    // ...data,\n    frame_number: i,\n    frame_path: `/tmp/${workflow_id}/frames/frame_${String(i).padStart(4, '0')}.png`,\n    timestamp: (i-1) * 1.0\n  });\n}\n\nreturn frames;"
             },
             "id": "12d29f29-a3ab-425b-a9cf-00fe02766fac",
             "name": "Prepare Frames",
@@ -405,7 +405,7 @@
         },
         {
             "parameters": {
-                "command": "=mkdir -p /tmp/frames_{{ $(\"Process Download\").first().json.workflow_id }};\nffmpeg -i /tmp/video_{{ $(\"Process Download\").first().json.workflow_id }}.mp4 -vf fps=2 /tmp/frames_{{ $(\"Process Download\").first().json.workflow_id }}/frame_%04d.png"
+                "command": "=workflow_id=\"{{ $(\"Process Download\").first().json.workflow_id }}\"\nmkdir -p /tmp/$workflow_id/frames/\nffmpeg -i /tmp/$workflow_id/video/$workflow_id.mp4 -vf fps=2 /tmp/$workflow_id/frames/frame_%04d.png"
             },
             "id": "c42f61a5-2ebb-4b07-80a2-01174f1e3837",
             "name": "Extract Frames",
@@ -418,7 +418,7 @@
         },
         {
             "parameters": {
-                "command": "=ffmpeg -i /tmp/video_{{ $(\"Process Download\").first().json.workflow_id }}.mp4 -vn -acodec pcm_s16le /tmp/audio_{{ $(\"Process Download\").first().json.workflow_id }}.wav"
+                "command": "=workflow_id=\"{{ $(\"Process Download\").first().json.workflow_id }}\"\nmkdir -p /tmp/$workflow_id/audio/\nffmpeg -i /tmp/$workflow_id/video/$workflow_id.mp4 -vn -acodec pcm_s16le /tmp/$workflow_id/audio/$workflow_id.wav"
             },
             "id": "6f98d8a7-6fa7-4024-a121-e3b208b2a0c7",
             "name": "Extract Audio",
@@ -431,7 +431,7 @@
         },
         {
             "parameters": {
-                "command": "=wget -O /tmp/video_{{ $json.workflow_id }}.mp4 \"{{ $json.video_url }}\""
+                "command": "=mkdir -p /tmp/{{ $json.workflow_id }}/video/\nwget -O /tmp/{{ $json.workflow_id }}/video/{{ $json.workflow_id }}.mp4 \"{{ $json.video_url }}\""
             },
             "id": "ef3939a1-6244-42fa-a701-cf5220081a64",
             "name": "Save Video",
@@ -452,8 +452,8 @@
             "type": "n8n-nodes-base.awsRekognition",
             "typeVersion": 1,
             "position": [
-                -432,
-                320
+                -624,
+                304
             ],
             "id": "5717885f-670a-4eea-b12e-1b14be2c1c6f",
             "name": "Analyze image",
@@ -483,8 +483,8 @@
             "name": "Replace Me",
             "typeVersion": 1,
             "position": [
-                -384,
-                496
+                -368,
+                304
             ],
             "id": "502e5fd1-fff0-459e-8098-3f8919b1c49c"
         },
@@ -496,40 +496,11 @@
             "type": "n8n-nodes-base.readWriteFile",
             "typeVersion": 1,
             "position": [
-                -688,
-                320
+                -896,
+                304
             ],
             "id": "fc7af635-6ce3-41e0-a7ef-353fd07345e0",
             "name": "Read/Write Files from Disk"
-        },
-        {
-            "parameters": {
-                "url": "=file://{{ $json.frame_path }}",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                -880,
-                352
-            ],
-            "id": "cb85dfee-4988-4473-b69c-8dd9893ba0a8",
-            "name": "HTTP Request"
-        },
-        {
-            "parameters": {
-                "fileSelector": "={{ $json.frame_path }}",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.readWriteFile",
-            "typeVersion": 1,
-            "position": [
-                -896,
-                480
-            ],
-            "id": "128e94b0-4e9f-4871-9a06-347ef9380ca2",
-            "name": "Read/Write Files from Disk1",
-            "alwaysOutputData": true
         }
     ],
     "connections": {
@@ -771,7 +742,7 @@
                 [],
                 [
                     {
-                        "node": "Read/Write Files from Disk1",
+                        "node": "Read/Write Files from Disk",
                         "type": "main",
                         "index": 0
                     }
@@ -793,18 +764,18 @@
             "main": [
                 [
                     {
-                        "node": "Replace Me",
+                        "node": "Analyze image",
                         "type": "main",
                         "index": 0
                     }
                 ]
             ]
         },
-        "HTTP Request": {
+        "Analyze image": {
             "main": [
                 [
                     {
-                        "node": "Read/Write Files from Disk",
+                        "node": "Replace Me",
                         "type": "main",
                         "index": 0
                     }
@@ -818,7 +789,7 @@
     "staticData": null,
     "meta": null,
     "pinData": {},
-    "versionId": "ff39e785-6ae3-40c7-becf-03bd06bd4269",
+    "versionId": "b490a1b7-c19d-4124-95bc-925e04a98e6a",
     "triggerCount": 2,
     "tags": [
         {
