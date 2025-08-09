@@ -1,6 +1,6 @@
 {
     "createdAt": "2024-09-28T09:11:06.127Z",
-    "updatedAt": "2025-05-17T10:47:37.000Z",
+    "updatedAt": "2025-08-08T07:41:50.000Z",
     "id": "gTBkibbRHEFPmn1l",
     "name": "Splunk - Notification",
     "active": true,
@@ -17,8 +17,8 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                420,
-                40
+                432,
+                48
             ],
             "id": "2f0c6b21-f92e-4e3a-807a-0db2420c9998",
             "name": "Telegram",
@@ -58,8 +58,8 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.2,
             "position": [
-                -300,
-                40
+                -304,
+                48
             ],
             "id": "c1bc587e-83b1-486f-b1f1-37af089b415c",
             "name": "If"
@@ -72,8 +72,8 @@
             "type": "@n8n/n8n-nodes-langchain.chainLlm",
             "typeVersion": 1.5,
             "position": [
-                100,
-                -20
+                112,
+                -16
             ],
             "id": "cbf43d69-d629-4d5c-87a4-0c457d142c2b",
             "name": "Basic LLM Chain"
@@ -86,8 +86,8 @@
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
             "typeVersion": 1,
             "position": [
-                20,
-                220
+                32,
+                224
             ],
             "id": "073ae533-c155-4b53-a97c-8ebadcb4aebf",
             "name": "OpenRouter Chat Model",
@@ -106,8 +106,8 @@
             "type": "@n8n/n8n-nodes-langchain.chainLlm",
             "typeVersion": 1.5,
             "position": [
-                100,
-                100
+                112,
+                112
             ],
             "id": "fdabfb1c-34c8-4af2-9619-c2d9bb3080f9",
             "name": "Basic LLM Chain1"
@@ -168,7 +168,7 @@
             "typeVersion": 3.2,
             "position": [
                 -80,
-                40
+                48
             ],
             "id": "0e279135-95c5-4976-b6a1-452167a4dc26",
             "name": "Switch"
@@ -182,8 +182,8 @@
             "type": "n8n-nodes-base.webhook",
             "typeVersion": 2,
             "position": [
-                -540,
-                -40
+                -544,
+                -48
             ],
             "id": "b37f12a4-232d-49e6-bfb4-c80acbb3987d",
             "name": "Appinfo",
@@ -200,8 +200,8 @@
             "type": "n8n-nodes-base.webhook",
             "typeVersion": 2,
             "position": [
-                -540,
-                120
+                -544,
+                128
             ],
             "webhookId": "f274fdf3-1562-4ab9-8619-a9875fcedc35",
             "notes": "ChangeDetection Input"
@@ -217,8 +217,8 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                -300,
-                220
+                -304,
+                224
             ],
             "id": "5506dd2f-01c0-40ac-bc90-058cd2f8fdf1",
             "name": "Telegram1",
@@ -228,7 +228,8 @@
                     "id": "t5jP1rX1Q7rEmgPc",
                     "name": "Telegram account"
                 }
-            }
+            },
+            "onError": "continueRegularOutput"
         }
     ],
     "connections": {
@@ -335,7 +336,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "b2320c89-27a5-41c9-a931-4eb31b723fd9",
+    "versionId": "f389350e-85bf-4f4d-94d6-0024ac536758",
     "triggerCount": 2,
     "tags": [
         {
