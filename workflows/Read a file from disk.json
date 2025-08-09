@@ -1,10 +1,10 @@
 {
     "createdAt": "2025-08-07T22:29:06.847Z",
-    "updatedAt": "2025-08-07T22:29:06.847Z",
+    "updatedAt": "2025-08-08T07:24:27.000Z",
     "id": "4FHKSio0wF5775em",
     "name": "Read a file from disk",
     "active": false,
-    "isArchived": false,
+    "isArchived": true,
     "nodes": [
         {
             "parameters": {},
@@ -52,7 +52,7 @@
         "templateId": "577"
     },
     "pinData": {},
-    "versionId": "41e0bc0b-64f9-49a7-866b-cb2b90e0a9b7",
+    "versionId": "68f88f3c-5121-496d-8706-3d37fa9d5f6e",
     "triggerCount": 0,
     "tags": []
 }
