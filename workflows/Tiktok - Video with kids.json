@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-06-06T20:25:30.273Z",
-    "updatedAt": "2025-08-07T22:48:23.000Z",
+    "updatedAt": "2025-08-10T23:27:11.000Z",
     "id": "YPjY5Fm5h3SpijZI",
     "name": "Tiktok - Video with kids",
     "active": false,
@@ -31,8 +31,8 @@
             "type": "n8n-nodes-base.function",
             "typeVersion": 1,
             "position": [
-                -1488,
-                464
+                -1616,
+                752
             ]
         },
         {
@@ -44,8 +44,8 @@
             "type": "n8n-nodes-base.executeCommand",
             "typeVersion": 1,
             "position": [
-                -960,
-                1312
+                -1168,
+                976
             ]
         },
         {
@@ -57,8 +57,8 @@
             "type": "n8n-nodes-base.function",
             "typeVersion": 1,
             "position": [
-                -736,
-                1312
+                -944,
+                976
             ]
         },
         {
@@ -70,8 +70,8 @@
             "type": "n8n-nodes-base.function",
             "typeVersion": 1,
             "position": [
-                -528,
-                1312
+                -736,
+                976
             ]
         },
         {
@@ -83,8 +83,8 @@
             "type": "n8n-nodes-base.executeCommand",
             "typeVersion": 1,
             "position": [
-                -304,
-                1312
+                -512,
+                976
             ]
         },
         {
@@ -123,8 +123,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.1,
             "position": [
-                -80,
-                1312
+                -288,
+                976
             ]
         },
         {
@@ -318,8 +318,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                -1536,
-                640
+                -1712,
+                992
             ],
             "id": "f8bf6d34-6466-4315-b347-7a193dfe4a6d",
             "name": "Code"
@@ -333,13 +333,14 @@
             "type": "n8n-nodes-base.function",
             "typeVersion": 1,
             "position": [
-                160,
-                1376
+                -48,
+                1040
             ]
         },
         {
             "parameters": {
-                "jsCode": "// Validation et extraction de l'URL TikTok\nconst input = $input.first().json;\nconst tiktokUrl = input.url || input.tiktok_url || input.chatInput;\n\nif (!tiktokUrl) {\n  throw new Error('URL TikTok manquante');\n}\n\n// Vérification format URL TikTok\nif (!tiktokUrl.includes('tiktok.com')) {\n  throw new Error('URL TikTok invalide');\n}\n\nreturn {\n  json: {\n    tiktok_url: tiktokUrl,\n    timestamp: new Date().toISOString(),\n    workflow_id: `workflow_${Date.now()}`\n  }\n};"
+                "language": "python",
+                "pythonCode": "# Validation et extraction de l'URL TikTok\nimport time\nfrom datetime import datetime\n\ninput = _input.first().json\ntiktok_url = input.get(\"url\") or input.get(\"tiktok_url\") or input.get(\"chatInput\")\n\nif not tiktok_url:\n  raise ValueError('URL TikTok manquante')\n\n# Vérification format URL TikTok\nif 'tiktok.com' not in tiktok_url:\n  raise ValueError('URL TikTok invalide')\n\nreturn {\n    \"tiktok_url\": tiktok_url,\n    \"timestamp\": datetime.now().isoformat(),\n    \"workflow_id\": f\"workflow_{int(time.time() * 1000)}\"\n  }"
             },
             "id": "03381ea7-c87c-44a8-8fa3-7142d570cf02",
             "name": "Validate Input",
@@ -373,26 +374,28 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.1,
             "position": [
-                -656,
+                -704,
                 -96
             ]
         },
         {
             "parameters": {
-                "jsCode": "// Traitement de la réponse de téléchargement\nconst response = $input.first().json;\n\nif (response.code !== 0) {\n  throw new Error('Échec du téléchargement TikTok');\n}\n\nconst data = response.data;\n                               \nreturn {\n  json: {\n    video_url: data.hdplay || data.play,\n    video_title: data.title,\n    duration: data.duration,\n    author: data.author.nickname,\n    workflow_id: $('Validate Input').first().json.workflow_id,\n    download_success: true\n  }\n};"
+                "language": "python",
+                "pythonCode": "# Traitement de la réponse de téléchargement\nimport json\n\nresponse = _input.first().json\n\nif response.code != 0:\n  raise ValueError('Échec du téléchargement TikTok')\n\ndata = response.get('data', {})\n\nif hasattr(data, 'to_py'):\n    data = data.to_py()  # ou data.valueOf()\n\nauthor = data.get('author', {})\n\nreturn {\n    'video_url': data.get('hdplay') or data.get('play'),\n    'video_title': data.get('title'),\n    'duration': data.get('duration'),\n    'author': author.get('nickname'),\n    'workflow_id': _('Validate Input').first().json.get(\"workflow_id\"),\n    'download_success': True\n}"
             },
             "id": "220253b5-470c-4bff-97bd-5f92ec13578a",
             "name": "Process Download",
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                -448,
+                -512,
                 -96
             ]
         },
         {
             "parameters": {
-                "jsCode": "// Créer liste des frames à traiter\nconst workflow_id = $(\"Process Download\").first().json.workflow_id\nconst data = $input.first().json;\nconst frameCount = 15; // Optimisé pour les coûts\nconst frames = [];\n\nfor (let i = 1; i <= frameCount; i++) {\n  frames.push({\n    // ...data,\n    frame_number: i,\n    frame_path: `/tmp/${workflow_id}/frames/frame_${String(i).padStart(4, '0')}.png`,\n    timestamp: (i-1) * 1.0\n  });\n}\n\nreturn frames;"
+                "language": "python",
+                "pythonCode": "# Créer liste des frames à traiter\nworkflow_id = _(\"Process Download\").first().json.get(\"workflow_id\")\ndata = _input.first().json\nframe_count = 10 # Optimisé pour les coûts\nframes = []\n\n# Créer liste des frames à traiter\nfor i in range(1, frame_count + 1):\n    frame_info = {\n        # **data,  # Décommentez si vous voulez inclure toutes les données\n        'frame_number': i,\n        'frame_path': f'/tmp/{workflow_id}/frames/frame_{str(i).zfill(4)}.png',\n        'timestamp': (i - 1) * 1.0\n    }\n    frames.append(frame_info)\n\nreturn frames"
             },
             "id": "12d29f29-a3ab-425b-a9cf-00fe02766fac",
             "name": "Prepare Frames",
@@ -405,7 +408,7 @@
         },
         {
             "parameters": {
-                "command": "=workflow_id=\"{{ $(\"Process Download\").first().json.workflow_id }}\"\nmkdir -p /tmp/$workflow_id/frames/\nffmpeg -i /tmp/$workflow_id/video/$workflow_id.mp4 -vf fps=2 /tmp/$workflow_id/frames/frame_%04d.png"
+                "command": "=workflow_id=\"{{ $(\"Process Download\").first().json.workflow_id }}\"\nffmpeg -i /tmp/$workflow_id/video/$workflow_id.mp4 -vf fps=2 /tmp/$workflow_id/frames/frame_%04d.png"
             },
             "id": "c42f61a5-2ebb-4b07-80a2-01174f1e3837",
             "name": "Extract Frames",
@@ -418,7 +421,7 @@
         },
         {
             "parameters": {
-                "command": "=workflow_id=\"{{ $(\"Process Download\").first().json.workflow_id }}\"\nmkdir -p /tmp/$workflow_id/audio/\nffmpeg -i /tmp/$workflow_id/video/$workflow_id.mp4 -vn -acodec pcm_s16le /tmp/$workflow_id/audio/$workflow_id.wav"
+                "command": "=workflow_id=\"{{ $(\"Process Download\").first().json.workflow_id }}\"\nffmpeg -i /tmp/$workflow_id/video/$workflow_id.mp4 -vn -acodec pcm_s16le /tmp/$workflow_id/audio/$workflow_id.wav"
             },
             "id": "6f98d8a7-6fa7-4024-a121-e3b208b2a0c7",
             "name": "Extract Audio",
@@ -431,14 +434,14 @@
         },
         {
             "parameters": {
-                "command": "=mkdir -p /tmp/{{ $json.workflow_id }}/video/\nwget -O /tmp/{{ $json.workflow_id }}/video/{{ $json.workflow_id }}.mp4 \"{{ $json.video_url }}\""
+                "command": "=workflow_id=\"{{ $(\"Process Download\").first().json.workflow_id }}\"\nwget -O /tmp/$workflow_id/video/$workflow_id.mp4 \"{{ $('Process Download').item.json.video_url }}\""
             },
             "id": "ef3939a1-6244-42fa-a701-cf5220081a64",
             "name": "Save Video",
             "type": "n8n-nodes-base.executeCommand",
             "typeVersion": 1,
             "position": [
-                -224,
+                -160,
                 -96
             ],
             "alwaysOutputData": true,
@@ -447,7 +450,9 @@
         {
             "parameters": {
                 "binaryData": true,
-                "additionalFields": {}
+                "additionalFields": {
+                    "attributes": "={{ [\"EYE_DIRECTION\", \"EYES_OPEN\"] }}"
+                }
             },
             "type": "n8n-nodes-base.awsRekognition",
             "typeVersion": 1,
@@ -475,7 +480,8 @@
                 304
             ],
             "id": "7e8db1d9-7199-4f82-bd82-e6785a105bb9",
-            "name": "Loop Over Items"
+            "name": "Loop Over Items",
+            "disabled": true
         },
         {
             "parameters": {},
@@ -501,6 +507,113 @@
             ],
             "id": "fc7af635-6ce3-41e0-a7ef-353fd07345e0",
             "name": "Read/Write Files from Disk"
+        },
+        {
+            "parameters": {
+                "command": "=mkdir -p /tmp/{{ $json.workflow_id }}/audio/\nmkdir -p /tmp/{{ $json.workflow_id }}/faces/\nmkdir -p /tmp/{{ $json.workflow_id }}/frames/\nmkdir -p /tmp/{{ $json.workflow_id }}/video/"
+            },
+            "id": "35027d3e-1464-4366-88f7-f09721b8f544",
+            "name": "Create folders",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -336,
+                -96
+            ],
+            "alwaysOutputData": true,
+            "notesInFlow": false
+        },
+        {
+            "parameters": {
+                "authentication": "predefinedCredentialType",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                -16,
+                224
+            ],
+            "id": "a4eaa39b-2e18-4b18-be61-16f428bf214a",
+            "name": "HTTP Request",
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "fileSelector": "={{ $json.frame_path }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.readWriteFile",
+            "typeVersion": 1,
+            "position": [
+                -1216,
+                720
+            ],
+            "id": "246c4806-0f17-41d1-aa38-3e6636d6f8ed",
+            "name": "Read/Write Files from Disk1"
+        },
+        {
+            "parameters": {
+                "binaryData": true,
+                "additionalFields": {
+                    "attributes": "={{ [\"AGE_RANGE\", \"EYE_DIRECTION\", \"EYES_OPEN\", \"GENDER\"] }}"
+                }
+            },
+            "type": "n8n-nodes-base.awsRekognition",
+            "typeVersion": 1,
+            "position": [
+                -1008,
+                720
+            ],
+            "id": "469404b1-d4f7-4f94-90fd-186fba55e266",
+            "name": "Analyze image1",
+            "credentials": {
+                "aws": {
+                    "id": "TVt2s9BRalpzLzvl",
+                    "name": "AWS account n8n tsnake7"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "language": "python",
+                "pythonCode": "# Collecter tous les visages détectés avec leurs métadonnées\nall_faces = []\nitems = _input.all()\n\nfor item in items:\n  faces = item.json.get('FaceDetails', [])\n  \n  for face_index, face in enumerate(faces):\n     all_faces.append({\n         'frame_number': (_('Prepare Frames').all())[face_index].json.frame_number,\n         'timestamp': item.json.get('timestamp'),\n         'face_id': f\"frame_{(_('Prepare Frames').all())[face_index].json.frame_number}_face_{face_index}\",\n         'bounding_box': face.get('BoundingBox'),\n         'confidence': face.get('Confidence'),\n         'emotions': face.get('Emotions'),\n         'age_range': face.get('AgeRange'),\n         'gender': face.get('Gender'),\n         'landmarks': face.get('Landmarks')\n     })\n\nreturn [{'json': {'detected_faces': all_faces, 'total_faces': len(all_faces)}}]"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -800,
+                720
+            ],
+            "id": "1ee11120-a06d-4d11-8e13-855e943feaf1",
+            "name": "Code1"
+        },
+        {
+            "parameters": {
+                "language": "python",
+                "pythonCode": "import math\n\n# Grouper les visages similaires par comparaison de landmarks\nfaces = _json.get('detected_faces', {})\ngroups = []\nprocessed = set()\n\nfor index, face in enumerate(faces):\n  if index in processed:\n     continue\n  \n  group = {\n     'group_id': f\"person_{len(groups) + 1}\",\n     'faces': [face],\n     'first_appearance': face.get('timestamp'),\n     'appearances': [face.get('timestamp')]\n  }\n  \n  # Chercher des visages similaires\n  for i in range(index + 1, len(faces)):\n    if i in processed:\n      continue\n     \n    other_face = faces[i]\n     \n    # Comparaison basique sur la position et taille du visage\n    bbox1 = face.get('bounding_box', {})\n    bbox2 = other_face.get('bounding_box', {})\n     \n    center_diff = math.sqrt(\n      (bbox1.get('Left', 0) - bbox2.get('Left', 0)) ** 2 + \n      (bbox1.get('Top', 0) - bbox2.get('Top', 0)) ** 2\n    )\n     \n    size_diff = abs(\n      (bbox1.get('Width', 0) * bbox1.get('Height', 0)) - \n      (bbox2.get('Width', 0) * bbox2.get('Height', 0))\n    )\n     \n    # Si les visages sont dans des positions/tailles similaires et même genre/âge approximatif\n    face_age_low = face.get('age_range', {}).get('Low', 0)\n    other_age_low = other_face.get('age_range', {}).get('Low', 0)\n     \n    if (center_diff < 0.3 and size_diff < 0.1 and \n      abs(face_age_low - other_age_low) < 10):\n      group['faces'].append(other_face)\n      group['appearances'].append(other_face.get('timestamp'))\n      processed.add(i)\n  \n  groups.append(group)\n  processed.add(index)\n\nreturn [{'json': {'person_groups': groups, 'total_persons': len(groups)}}]"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -592,
+                720
+            ],
+            "id": "1d78554f-1a98-46e2-aa50-896c40a9681e",
+            "name": "Code2"
+        },
+        {
+            "parameters": {
+                "command": "workflow_id=_(\"Process Download\").first().json.get(\"workflow_id\")\npython /tmp/detect_faces.py /tmp/$workflow_id/frames/ /tmp/$workflow_id/faces/"
+            },
+            "id": "480d5ca3-c387-4ae5-af83-c18601a0fbd4",
+            "name": "Detect & Identify Faces",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -1488,
+                528
+            ]
         }
     ],
     "connections": {
@@ -642,13 +755,7 @@
         },
         "Code": {
             "main": [
-                [
-                    {
-                        "node": "Détecter Visages",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
+                []
             ]
         },
         "Validate Input": {
@@ -682,7 +789,7 @@
             "main": [
                 [
                     {
-                        "node": "Save Video",
+                        "node": "Create folders",
                         "type": "main",
                         "index": 0
                     }
@@ -693,7 +800,7 @@
             "main": [
                 [
                     {
-                        "node": "Loop Over Items",
+                        "node": "Read/Write Files from Disk1",
                         "type": "main",
                         "index": 0
                     }
@@ -717,6 +824,11 @@
                         "node": "Prepare Frames",
                         "type": "main",
                         "index": 0
+                    },
+                    {
+                        "node": "Detect & Identify Faces",
+                        "type": "main",
+                        "index": 0
                     }
                 ]
             ]
@@ -731,6 +843,11 @@
                     },
                     {
                         "node": "Extract Frames",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "HTTP Request",
                         "type": "main",
                         "index": 0
                     }
@@ -781,6 +898,50 @@
                     }
                 ]
             ]
+        },
+        "Create folders": {
+            "main": [
+                [
+                    {
+                        "node": "Save Video",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Read/Write Files from Disk1": {
+            "main": [
+                [
+                    {
+                        "node": "Analyze image1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Analyze image1": {
+            "main": [
+                [
+                    {
+                        "node": "Code1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code1": {
+            "main": [
+                [
+                    {
+                        "node": "Code2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
         }
     },
     "settings": {
@@ -789,7 +950,7 @@
     "staticData": null,
     "meta": null,
     "pinData": {},
-    "versionId": "b490a1b7-c19d-4124-95bc-925e04a98e6a",
+    "versionId": "c8a0314b-bd53-43aa-ac20-9a93925ca89b",
     "triggerCount": 2,
     "tags": [
         {
