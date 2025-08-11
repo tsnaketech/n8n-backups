@@ -1,19 +1,189 @@
 {
     "createdAt": "2025-06-24T23:53:55.351Z",
-    "updatedAt": "2025-06-24T23:53:55.351Z",
+    "updatedAt": "2025-08-10T23:27:09.000Z",
     "id": "cBpT07OPrRHZfQ7z",
     "name": "My workflow 5",
     "active": false,
     "isArchived": false,
-    "nodes": [],
-    "connections": {},
+    "nodes": [
+        {
+            "parameters": {
+                "filePath": "/data/input/interview.mp4"
+            },
+            "id": "00ad6cc5-c277-4a1d-82e6-e8b15c38e4d2",
+            "name": "Read Video",
+            "type": "n8n-nodes-base.readBinaryFile",
+            "typeVersion": 1,
+            "position": [
+                -768,
+                -32
+            ]
+        },
+        {
+            "parameters": {
+                "command": "ffmpeg -i /data/input/interview.mp4 /data/frames/frame_%04d.png"
+            },
+            "id": "6cc0f377-8596-4716-8de7-9bf01f22d3d4",
+            "name": "Extract Frames",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -512,
+                -32
+            ]
+        },
+        {
+            "parameters": {
+                "command": "python3 /data/scripts/detect_faces.py /data/frames /data/faces"
+            },
+            "id": "56fb6cea-d38f-46e1-869e-60e6f3415b61",
+            "name": "Detect & Identify Faces",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -256,
+                -32
+            ]
+        },
+        {
+            "parameters": {
+                "authentication": "headerAuth",
+                "url": "https://api.replicate.com/v1/predictions",
+                "jsonParameters": true,
+                "options": {}
+            },
+            "id": "298055a4-d05e-4a12-9354-ae5d33f3f3e3",
+            "name": "Generate Baby Faces",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 1,
+            "position": [
+                -16,
+                -32
+            ],
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "3sytPF58vLXwSQtC",
+                    "name": "NocoDB"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "command": "python3 /data/scripts/face_swap.py /data/frames /data/faces_baby /data/frames_swapped"
+            },
+            "id": "90015512-5a3f-4833-9c19-4a7e64279086",
+            "name": "Apply Face Swap",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                240,
+                -32
+            ]
+        },
+        {
+            "parameters": {
+                "command": "ffmpeg -framerate 30 -i /data/frames_swapped/frame_%04d.png -i /data/input/interview.mp4 -c:v libx264 -pix_fmt yuv420p -map 0:v -map 1:a /data/output/final_babyface.mp4"
+            },
+            "id": "39eb9f67-23f1-4a51-a3e4-131bb1fe3028",
+            "name": "Rebuild Video",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                496,
+                -32
+            ]
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "id": "964eecf7-ab92-48a6-9b88-08c7023966a9",
+            "name": "Return File",
+            "type": "n8n-nodes-base.moveBinaryData",
+            "typeVersion": 1,
+            "position": [
+                752,
+                -32
+            ]
+        }
+    ],
+    "connections": {
+        "Read Video": {
+            "main": [
+                [
+                    {
+                        "node": "Extract Frames",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract Frames": {
+            "main": [
+                [
+                    {
+                        "node": "Detect & Identify Faces",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Detect & Identify Faces": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Baby Faces",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Baby Faces": {
+            "main": [
+                [
+                    {
+                        "node": "Apply Face Swap",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Apply Face Swap": {
+            "main": [
+                [
+                    {
+                        "node": "Rebuild Video",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Rebuild Video": {
+            "main": [
+                [
+                    {
+                        "node": "Return File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
     "settings": {
         "executionOrder": "v1"
     },
     "staticData": null,
-    "meta": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
     "pinData": {},
-    "versionId": "ac2dcd57-c6e8-41d2-9577-b080350401e0",
+    "versionId": "5f7fa836-7780-48dd-b932-2eb82e2e626a",
     "triggerCount": 0,
     "tags": []
 }
