@@ -1,0 +1,19 @@
+{
+    "createdAt": "2025-08-11T22:17:19.789Z",
+    "updatedAt": "2025-08-11T22:17:19.789Z",
+    "id": "faLgq7WA8mepwvto",
+    "name": "Test2",
+    "active": false,
+    "isArchived": false,
+    "nodes": [],
+    "connections": {},
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "3551a071-021f-41cd-b499-dd34ed9b5b19",
+    "triggerCount": 0,
+    "tags": []
+}
