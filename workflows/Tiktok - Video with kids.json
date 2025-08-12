@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-06-06T20:25:30.273Z",
-    "updatedAt": "2025-08-10T23:27:11.000Z",
+    "updatedAt": "2025-08-11T22:26:34.000Z",
     "id": "YPjY5Fm5h3SpijZI",
     "name": "Tiktok - Video with kids",
     "active": false,
@@ -510,7 +510,7 @@
         },
         {
             "parameters": {
-                "command": "=mkdir -p /tmp/{{ $json.workflow_id }}/audio/\nmkdir -p /tmp/{{ $json.workflow_id }}/faces/\nmkdir -p /tmp/{{ $json.workflow_id }}/frames/\nmkdir -p /tmp/{{ $json.workflow_id }}/video/"
+                "command": "=mkdir -p /tmp/{{ $json.workflow_id }}/animated/\nmkdir -p /tmp/{{ $json.workflow_id }}/audio/\nmkdir -p /tmp/{{ $json.workflow_id }}/faces/\nmkdir -p /tmp/{{ $json.workflow_id }}/final/\nmkdir -p /tmp/{{ $json.workflow_id }}/frames/\nmkdir -p /tmp/{{ $json.workflow_id }}/video/"
             },
             "id": "35027d3e-1464-4366-88f7-f09721b8f544",
             "name": "Create folders",
@@ -577,7 +577,7 @@
         {
             "parameters": {
                 "language": "python",
-                "pythonCode": "# Collecter tous les visages détectés avec leurs métadonnées\nall_faces = []\nitems = _input.all()\n\nfor item in items:\n  faces = item.json.get('FaceDetails', [])\n  \n  for face_index, face in enumerate(faces):\n     all_faces.append({\n         'frame_number': (_('Prepare Frames').all())[face_index].json.frame_number,\n         'timestamp': item.json.get('timestamp'),\n         'face_id': f\"frame_{(_('Prepare Frames').all())[face_index].json.frame_number}_face_{face_index}\",\n         'bounding_box': face.get('BoundingBox'),\n         'confidence': face.get('Confidence'),\n         'emotions': face.get('Emotions'),\n         'age_range': face.get('AgeRange'),\n         'gender': face.get('Gender'),\n         'landmarks': face.get('Landmarks')\n     })\n\nreturn [{'json': {'detected_faces': all_faces, 'total_faces': len(all_faces)}}]"
+                "pythonCode": "# Collecter tous les visages détectés avec leurs métadonnées\nall_faces = []\nitems = _input.all()\n\nfor item in items:\n  faces = item.json.get('FaceDetails', [])\n  \n  for face_index, face in enumerate(faces):\n    all_faces.append({\n       'frame_number': (_('Prepare Frames').all())[face_index].json.frame_number,\n       'timestamp': item.json.get('timestamp'),\n       'face_id': f\"frame_{(_('Prepare Frames').all())[face_index].json.frame_number}_face_{face_index}\",\n       'bounding_box': face.get('BoundingBox'),\n       'confidence': face.get('Confidence'),\n       'emotions': face.get('Emotions'),\n       'age_range': face.get('AgeRange'),\n       'gender': face.get('Gender'),\n       'landmarks': face.get('Landmarks')\n    })\n\nreturn [{'json': {'detected_faces': all_faces, 'total_faces': len(all_faces)}}]"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
@@ -604,15 +604,15 @@
         },
         {
             "parameters": {
-                "command": "workflow_id=_(\"Process Download\").first().json.get(\"workflow_id\")\npython /tmp/detect_faces.py /tmp/$workflow_id/frames/ /tmp/$workflow_id/faces/"
+                "command": "=workflow_id=\"{{ $(\"Process Download\").first().json.workflow_id }}\"\npython3 /data/scripts/detect_faces.py /tmp/$workflow_id/frames/ /tmp/$workflow_id/faces/"
             },
-            "id": "480d5ca3-c387-4ae5-af83-c18601a0fbd4",
-            "name": "Detect & Identify Faces",
+            "id": "a959898d-cc47-409d-83fd-52490fac7527",
+            "name": "Extract Frames1",
             "type": "n8n-nodes-base.executeCommand",
             "typeVersion": 1,
             "position": [
-                -1488,
-                528
+                384,
+                -16
             ]
         }
     ],
@@ -824,11 +824,6 @@
                         "node": "Prepare Frames",
                         "type": "main",
                         "index": 0
-                    },
-                    {
-                        "node": "Detect & Identify Faces",
-                        "type": "main",
-                        "index": 0
                     }
                 ]
             ]
@@ -950,7 +945,7 @@
     "staticData": null,
     "meta": null,
     "pinData": {},
-    "versionId": "c8a0314b-bd53-43aa-ac20-9a93925ca89b",
+    "versionId": "5f26dd4a-dac8-499c-927c-97c74f15aa64",
     "triggerCount": 2,
     "tags": [
         {
