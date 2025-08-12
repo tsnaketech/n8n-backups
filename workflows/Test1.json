@@ -1,0 +1,511 @@
+{
+    "createdAt": "2025-06-24T23:53:55.351Z",
+    "updatedAt": "2025-08-11T22:17:23.000Z",
+    "id": "cBpT07OPrRHZfQ7z",
+    "name": "Test1",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "/transform-video",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "id": "5bee82ce-50bf-4c58-bb88-c2d0b271920d",
+            "name": "Webhook - Réception vidéo",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                -1040,
+                -176
+            ],
+            "webhookId": "1184d75e-7461-4a2a-8ecc-69959df80466"
+        },
+        {
+            "parameters": {
+                "values": {
+                    "string": [
+                        {
+                            "name": "videoUrl",
+                            "value": "={{ $json.body.videoUrl }}"
+                        },
+                        {
+                            "name": "outputFormat",
+                            "value": "={{ $json.body.outputFormat || 'mp4' }}"
+                        },
+                        {
+                            "name": "quality",
+                            "value": "={{ $json.body.quality || 'high' }}"
+                        },
+                        {
+                            "name": "jobId",
+                            "value": "={{ $runIndex }}_{{ $now }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "5e1843d2-afde-4f94-9b06-3f854c5de749",
+            "name": "Définir variables",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 1,
+            "position": [
+                -816,
+                -176
+            ]
+        },
+        {
+            "parameters": {
+                "command": "ffmpeg -i \"{{ $json.videoUrl }}\" -vf \"fps=30\" -q:v 2 /tmp/frame_{{ $json.jobId }}_%04d.jpg"
+            },
+            "id": "d391d2ef-f9ae-45c8-b8df-621845eeb5e7",
+            "name": "Extraire toutes les frames",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -608,
+                -176
+            ]
+        },
+        {
+            "parameters": {
+                "command": "ls /tmp/frame_{{ $('set-variables').item.json.jobId }}_*.jpg"
+            },
+            "id": "8de1096b-875d-42be-a398-f4ac8c63fc10",
+            "name": "Lister frames extraites",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -384,
+                -176
+            ]
+        },
+        {
+            "parameters": {
+                "language": "python",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+            },
+            "id": "b93eb667-966b-47c7-a009-89ac7f8cbb92",
+            "name": "Préparer lots de frames",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -160,
+                -176
+            ]
+        },
+        {
+            "parameters": {
+                "fileSelector": "={{ $json.frames.map(f => f.framePath).join(',') }}"
+            },
+            "id": "0ac90e63-2972-4226-a010-4857ccd6b466",
+            "name": "Lire lot de frames",
+            "type": "n8n-nodes-base.readBinaryFiles",
+            "typeVersion": 1,
+            "position": [
+                64,
+                -176
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.replicate.com/v1/predictions",
+                "authentication": "predefinedCredentialType",
+                "nodeCredentialType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Token {{ $credentials.replicate.token }}"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {}
+                    ]
+                },
+                "options": {}
+            },
+            "id": "0559fbe3-160e-45d3-8e0b-0ba29aec2291",
+            "name": "Replicate - Transformation bébé",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                288,
+                -176
+            ],
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "3sytPF58vLXwSQtC",
+                    "name": "NocoDB"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "https://api.faceswap.dev/api/v1/face_transform",
+                "authentication": "predefinedCredentialType",
+                "nodeCredentialType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer {{ $credentials.faceswap.apiKey }}"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {}
+                    ]
+                },
+                "options": {}
+            },
+            "id": "1ff7cd5c-9b23-41f4-b235-e210c234ce51",
+            "name": "FaceSwap - Transformation bébé (Alternative)",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                288,
+                32
+            ],
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "3sytPF58vLXwSQtC",
+                    "name": "NocoDB"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "https://api.runpod.ai/v2/{{ $credentials.runpod.endpointId }}/run",
+                "authentication": "predefinedCredentialType",
+                "nodeCredentialType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer {{ $credentials.runpod.apiKey }}"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {}
+                    ]
+                },
+                "options": {}
+            },
+            "id": "ca16f107-52de-4c7e-8d3f-85ff3806cdee",
+            "name": "RunPod - Transformation bébé (Custom)",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                288,
+                224
+            ],
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "3sytPF58vLXwSQtC",
+                    "name": "NocoDB"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict"
+                    },
+                    "conditions": [
+                        {
+                            "id": "success-condition",
+                            "leftValue": "={{ $json.status }}",
+                            "rightValue": "succeeded",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "id": "bd2edaec-9099-4025-af23-c2db18d09444",
+            "name": "Vérifier statut transformation",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2,
+            "position": [
+                512,
+                -176
+            ]
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.urls.get }}",
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "file"
+                        }
+                    }
+                }
+            },
+            "id": "dede22c8-bc71-4ce4-8fe3-980ee14d382d",
+            "name": "Télécharger image transformée",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                720,
+                -288
+            ]
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "id": "a023101c-32b4-47aa-aa17-053cd021e728",
+            "name": "Sauvegarder frame transformée",
+            "type": "n8n-nodes-base.writeBinaryFile",
+            "typeVersion": 1,
+            "position": [
+                944,
+                -288
+            ]
+        },
+        {
+            "parameters": {
+                "language": "python"
+            },
+            "id": "5155b105-c726-4173-bd16-09c75f029106",
+            "name": "Reconstituer vidéo finale",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1168,
+                -288
+            ]
+        },
+        {
+            "parameters": {
+                "filePath": "={{ $json.outputPath }}"
+            },
+            "id": "e97cb244-3db5-4a2a-885a-b47010f7127e",
+            "name": "Lire vidéo finale",
+            "type": "n8n-nodes-base.readBinaryFile",
+            "typeVersion": 1,
+            "position": [
+                1392,
+                -288
+            ]
+        },
+        {
+            "parameters": {
+                "respondWith": "binary",
+                "options": {}
+            },
+            "id": "ff00aa06-5b95-4743-9211-c01d83629c8c",
+            "name": "Retourner vidéo transformée",
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1,
+            "position": [
+                1600,
+                -288
+            ]
+        },
+        {
+            "parameters": {
+                "command": "rm -f /tmp/frame_{{ $('set-variables').item.json.jobId }}_*.jpg /tmp/transformed_{{ $('set-variables').item.json.jobId }}_*.jpg"
+            },
+            "id": "1ace0fd1-5f22-42c2-8011-31bea4683d22",
+            "name": "Nettoyer fichiers temporaires",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                1600,
+                -80
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook - Réception vidéo": {
+            "main": [
+                [
+                    {
+                        "node": "Définir variables",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Définir variables": {
+            "main": [
+                [
+                    {
+                        "node": "Extraire toutes les frames",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extraire toutes les frames": {
+            "main": [
+                [
+                    {
+                        "node": "Lister frames extraites",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Lister frames extraites": {
+            "main": [
+                [
+                    {
+                        "node": "Préparer lots de frames",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Préparer lots de frames": {
+            "main": [
+                [
+                    {
+                        "node": "Lire lot de frames",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Lire lot de frames": {
+            "main": [
+                [
+                    {
+                        "node": "Replicate - Transformation bébé",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Replicate - Transformation bébé": {
+            "main": [
+                [
+                    {
+                        "node": "Vérifier statut transformation",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Vérifier statut transformation": {
+            "main": [
+                [
+                    {
+                        "node": "Télécharger image transformée",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Nettoyer fichiers temporaires",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Télécharger image transformée": {
+            "main": [
+                [
+                    {
+                        "node": "Sauvegarder frame transformée",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Sauvegarder frame transformée": {
+            "main": [
+                [
+                    {
+                        "node": "Reconstituer vidéo finale",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Reconstituer vidéo finale": {
+            "main": [
+                [
+                    {
+                        "node": "Lire vidéo finale",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Nettoyer fichiers temporaires",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Lire vidéo finale": {
+            "main": [
+                [
+                    {
+                        "node": "Retourner vidéo transformée",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "d80fec89-50ef-40bf-84e2-3c0af323f565",
+    "triggerCount": 0,
+    "tags": []
+}
