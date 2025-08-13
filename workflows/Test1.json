@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-06-24T23:53:55.351Z",
-    "updatedAt": "2025-08-11T22:17:23.000Z",
+    "updatedAt": "2025-08-12T07:47:25.000Z",
     "id": "cBpT07OPrRHZfQ7z",
     "name": "Test1",
     "active": false,
@@ -505,7 +505,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "d80fec89-50ef-40bf-84e2-3c0af323f565",
+    "versionId": "0c7eb594-4e52-4007-afd6-4e1ef9b41991",
     "triggerCount": 0,
     "tags": []
 }
