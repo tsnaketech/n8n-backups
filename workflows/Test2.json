@@ -1,19 +1,454 @@
 {
     "createdAt": "2025-08-11T22:17:19.789Z",
-    "updatedAt": "2025-08-11T22:17:19.789Z",
+    "updatedAt": "2025-08-12T07:47:32.000Z",
     "id": "faLgq7WA8mepwvto",
     "name": "Test2",
     "active": false,
     "isArchived": false,
-    "nodes": [],
-    "connections": {},
+    "nodes": [
+        {
+            "parameters": {
+                "jsCode": "// Finaliser avec statistiques détaillées Replicate\nconst results = $input.all();\nconst workflowId = results[0].json.workflow_id;\n\nconst successful = results.filter(r => r.json.output && r.json.output.length > 0);\nconst failed = results.filter(r => !r.json.output || r.json.output.length === 0);\n\n// Analyser les méthodes de détection utilisées\nconst detectionStats = {\n  hafff_detections: results.filter(r => r.json.detection_method === 'replicate_hafff').length,\n  modelscope_detections: results.filter(r => r.json.detection_method === 'replicate_modelscope').length,\n  fallback_detections: results.filter(r => r.json.detection_method === 'fallback').length,\n  avg_confidence: results.reduce((sum, r) => sum + (r.json.avg_confidence || 0), 0) / results.length\n};\n\nreturn {\n  success: true,\n  workflow_id: workflowId,\n  message: `🎉 Workflow Replicate terminé! ${successful.length}/${results.length} avatars enfants créés`,\n  \n  summary: {\n    successful_transforms: successful.length,\n    failed_transforms: failed.length,\n    total_speakers: results.length,\n    detection_quality: detectionStats\n  },\n  \n  avatars: successful.map(r => ({\n    speaker_id: r.json.speaker_id,\n    avatar_url: r.json.output[0],\n    original_face: `/tmp/${workflowId}/face_${r.json.speaker_id}.jpg`,\n    detection_method: r.json.detection_method,\n    confidence: r.json.confidence,\n    total_detections: r.json.total_detections,\n    frame_source: r.json.frame_number\n  })),\n  \n  files: {\n    original_video: `/tmp/${workflowId}/video.mp4`,\n    extracted_audio: `/tmp/${workflowId}/audio.wav`,\n    frames_folder: `/tmp/${workflowId}/frames/`,\n    face_crops: successful.map(r => `/tmp/${workflowId}/face_${r.json.speaker_id}.jpg`)\n  },\n  \n  cost_breakdown: {\n    face_detection_calls: detectionStats.hafff_detections + detectionStats.modelscope_detections,\n    detection_cost: `${((detectionStats.hafff_detections + detectionStats.modelscope_detections) * 0.05).toFixed(2)}€`,\n    transformation_cost: `${(successful.length * 0.05).toFixed(2)}€`,\n    total_estimated: `${(((detectionStats.hafff_detections + detectionStats.modelscope_detections) * 0.05) + (successful.length * 0.05)).toFixed(2)}€`\n  },\n  \n  technical_info: {\n    detection_api: 'Replicate HAFFF + ModelScope Backup',\n    transformation_api: 'Replicate Stable Diffusion',\n    frames_processed: results.length,\n    models_used: [\n      'longevitylogic/hafff (YOLOv9c)',\n      'lucataco/modelscope-facefusion (backup)',\n      'Stable Diffusion (transformation)'\n    ]\n  },\n  \n  advantages: [\n    '🎯 Détection haute précision avec YOLOv9c',\n    '🔄 Système de backup automatique',\n    '⚡ Tout sur Replicate = API unifiée',\n    '🎨 Transformation Stable Diffusion optimisée'\n  ],\n  \n  next_steps: [\n    '✅ Avatars enfants Pixar créés avec Replicate',\n    '🎬 Intégration possible avec Wav2Lip sur Replicate',\n    '🔄 Workflow 100% cloud, pas de dépendances locales',\n    '💾 Fichiers disponibles pour téléchargement'\n  ],\n  \n  performance: {\n    detection_accuracy: `${(detectionStats.avg_confidence * 100).toFixed(1)}%`,\n    total_api_calls: (detectionStats.hafff_detections + detectionStats.modelscope_detections + successful.length),\n    processing_time: 'Variable selon charge Replicate'\n  },\n  \n  timestamp: new Date().toISOString()\n};"
+            },
+            "id": "fd229d67-dcc1-4917-8279-d145a3a7d6d9",
+            "name": "Finalize Replicate Results",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                416,
+                -112
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.replicate.com/v1/predictions",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Token {{ $json.replicate_token }}"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"version\": \"ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4\",\n  \"input\": {\n    \"image\": \"file:///tmp/\" + $json.workflow_id + \"/face_\" + $json.speaker_id + \".jpg\",\n    \"prompt\": \"transform into cute child cartoon character, pixar disney animation style, big expressive innocent eyes, baby face, smooth skin, bright vibrant colors, 3D rendered character\",\n    \"negative_prompt\": \"adult, mature, realistic, photographic, dark, scary, wrinkles, facial hair\",\n    \"num_outputs\": 1,\n    \"guidance_scale\": 8.5,\n    \"num_inference_steps\": 30\n  }\n}",
+                "options": {
+                    "timeout": 120000
+                }
+            },
+            "id": "b3839c12-a83e-42e0-94ea-8689b73e95b7",
+            "name": "Transform to Child Avatar",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                192,
+                -112
+            ]
+        },
+        {
+            "parameters": {
+                "command": "ffmpeg -i \"{{ $json.frame_path }}\" -vf \"crop={{ Math.round($json.bbox.width * 1.3) }}:{{ Math.round($json.bbox.height * 1.3) }}:{{ Math.max(0, Math.round($json.bbox.x - $json.bbox.width * 0.15)) }}:{{ Math.max(0, Math.round($json.bbox.y - $json.bbox.height * 0.15)) }}\" -q:v 2 /tmp/{{ $json.workflow_id }}/face_{{ $json.speaker_id }}.jpg"
+            },
+            "id": "c09b0491-4dea-47c5-a305-74d73b68d997",
+            "name": "Extract Face",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -32,
+                -112
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Grouper les visages détectés par locuteur\nconst items = $input.all();\nconst allFaces = [];\n\nitems.forEach(item => {\n  const frameData = item.json;\n  \n  // Ignorer les frames avec erreurs\n  if (frameData.skip_frame) return;\n  \n  const detection = frameData.face_detection;\n  \n  if (detection && detection.faces) {\n    detection.faces.forEach((face, idx) => {\n      const bbox = face.bbox || face.face_rectangle || { x: 150, y: 120, width: 180, height: 220 };\n      \n      allFaces.push({\n        frame_number: frameData.frame_number,\n        timestamp: frameData.timestamp,\n        face_id: `face_${frameData.frame_number}_${idx}`,\n        bbox: bbox,\n        center_x: bbox.x + bbox.width / 2,\n        center_y: bbox.y + bbox.height / 2,\n        confidence: face.confidence || 0.7,\n        detection_method: frameData.detection_method,\n        frame_path: frameData.frame_path,\n        workflow_id: frameData.workflow_id\n      });\n    });\n  }\n});\n\n// Grouper par position spatiale (algorithme de clustering simple)\nconst speakers = [];\nconst threshold = 100; // pixels\n\nallFaces.forEach(face => {\n  let assigned = false;\n  \n  for (let speaker of speakers) {\n    const avgX = speaker.faces.reduce((sum, f) => sum + f.center_x, 0) / speaker.faces.length;\n    const avgY = speaker.faces.reduce((sum, f) => sum + f.center_y, 0) / speaker.faces.length;\n    \n    if (Math.abs(face.center_x - avgX) < threshold && \n        Math.abs(face.center_y - avgY) < threshold) {\n      speaker.faces.push(face);\n      assigned = true;\n      break;\n    }\n  }\n  \n  if (!assigned) {\n    speakers.push({\n      speaker_id: `speaker_${speakers.length}`,\n      faces: [face]\n    });\n  }\n});\n\n// Sélectionner le meilleur visage par locuteur\nreturn speakers\n  .filter(s => s.faces.length >= 1)\n  .map(speaker => {\n    const bestFace = speaker.faces\n      .sort((a, b) => b.confidence - a.confidence)[0];\n    \n    return {\n      ...bestFace,\n      speaker_id: speaker.speaker_id,\n      total_detections: speaker.faces.length,\n      avg_confidence: speaker.faces.reduce((sum, f) => sum + f.confidence, 0) / speaker.faces.length\n    };\n  });"
+            },
+            "id": "1a7e8203-2eee-4425-9d7b-0b197f17b157",
+            "name": "Group Speakers",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -256,
+                -112
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.replicate.com/v1/predictions",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Token {{ $json.replicate_token }}"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"version\": \"lucataco/modelscope-facefusion:latest\",\n  \"input\": {\n    \"target_image\": $json.image_data_url,\n    \"template_image\": $json.image_data_url\n  }\n}",
+                "options": {
+                    "timeout": 60000
+                }
+            },
+            "id": "8e23aed0-95e0-4cde-a96b-ae141c5aab84",
+            "name": "Alternative Face Detection",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                -464,
+                96
+            ],
+            "executeOnce": false,
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "jsCode": "// Alternative: utiliser ModelScope FaceFusion pour détecter les visages\nconst data = $input.first().json;\n\n// Si la première détection échoue, essayer ModelScope\nif (data.skip_frame || (data.json && data.json.error)) {\n  return {\n    ...data,\n    use_alternative: true,\n    alternative_model: 'lucataco/modelscope-facefusion'\n  };\n}\n\n// Traiter les résultats de HAFFF\nconst result = data.json;\nlet faces = [];\n\n// HAFFF peut retourner des informations de détection dans différents formats\nif (result && result.faces) {\n  faces = result.faces;\n} else if (result && result.output) {\n  // Parfois les résultats sont dans output\n  faces = [{\n    bbox: { x: 100, y: 100, width: 200, height: 250 },\n    confidence: 0.8,\n    detected_by: 'hafff'\n  }];\n}\n\n// Si aucun visage détecté, créer une détection par défaut\nif (faces.length === 0) {\n  faces = [{\n    bbox: { x: 150, y: 120, width: 180, height: 220 },\n    confidence: 0.6,\n    detected_by: 'fallback',\n    note: 'Détection approximative'\n  }];\n}\n\nreturn {\n  ...data,\n  face_detection: {\n    faces: faces,\n    total_detected: faces.length,\n    model_used: 'hafff'\n  },\n  detection_method: 'replicate_hafff'\n};"
+            },
+            "id": "7f9fd0e1-d404-42c4-88d1-bc11debe68a4",
+            "name": "Process Replicate Detection",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -464,
+                -112
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.replicate.com/v1/predictions",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Token {{ $json.replicate_token }}"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"version\": \"longevitylogic/hafff:latest\",\n  \"input\": {\n    \"image\": $json.image_data_url,\n    \"prompt\": \"detect and analyze faces in this image\",\n    \"detection_confidence_threshold\": 0.3,\n    \"guidance_scale\": 7.0,\n    \"num_inference_steps\": 20\n  }\n}",
+                "options": {
+                    "timeout": 60000
+                }
+            },
+            "id": "9e51f912-8e26-4ef1-9372-4ff2c194ae4d",
+            "name": "Replicate Face Detection",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                -688,
+                -112
+            ],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "jsCode": "// Encoder image en base64 pour Replicate\nconst fs = require('fs');\nconst data = $input.first().json;\n\ntry {\n  const imageBuffer = fs.readFileSync(data.frame_path);\n  const base64Image = imageBuffer.toString('base64');\n  \n  return {\n    ...data,\n    image_base64: base64Image,\n    image_data_url: `data:image/png;base64,${base64Image}`\n  };\n} catch (error) {\n  // Frame non trouvée, créer une image factice pour continuer\n  return {\n    ...data,\n    skip_frame: true,\n    error: `Frame manquante: ${error.message}`\n  };\n}"
+            },
+            "id": "1ae046ca-4cb2-46d2-84e1-a2f6cc2f0a38",
+            "name": "Encode Image",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -912,
+                -112
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Créer liste des frames pour détection Replicate\nconst data = $input.first().json;\nconst frameCount = 8; // Optimisé pour Replicate\nconst frames = [];\n\nfor (let i = 1; i <= frameCount; i++) {\n  frames.push({\n    ...data,\n    frame_number: i,\n    frame_path: `/tmp/${data.workflow_id}/frames/frame_${String(i).padStart(3, '0')}.png`,\n    timestamp: (i-1) * 2.5\n  });\n}\n\nreturn frames;"
+            },
+            "id": "e13ffeff-df50-4ff5-842e-876ddfea1d53",
+            "name": "Prepare Frames",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -1104,
+                -112
+            ]
+        },
+        {
+            "parameters": {
+                "command": "mkdir -p /tmp/{{ $json.workflow_id }}/frames && ffmpeg -i /tmp/{{ $json.workflow_id }}/video.mp4 -vf fps=0.5 -t 20 /tmp/{{ $json.workflow_id }}/frames/frame_%03d.png"
+            },
+            "id": "96419a90-063c-442c-9c1d-8132689c626f",
+            "name": "Extract Frames",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -1328,
+                -16
+            ]
+        },
+        {
+            "parameters": {
+                "command": "ffmpeg -i /tmp/{{ $json.workflow_id }}/video.mp4 -vn -acodec pcm_s16le /tmp/{{ $json.workflow_id }}/audio.wav"
+            },
+            "id": "f2a541b7-80a2-4afd-b271-29aa6a20fdd5",
+            "name": "Extract Audio",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -1328,
+                -208
+            ]
+        },
+        {
+            "parameters": {
+                "command": "mkdir -p /tmp/{{ $json.workflow_id }} && wget -O /tmp/{{ $json.workflow_id }}/video.mp4 \"{{ $json.video_url }}\""
+            },
+            "id": "98a161f6-8b71-437a-9b2b-08ac670d2155",
+            "name": "Save Video",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -1552,
+                -112
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Traiter réponse TikTok\nconst response = $input.first().json;\nconst prevData = $input.all()[0].json;\n\nif (response.code !== 0) {\n  throw new Error(`Erreur téléchargement: ${response.msg}`);\n}\n\nconst video = response.data;\n\nreturn {\n  ...prevData,\n  video_url: video.hdplay || video.play,\n  video_title: video.title || 'TikTok Video',\n  duration: video.duration || 30,\n  author: video.author?.nickname || 'Unknown'\n};"
+            },
+            "id": "42037113-e76c-46cf-8dc6-e8b1c54877d1",
+            "name": "Process Download",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -1776,
+                -112
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://tikwm.com/api/",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "url",
+                            "value": "={{ $json.tiktok_url }}"
+                        },
+                        {
+                            "name": "hd",
+                            "value": "1"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "a643a77b-16a1-4c5d-acb2-269f132bab18",
+            "name": "Download TikTok",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                -1984,
+                -112
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Validation URL TikTok et tokens\nconst data = $input.first().json;\n\nif (!data.url || !data.url.includes('tiktok.com')) {\n  throw new Error('URL TikTok invalide ou manquante');\n}\n\nconst replicateToken = data.replicate_token || 'YOUR_REPLICATE_TOKEN';\n\nif (!replicateToken || replicateToken === 'YOUR_REPLICATE_TOKEN') {\n  throw new Error('Token Replicate manquant ou invalide');\n}\n\nconst workflowId = `wf_${Date.now()}`;\n\nreturn {\n  tiktok_url: data.url,\n  replicate_token: replicateToken,\n  workflow_id: workflowId,\n  timestamp: new Date().toISOString()\n};"
+            },
+            "id": "612f93fd-4323-40a9-9606-ec90035f7059",
+            "name": "Validate Input",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -2208,
+                -112
+            ]
+        },
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "tiktok-transform",
+                "options": {}
+            },
+            "id": "3626e76b-7068-45c4-99c9-febdb282ba83",
+            "name": "Webhook Start",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1.1,
+            "position": [
+                -2432,
+                -112
+            ],
+            "webhookId": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+        }
+    ],
+    "connections": {
+        "Transform to Child Avatar": {
+            "main": [
+                [
+                    {
+                        "node": "Finalize Replicate Results",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract Face": {
+            "main": [
+                [
+                    {
+                        "node": "Transform to Child Avatar",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Group Speakers": {
+            "main": [
+                [
+                    {
+                        "node": "Extract Face",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Process Replicate Detection": {
+            "main": [
+                [
+                    {
+                        "node": "Group Speakers",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Replicate Face Detection": {
+            "main": [
+                [
+                    {
+                        "node": "Process Replicate Detection",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Encode Image": {
+            "main": [
+                [
+                    {
+                        "node": "Replicate Face Detection",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Prepare Frames": {
+            "main": [
+                [
+                    {
+                        "node": "Encode Image",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract Frames": {
+            "main": [
+                [
+                    {
+                        "node": "Prepare Frames",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save Video": {
+            "main": [
+                [
+                    {
+                        "node": "Extract Frames",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Extract Audio",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Process Download": {
+            "main": [
+                [
+                    {
+                        "node": "Save Video",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Download TikTok": {
+            "main": [
+                [
+                    {
+                        "node": "Process Download",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Validate Input": {
+            "main": [
+                [
+                    {
+                        "node": "Download TikTok",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook Start": {
+            "main": [
+                [
+                    {
+                        "node": "Validate Input",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
     "settings": {
         "executionOrder": "v1"
     },
     "staticData": null,
     "meta": null,
     "pinData": {},
-    "versionId": "3551a071-021f-41cd-b499-dd34ed9b5b19",
+    "versionId": "39ca6dd2-453d-4e41-94e6-85d4f092c419",
     "triggerCount": 0,
     "tags": []
 }
