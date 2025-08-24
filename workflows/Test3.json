@@ -1,0 +1,193 @@
+{
+    "createdAt": "2025-08-24T00:20:39.940Z",
+    "updatedAt": "2025-08-24T02:00:38.000Z",
+    "id": "hWfazNhHPQI4TYzk",
+    "name": "Test3",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {},
+            "id": "8c97cec1-9592-472a-bf39-17d30daae042",
+            "name": "Cron Daily",
+            "type": "n8n-nodes-base.cron",
+            "typeVersion": 1,
+            "position": [
+                48,
+                -16
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "be972fa6-a700-4ab5-affa-1ebd30406675",
+            "name": "Airtable Get",
+            "type": "n8n-nodes-base.airtable",
+            "typeVersion": 3,
+            "position": [
+                256,
+                -16
+            ],
+            "credentials": {}
+        },
+        {
+            "parameters": {},
+            "id": "46b8c67d-f511-4fdd-9619-93a97ad9d609",
+            "name": "OpenAI Generate QCM",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 2,
+            "position": [
+                448,
+                -16
+            ],
+            "credentials": {}
+        },
+        {
+            "parameters": {
+                "functionCode": "const data=JSON.parse($json[\"choices\"][0][\"message\"][\"content\"]);\nreturn [{json:{question:data.question,options:data.options,answer:data.answer}}];"
+            },
+            "id": "0df702c7-42d2-49a1-953d-85ca86e00f51",
+            "name": "Parse QCM",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                656,
+                -16
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "84e2b877-e67c-46fc-bc13-52fbd480ac28",
+            "name": "Airtable Save QCM",
+            "type": "n8n-nodes-base.airtable",
+            "typeVersion": 3,
+            "position": [
+                848,
+                -16
+            ],
+            "credentials": {}
+        },
+        {
+            "parameters": {},
+            "id": "892a3698-cbbb-486f-978b-b796b00ec015",
+            "name": "OpenAI TTS",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 2,
+            "position": [
+                1056,
+                -16
+            ],
+            "credentials": {}
+        },
+        {
+            "parameters": {
+                "functionCode": "return [{json:{audio: $binary.data.toString('base64')}}];"
+            },
+            "id": "5397e9cd-3178-4f24-80a3-0bff3f38f007",
+            "name": "Convert Audio Base64",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                1248,
+                -16
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://api.canva.com/v1/assets",
+                "authentication": "headerAuth",
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {}
+                    ]
+                },
+                "options": {}
+            },
+            "id": "4952fabb-d6af-4cfb-8a4e-3654fac2e1f8",
+            "name": "Canva Upload Audio",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1456,
+                -16
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://api.canva.com/v1/videos",
+                "authentication": "headerAuth",
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {}
+                    ]
+                },
+                "options": {}
+            },
+            "id": "4dd27ce8-d9d8-44d4-a0c5-ad3c0f729a9a",
+            "name": "Canva Create Video",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4,
+            "position": [
+                1648,
+                -16
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "20261e70-c99e-42ab-95bb-b567a15bc6db",
+            "name": "Airtable Update Video",
+            "type": "n8n-nodes-base.airtable",
+            "typeVersion": 3,
+            "position": [
+                1856,
+                -16
+            ],
+            "credentials": {}
+        }
+    ],
+    "connections": {
+        "Convert Audio Base64": {
+            "main": [
+                [
+                    {
+                        "node": "Canva Upload Audio",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Canva Upload Audio": {
+            "main": [
+                [
+                    {
+                        "node": "Canva Create Video",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "c51a71d4-f981-438f-8180-7c5b3fc1535c",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-08-24T00:20:39.943Z",
+            "updatedAt": "2025-08-24T00:20:39.943Z",
+            "role": "workflow:owner",
+            "workflowId": "hWfazNhHPQI4TYzk",
+            "projectId": "lnYpJLFYV8VS8Mcd"
+        }
+    ],
+    "tags": []
+}
