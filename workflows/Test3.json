@@ -1,170 +1,846 @@
 {
     "createdAt": "2025-08-24T00:20:39.940Z",
-    "updatedAt": "2025-08-24T02:00:38.000Z",
+    "updatedAt": "2025-08-25T02:24:30.000Z",
     "id": "hWfazNhHPQI4TYzk",
     "name": "Test3",
     "active": false,
     "isArchived": false,
     "nodes": [
         {
-            "parameters": {},
-            "id": "8c97cec1-9592-472a-bf39-17d30daae042",
-            "name": "Cron Daily",
-            "type": "n8n-nodes-base.cron",
-            "typeVersion": 1,
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "hours",
+                            "hoursInterval": 24
+                        }
+                    ]
+                }
+            },
+            "id": "86fafca8-892d-4d16-85ae-0dc04c020370",
+            "name": "Schedule Trigger",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.1,
             "position": [
-                48,
-                -16
+                -272,
+                -208
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "databasePage",
+                "operation": "getAll",
+                "databaseId": "{{ $vars.notion_database_id }}",
+                "filterType": "manual",
+                "filters": {
+                    "conditions": [
+                        {
+                            "key": "Used",
+                            "condition": "checkbox"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "80dd760f-cce1-4edf-802c-9001517a8731",
+            "name": "Get Unused Questions",
+            "type": "n8n-nodes-base.notion",
+            "typeVersion": 2,
+            "position": [
+                -48,
+                -208
+            ],
+            "credentials": {
+                "notionApi": {
+                    "id": "g3AwBtYd70JlJQfn",
+                    "name": "Notion SnakeTech account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsCode": "// Sélectionner une question aléatoire parmi les non utilisées\nconst unusedQuestions = $input.all();\n\nif (unusedQuestions.length === 0) {\n  return {\n    needNewQuestion: true,\n    hasQuestion: false\n  };\n}\n\n// Sélection aléatoire\nconst randomIndex = Math.floor(Math.random() * unusedQuestions.length);\nconst selectedQuestion = unusedQuestions[randomIndex].json;\n\n// Extraire les propriétés Notion\nconst extractProperty = (prop) => {\n  if (prop?.title) return prop.title[0]?.text?.content || '';\n  if (prop?.rich_text) return prop.rich_text[0]?.text?.content || '';\n  if (prop?.select) return prop.select?.name || '';\n  if (prop?.checkbox) return prop.checkbox;\n  return '';\n};\n\nreturn {\n  id: selectedQuestion.id,\n  question: extractProperty(selectedQuestion.properties.Question),\n  option_a: extractProperty(selectedQuestion.properties['Option A']),\n  option_b: extractProperty(selectedQuestion.properties['Option B']),\n  option_c: extractProperty(selectedQuestion.properties['Option C']),\n  option_d: extractProperty(selectedQuestion.properties['Option D']),\n  correct_answer: extractProperty(selectedQuestion.properties['Correct Answer']),\n  explanation: extractProperty(selectedQuestion.properties.Explanation),\n  category: extractProperty(selectedQuestion.properties.Category),\n  hasQuestion: true,\n  needNewQuestion: false\n};"
+            },
+            "id": "4ecf364a-2d01-464b-944e-d11289fcdc8b",
+            "name": "Select Random Question",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                176,
+                -208
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 1
+                    },
+                    "conditions": [
+                        {
+                            "leftValue": "={{ $json.hasQuestion }}",
+                            "rightValue": true,
+                            "operation": "equal",
+                            "id": "695358ed-c9d4-4a27-b82b-1580b1840ffe"
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "id": "a4d5e703-443e-4726-8abc-8735a1c78a75",
+            "name": "Has Question?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2,
+            "position": [
+                400,
+                -208
             ]
         },
         {
             "parameters": {},
-            "id": "be972fa6-a700-4ab5-affa-1ebd30406675",
-            "name": "Airtable Get",
-            "type": "n8n-nodes-base.airtable",
-            "typeVersion": 3,
-            "position": [
-                256,
-                -16
-            ],
-            "credentials": {}
-        },
-        {
-            "parameters": {},
-            "id": "46b8c67d-f511-4fdd-9619-93a97ad9d609",
-            "name": "OpenAI Generate QCM",
+            "id": "2f6296d3-f4fd-45e3-8d67-6f4e4b58c8c7",
+            "name": "Generate New Question",
             "type": "n8n-nodes-base.openAi",
-            "typeVersion": 2,
+            "typeVersion": 1.3,
             "position": [
-                448,
-                -16
+                400,
+                -32
             ],
             "credentials": {}
         },
         {
             "parameters": {
-                "functionCode": "const data=JSON.parse($json[\"choices\"][0][\"message\"][\"content\"]);\nreturn [{json:{question:data.question,options:data.options,answer:data.answer}}];"
+                "jsCode": "// Parser la réponse OpenAI pour extraire les éléments\nconst response = $input.first().json.message.content;\n\n// Extraction avec regex\nconst questionMatch = response.match(/QUESTION:\\s*(.+?)(?=\\n[A-D]\\))/s);\nconst optionsMatch = response.match(/([A-D])\\)\\s*(.+?)(?=\\n|$)/g);\nconst correctMatch = response.match(/CORRECT:\\s*([A-D])/); \nconst explanationMatch = response.match(/EXPLICATION:\\s*(.+?)(?=\\nCATEGORIE|$)/s);\nconst categoryMatch = response.match(/CATÉGORIE:\\s*(.+?)$/s);\n\nif (!questionMatch || !optionsMatch || !correctMatch) {\n  throw new Error('Format de réponse invalide');\n}\n\nconst question = questionMatch[1].trim();\nconst options = {};\nconst correctAnswer = correctMatch[1];\nconst explanation = explanationMatch ? explanationMatch[1].trim() : '';\nconst category = categoryMatch ? categoryMatch[1].trim() : 'Culture générale';\n\n// Parser les options\noptionsMatch.forEach(option => {\n  const match = option.match(/([A-D])\\)\\s*(.+)/);\n  if (match) {\n    options[match[1]] = match[2].trim();\n  }\n});\n\nreturn {\n  question,\n  option_a: options.A || '',\n  option_b: options.B || '',\n  option_c: options.C || '',\n  option_d: options.D || '',\n  correct_answer: correctAnswer,\n  explanation,\n  category,\n  hasQuestion: true,\n  needNewQuestion: false,\n  isNewQuestion: true\n};"
             },
-            "id": "0df702c7-42d2-49a1-953d-85ca86e00f51",
-            "name": "Parse QCM",
-            "type": "n8n-nodes-base.function",
-            "typeVersion": 1,
+            "id": "b298a1c0-eaa8-4647-aff3-8e9ea3128425",
+            "name": "Parse Generated Question",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
             "position": [
                 656,
                 -16
             ]
         },
         {
-            "parameters": {},
-            "id": "84e2b877-e67c-46fc-bc13-52fbd480ac28",
-            "name": "Airtable Save QCM",
-            "type": "n8n-nodes-base.airtable",
-            "typeVersion": 3,
-            "position": [
-                848,
-                -16
-            ],
-            "credentials": {}
-        },
-        {
-            "parameters": {},
-            "id": "892a3698-cbbb-486f-978b-b796b00ec015",
-            "name": "OpenAI TTS",
-            "type": "n8n-nodes-base.openAi",
+            "parameters": {
+                "resource": "databasePage",
+                "databaseId": "{{ $vars.notion_database_id }}",
+                "title": "={{ $json.question.substring(0, 100) }}...",
+                "propertiesUi": {
+                    "propertyValues": [
+                        {
+                            "key": "Question",
+                            "textContent": "={{ $json.question }}"
+                        },
+                        {
+                            "key": "Option A",
+                            "textContent": "={{ $json.option_a }}"
+                        },
+                        {
+                            "key": "Option B",
+                            "textContent": "={{ $json.option_b }}"
+                        },
+                        {
+                            "key": "Option C",
+                            "textContent": "={{ $json.option_c }}"
+                        },
+                        {
+                            "key": "Option D",
+                            "textContent": "={{ $json.option_d }}"
+                        },
+                        {
+                            "key": "Correct Answer",
+                            "selectValue": "={{ $json.correct_answer }}"
+                        },
+                        {
+                            "key": "Explanation",
+                            "textContent": "={{ $json.explanation }}"
+                        },
+                        {
+                            "key": "Category",
+                            "selectValue": "={{ $json.category }}"
+                        },
+                        {
+                            "key": "Used"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "d0e69107-f5f1-410b-b57f-1cc2bdbb98c0",
+            "name": "Save New Question to Notion",
+            "type": "n8n-nodes-base.notion",
             "typeVersion": 2,
             "position": [
-                1056,
-                -16
-            ],
-            "credentials": {}
-        },
-        {
-            "parameters": {
-                "functionCode": "return [{json:{audio: $binary.data.toString('base64')}}];"
-            },
-            "id": "5397e9cd-3178-4f24-80a3-0bff3f38f007",
-            "name": "Convert Audio Base64",
-            "type": "n8n-nodes-base.function",
-            "typeVersion": 1,
-            "position": [
-                1248,
+                864,
                 -16
             ]
         },
         {
             "parameters": {
-                "method": "POST",
-                "url": "https://api.canva.com/v1/assets",
-                "authentication": "headerAuth",
-                "sendBody": true,
-                "bodyParameters": {
-                    "parameters": [
-                        {}
-                    ]
-                },
-                "options": {}
+                "jsCode": "// Fusionner les données de question (soit existante, soit nouvelle)\nconst inputData = $input.all();\nlet questionData;\n\n// Trouver les données de question\nfor (const item of inputData) {\n  if (item.json.hasQuestion && item.json.question) {\n    questionData = item.json;\n    break;\n  }\n}\n\nif (!questionData) {\n  throw new Error('Aucune donnée de question trouvée');\n}\n\n// Créer le script de voix off optimisé\nconst voiceScript = `Bonjour et bienvenue ! \nVoici une nouvelle question de ${questionData.category || 'culture générale'}.\n\n${questionData.question}\n\nLes réponses possibles sont :\nA, ${questionData.option_a}\nB, ${questionData.option_b}\nC, ${questionData.option_c}\nD, ${questionData.option_d}\n\nÀ vous de jouer ! Prenez le temps de bien réfléchir...\n\nEt la bonne réponse est : ${questionData.correct_answer} !\n${questionData.explanation || 'Félicitations si vous avez trouvé la bonne réponse !'}\n\nÀ bientôt pour une nouvelle question !`;\n\n// Query pour Canva\nconst designQuery = `Créer une présentation QCM moderne et attractive avec le titre \"Question de ${questionData.category || 'Culture Générale'}\", la question \"${questionData.question}\", et les 4 options de réponse : A) ${questionData.option_a}, B) ${questionData.option_b}, C) ${questionData.option_c}, D) ${questionData.option_d}. Utiliser un design coloré et professionnel avec des éléments visuels engageants, des icônes éducatives, et une mise en page claire et lisible.`;\n\nreturn {\n  ...questionData,\n  voice_script: voiceScript,\n  design_query: designQuery\n};"
             },
-            "id": "4952fabb-d6af-4cfb-8a4e-3654fac2e1f8",
-            "name": "Canva Upload Audio",
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4,
+            "id": "4e7a6aa2-c419-4f75-8f24-54e63f6a462d",
+            "name": "Prepare Content",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
             "position": [
-                1456,
-                -16
+                656,
+                -240
             ]
         },
         {
             "parameters": {
                 "method": "POST",
-                "url": "https://api.canva.com/v1/videos",
-                "authentication": "headerAuth",
+                "url": "https://api.openai.com/v1/audio/speech",
+                "authentication": "predefinedCredentialType",
+                "nodeCredentialType": "openAiApi",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
                 "sendBody": true,
                 "bodyParameters": {
                     "parameters": [
-                        {}
+                        {
+                            "name": "model",
+                            "value": "tts-1-hd"
+                        },
+                        {
+                            "name": "input",
+                            "value": "={{ $json.voice_script }}"
+                        },
+                        {
+                            "name": "voice",
+                            "value": "nova"
+                        },
+                        {
+                            "name": "response_format",
+                            "value": "mp3"
+                        },
+                        {
+                            "name": "speed",
+                            "value": "0.9"
+                        }
                     ]
                 },
-                "options": {}
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "file"
+                        }
+                    }
+                }
             },
-            "id": "4dd27ce8-d9d8-44d4-a0c5-ad3c0f729a9a",
-            "name": "Canva Create Video",
+            "id": "a66381b4-4f0c-488b-8330-e4c3e9f2d117",
+            "name": "Generate Voice Over",
             "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4,
+            "typeVersion": 4.2,
             "position": [
-                1648,
-                -16
+                832,
+                -240
             ]
         },
         {
             "parameters": {},
-            "id": "20261e70-c99e-42ab-95bb-b567a15bc6db",
-            "name": "Airtable Update Video",
-            "type": "n8n-nodes-base.airtable",
-            "typeVersion": 3,
+            "id": "50daad47-df6a-4b75-a127-c1726a5db6d0",
+            "name": "Generate Canva Design",
+            "type": "n8n-nodes-base.canva",
+            "typeVersion": 1,
             "position": [
-                1856,
-                -16
+                1056,
+                -208
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Vérifier le statut de la génération Canva\nconst designGeneration = $input.first().json;\n\nif (designGeneration.status === 'success') {\n  return {\n    status: 'completed',\n    designs: designGeneration.generated_designs,\n    job_id: designGeneration.job_id\n  };\n} else if (designGeneration.status === 'in_progress') {\n  return {\n    status: 'in_progress',\n    job_id: designGeneration.job_id\n  };\n} else {\n  throw new Error('Erreur dans la génération du design');\n}"
+            },
+            "id": "581eb0a2-aad8-40ce-a6d2-cd4032d94bb9",
+            "name": "Wait for Design Completion",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1280,
+                -208
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "fb23b9ee-ab26-47f2-8e21-e06bd62a9663",
+            "name": "Export Video",
+            "type": "n8n-nodes-base.canva",
+            "typeVersion": 1,
+            "position": [
+                1488,
+                -208
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Attendre que l'export soit terminé\nconst exportData = $input.first().json;\n\nif (exportData.status === 'success') {\n  return {\n    status: 'completed',\n    download_url: exportData.url,\n    job_id: exportData.job_id\n  };\n} else if (exportData.status === 'in_progress') {\n  return {\n    status: 'in_progress',\n    job_id: exportData.job_id\n  };\n} else {\n  throw new Error('Erreur dans l\\'export vidéo');\n}"
+            },
+            "id": "017dbf90-262b-41a6-9876-8b08bc89f40a",
+            "name": "Wait for Export Completion",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1712,
+                -208
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "databasePage",
+                "operation": "update",
+                "pageId": "={{ $('Select Random Question').item.json.id || $('Save New Question to Notion').item.json.id }}",
+                "propertiesUi": {
+                    "propertyValues": [
+                        {
+                            "key": "Used",
+                            "checkboxValue": true
+                        },
+                        {
+                            "key": "Used Date"
+                        },
+                        {
+                            "key": "Video URL",
+                            "urlValue": "={{ $json.download_url }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "1d305528-2841-494a-94b3-200fd0d66635",
+            "name": "Mark Question as Used in Notion",
+            "type": "n8n-nodes-base.notion",
+            "typeVersion": 2,
+            "position": [
+                1936,
+                -208
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Préparer les données finales pour notification\nconst questionData = $('Prepare Content').item.json;\nconst videoUrl = $('Wait for Export Completion').item.json.download_url;\n\nreturn {\n  message: `🎥 Nouvelle vidéo QCM générée avec succès!`,\n  question: questionData.question,\n  category: questionData.category,\n  correct_answer: questionData.correct_answer,\n  video_url: videoUrl,\n  created_at: new Date().toISOString(),\n  summary: `Question: \"${questionData.question.substring(0, 50)}...\" | Catégorie: ${questionData.category} | Réponse: ${questionData.correct_answer}`\n};"
+            },
+            "id": "3fc37e69-c2e4-4f74-819e-cb47d12dfda7",
+            "name": "Prepare Success Notification",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                2160,
+                -208
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Sélectionner 8 questions aléatoires parmi les non utilisées\nconst items = $input.all();\n\nif (items.length < 8) {\n  return {\n    needNewQuestions: true,\n    hasQuestions: false,\n    availableCount: items.length\n  };\n}\n\n// Mélanger et sélectionner 8 questions\nconst shuffled = [...items].sort(() => 0.5 - Math.random());\nconst selectedQuestions = shuffled.slice(0, 8);\n\n// Extraire les propriétés Notion pour chaque question\nconst extractProperty = (prop) => {\n  if (prop?.title && prop.title[0]?.text?.content) return prop.title[0].text.content;\n  if (prop?.rich_text && prop.rich_text[0]?.text?.content) return prop.rich_text[0].text.content;\n  if (prop?.select?.name) return prop.select.name;\n  if (prop?.checkbox !== undefined) return prop.checkbox;\n  return '';\n};\n\n// Formatter les 8 questions\nconst formattedQuestions = selectedQuestions.map((item, index) => {\n  const props = item.json.properties;\n  return {\n    id: item.json.id,\n    questionNumber: index + 1,\n    question: extractProperty(props.Question),\n    option_a: extractProperty(props['Option A']),\n    option_b: extractProperty(props['Option B']),\n    option_c: extractProperty(props['Option C']),\n    option_d: extractProperty(props['Option D']),\n    correct_answer: extractProperty(props['Correct Answer']),\n    explanation: extractProperty(props.Explanation),\n    category: extractProperty(props.Category)\n  };\n});\n\nreturn {\n  questions: formattedQuestions,\n  hasQuestions: true,\n  needNewQuestions: false,\n  questionIds: formattedQuestions.map(q => q.id)\n};"
+            },
+            "id": "216f1e6b-5ec2-4cd7-9e6b-4c0ba10214b2",
+            "name": "Select 8 Questions",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                736,
+                288
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true
+                    },
+                    "conditions": [
+                        {
+                            "leftValue": "={{ $json.hasQuestions }}",
+                            "rightValue": true,
+                            "operation": "equal"
+                        }
+                    ],
+                    "combineOperation": "all"
+                },
+                "options": {}
+            },
+            "id": "ac3345c1-a7cf-4dc9-a8d1-0e704cf7be0d",
+            "name": "Check Questions Available",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2,
+            "position": [
+                960,
+                288
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "61b26ca9-814c-41d2-be8e-4164d787c946",
+            "name": "Generate 8 Questions",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 1.3,
+            "position": [
+                960,
+                496
             ],
             "credentials": {}
+        },
+        {
+            "parameters": {
+                "jsCode": "// Parser la réponse OpenAI pour extraire 8 questions\nconst response = $input.first().json.message.content;\nconst questions = [];\n\nfor (let i = 1; i <= 8; i++) {\n  try {\n    const questionRegex = new RegExp(`QUESTION_${i}:\\\\s*(.+?)(?=\\\\n[A-D]\\\\))`, 's');\n    const correctRegex = new RegExp(`CORRECT_${i}:\\\\s*([A-D])`);\n    const explanationRegex = new RegExp(`EXPLICATION_${i}:\\\\s*(.+?)(?=\\\\nCATEGORIE_${i}|\\\\nQUESTION_${i+1}|$)`, 's');\n    const categoryRegex = new RegExp(`CATÉGORIE_${i}:\\\\s*(.+?)(?=\\\\nQUESTION_${i+1}|$)`, 's');\n    \n    const questionMatch = response.match(questionRegex);\n    const correctMatch = response.match(correctRegex);\n    const explanationMatch = response.match(explanationRegex);\n    const categoryMatch = response.match(categoryRegex);\n    \n    if (questionMatch && correctMatch) {\n      // Extraire les options pour cette question\n      const questionSection = response.substring(\n        response.indexOf(`QUESTION_${i}`),\n        response.indexOf(`QUESTION_${i+1}`) > -1 ? response.indexOf(`QUESTION_${i+1}`) : response.length\n      );\n      \n      const options = {};\n      const optionMatches = questionSection.match(/([A-D])\\)\\s*(.+?)(?=\\n|$)/g);\n      if (optionMatches) {\n        optionMatches.forEach(option => {\n          const match = option.match(/([A-D])\\)\\s*(.+)/);\n          if (match) {\n            options[match[1]] = match[2].trim();\n          }\n        });\n      }\n      \n      questions.push({\n        questionNumber: i,\n        question: questionMatch[1].trim(),\n        option_a: options.A || '',\n        option_b: options.B || '',\n        option_c: options.C || '',\n        option_d: options.D || '',\n        correct_answer: correctMatch[1],\n        explanation: explanationMatch ? explanationMatch[1].trim() : '',\n        category: categoryMatch ? categoryMatch[1].trim() : 'Culture générale'\n      });\n    }\n  } catch (error) {\n    console.log(`Erreur parsing question ${i}:`, error.message);\n  }\n}\n\nif (questions.length === 0) {\n  throw new Error('Aucune question générée correctement');\n}\n\nreturn {\n  questions,\n  hasQuestions: true,\n  needNewQuestions: false,\n  isNewQuestions: true\n};"
+            },
+            "id": "42e04ad6-daa8-412b-a6f1-a463d643cf12",
+            "name": "Parse Questions",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1168,
+                496
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://api.openai.com/v1/audio/speech",
+                "authentication": "predefinedCredentialType",
+                "nodeCredentialType": "openAiApi",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "model",
+                            "value": "tts-1-hd"
+                        },
+                        {
+                            "name": "input",
+                            "value": "={{ $json.voice_script }}"
+                        },
+                        {
+                            "name": "voice",
+                            "value": "nova"
+                        },
+                        {
+                            "name": "response_format",
+                            "value": "mp3"
+                        },
+                        {
+                            "name": "speed",
+                            "value": "0.9"
+                        }
+                    ]
+                },
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "file"
+                        }
+                    }
+                }
+            },
+            "id": "2a1ed891-3038-466e-8d31-15ae12925a2b",
+            "name": "Generate Voice",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1392,
+                288
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "2b9ea661-5d36-4e61-80d1-418e6e91387f",
+            "name": "Generate Design",
+            "type": "n8n-nodes-base.canva",
+            "typeVersion": 1,
+            "position": [
+                1616,
+                288
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Attendre que le design soit prêt\nconst maxAttempts = 20;\nlet attempt = 0;\n\nwhile (attempt < maxAttempts) {\n  const designData = $input.first().json;\n  \n  if (designData.status === 'success' && designData.generated_designs && designData.generated_designs.length > 0) {\n    return {\n      status: 'completed',\n      designs: designData.generated_designs,\n      design_id: designData.generated_designs[0].id\n    };\n  } else if (designData.status === 'failed') {\n    throw new Error('Génération design échouée');\n  }\n  \n  // Attendre 5 secondes avant de réessayer\n  await new Promise(resolve => setTimeout(resolve, 5000));\n  attempt++;\n}\n\nthrow new Error('Timeout: Design non généré après 100 secondes');"
+            },
+            "id": "c9c789ca-6287-477a-ac13-317eb640ca5b",
+            "name": "Wait Design",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1840,
+                288
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Attendre que l'export soit terminé\nconst maxAttempts = 30;\nlet attempt = 0;\n\nwhile (attempt < maxAttempts) {\n  const exportData = $input.first().json;\n  \n  if (exportData.status === 'success' && exportData.url) {\n    return {\n      status: 'completed',\n      download_url: exportData.url,\n      job_id: exportData.job_id\n    };\n  } else if (exportData.status === 'failed') {\n    throw new Error('Export vidéo échoué');\n  }\n  \n  // Attendre 10 secondes avant de réessayer\n  await new Promise(resolve => setTimeout(resolve, 10000));\n  attempt++;\n}\n\nthrow new Error('Timeout: Export non terminé après 5 minutes');"
+            },
+            "id": "9bfe38f2-fda3-4761-aa62-b67b20cc88bb",
+            "name": "Wait Export",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                2272,
+                288
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Marquer toutes les questions utilisées comme 'used'\nconst questionsData = $('Prepare Content1').item.json.questions;\nconst videoUrl = $json.download_url;\n\n// Récupérer seulement les IDs des questions existantes (pas les nouvelles générées)\nconst questionIds = questionsData\n  .filter(q => q.id && typeof q.id === 'string' && !q.id.includes('new_'))\n  .map(q => q.id);\n\nreturn {\n  questionIds,\n  videoUrl,\n  questionsCount: questionsData.length,\n  usedCount: questionIds.length\n};"
+            },
+            "id": "814c00ad-715e-4583-ac6f-ddc29ae5c37d",
+            "name": "Prepare Update",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                2496,
+                288
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Préparer la notification finale\nconst questionsData = $('Prepare Content1').item.json.questions;\nconst videoUrl = $('Wait Export').item.json.download_url;\nconst categories = $('Prepare Content1').item.json.categories;\n\nconst summary = questionsData.slice(0, 3).map((q, i) => \n  `${i + 1}. ${q.question.substring(0, 50)}... (${q.correct_answer})`\n).join('\\n');\n\nreturn {\n  success: true,\n  message: `🎥 Vidéo quiz de ${questionsData.length} questions générée !`,\n  video_url: videoUrl,\n  total_questions: questionsData.length,\n  categories: categories.join(', '),\n  duration: $('Prepare Content1').item.json.estimatedDuration,\n  preview: summary + (questionsData.length > 3 ? `\\n... et ${questionsData.length - 3} autres questions` : ''),\n  created_at: new Date().toISOString()\n};"
+            },
+            "id": "9184df09-9c32-48ab-8b4d-2edfffcedbad",
+            "name": "Final Notification",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                2720,
+                288
+            ]
+        },
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "hours",
+                            "hoursInterval": 24
+                        }
+                    ]
+                }
+            },
+            "id": "4447d885-b42f-4d4d-87ad-7db965700256",
+            "name": "Schedule Trigger1",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                288,
+                288
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "databasePage",
+                "operation": "getAll",
+                "databaseId": "{{ $vars.notion_database_id }}",
+                "filterType": "manual",
+                "matchType": "and",
+                "filters": {
+                    "conditions": [
+                        {
+                            "key": "Used",
+                            "condition": "checkbox"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "a444c4a6-15c1-4b2a-a06e-7b6d61de372f",
+            "name": "Get Unused Questions1",
+            "type": "n8n-nodes-base.notion",
+            "typeVersion": 2,
+            "position": [
+                512,
+                288
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Préparer le contenu pour toutes les questions disponibles\nlet questionsData;\nconst inputItems = $input.all();\n\n// Trouver les données de questions (existantes ou nouvelles)\nfor (const item of inputItems) {\n  if (item.json.hasQuestions && item.json.questions && Array.isArray(item.json.questions)) {\n    questionsData = item.json.questions;\n    break;\n  }\n}\n\nif (!questionsData || questionsData.length === 0) {\n  throw new Error('Aucune question trouvée');\n}\n\n// Limiter à 8 questions max\nif (questionsData.length > 8) {\n  questionsData = questionsData.slice(0, 8);\n}\n\n// Créer le script de voix off simplifié\nlet voiceScript = `Bonjour et bienvenue à ce quiz de culture générale !\\nVous allez voir ${questionsData.length} questions avec leurs options à l'écran.\\nVous aurez 5 secondes pour réfléchir avant que je révèle la réponse.\\nC'est parti !\\n\\n`;\n\n// Ajouter chaque question\nquestionsData.forEach((q, index) => {\n  voiceScript += `Question ${q.questionNumber || index + 1}\\n\\n`;\n  voiceScript += `${q.question}\\n\\n`;\n  voiceScript += `[PAUSE 5 SECONDES]\\n\\n`;\n  voiceScript += `La réponse est ${q.correct_answer}.\\n`;\n  if (q.explanation) {\n    voiceScript += `${q.explanation}\\n\\n`;\n  } else {\n    voiceScript += `\\n`;\n  }\n  \n  if (index < questionsData.length - 1) {\n    voiceScript += `Question suivante !\\n\\n`;\n  }\n});\n\nvoiceScript += `C'est terminé ! Merci d'avoir participé à ce quiz.\\nÀ bientôt pour de nouvelles questions !`;\n\n// Query pour Canva\nconst categories = [...new Set(questionsData.map(q => q.category).filter(Boolean))];\nconst designQuery = `Créer une présentation QCM de ${questionsData.length} questions avec un design moderne. Titre \"Quiz - ${questionsData.length} Questions de Culture Générale\". Catégories: ${categories.join(', ')}. Chaque slide doit afficher la question ET les 4 options A,B,C,D de manière très visible, suivie d'une slide réponse. Design coloré, options bien lisibles car non lues à voix haute.`;\n\nreturn {\n  questions: questionsData,\n  voice_script: voiceScript,\n  design_query: designQuery,\n  totalQuestions: questionsData.length,\n  categories: categories,\n  estimatedDuration: Math.round(questionsData.length * 0.75) + '-' + Math.round(questionsData.length * 1) + ' minutes'\n};"
+            },
+            "id": "caf1d1b8-d913-4966-8a82-da4e5b7af96a",
+            "name": "Prepare Content1",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1200,
+                192
+            ]
+        },
+        {
+            "parameters": {},
+            "id": "3094061d-445b-43b9-95c6-c16f37fc3fdd",
+            "name": "Export Video1",
+            "type": "n8n-nodes-base.canva",
+            "typeVersion": 1,
+            "position": [
+                2048,
+                288
+            ]
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.3,
+            "position": [
+                1744,
+                432
+            ],
+            "id": "79116b34-baa8-4c98-9e0c-f712240259e5",
+            "name": "When chat message received",
+            "webhookId": "13c47e51-950a-4d03-8c05-02bf8851f9a0"
+        },
+        {
+            "parameters": {
+                "batching": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chainLlm",
+            "typeVersion": 1.7,
+            "position": [
+                1952,
+                432
+            ],
+            "id": "5e662f51-e70f-4f79-b9ef-e6d80ad6a4a9",
+            "name": "Basic LLM Chain"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatAzureOpenAi",
+            "typeVersion": 1,
+            "position": [
+                2160,
+                432
+            ],
+            "id": "dbe1eed4-469b-46db-b6f8-0fb0e2d4c704",
+            "name": "Azure OpenAI Chat Model"
         }
     ],
     "connections": {
-        "Convert Audio Base64": {
+        "Schedule Trigger": {
             "main": [
                 [
                     {
-                        "node": "Canva Upload Audio",
+                        "node": "Get Unused Questions",
                         "type": "main",
                         "index": 0
                     }
                 ]
             ]
         },
-        "Canva Upload Audio": {
+        "Get Unused Questions": {
             "main": [
                 [
                     {
-                        "node": "Canva Create Video",
+                        "node": "Select Random Question",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Select Random Question": {
+            "main": [
+                [
+                    {
+                        "node": "Has Question?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Has Question?": {
+            "main": [
+                [
+                    {
+                        "node": "Prepare Content",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Parse Generated Question": {
+            "main": [
+                [
+                    {
+                        "node": "Save New Question to Notion",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save New Question to Notion": {
+            "main": [
+                [
+                    {
+                        "node": "Prepare Content",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Prepare Content": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Voice Over",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Wait for Export Completion": {
+            "main": [
+                [
+                    {
+                        "node": "Mark Question as Used in Notion",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Mark Question as Used in Notion": {
+            "main": [
+                [
+                    {
+                        "node": "Prepare Success Notification",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Select 8 Questions": {
+            "main": [
+                [
+                    {
+                        "node": "Check Questions Available",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Check Questions Available": {
+            "main": [
+                [
+                    {
+                        "node": "Prepare Content1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Parse Questions": {
+            "main": [
+                [
+                    {
+                        "node": "Prepare Content1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Wait Export": {
+            "main": [
+                [
+                    {
+                        "node": "Prepare Update",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Prepare Update": {
+            "main": [
+                [
+                    {
+                        "node": "Final Notification",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schedule Trigger1": {
+            "main": [
+                [
+                    {
+                        "node": "Get Unused Questions1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Unused Questions1": {
+            "main": [
+                [
+                    {
+                        "node": "Select 8 Questions",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Prepare Content1": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Voice",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Azure OpenAI Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "When chat message received": {
+            "main": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
                         "type": "main",
                         "index": 0
                     }
@@ -176,9 +852,11 @@
         "executionOrder": "v1"
     },
     "staticData": null,
-    "meta": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
     "pinData": {},
-    "versionId": "c51a71d4-f981-438f-8180-7c5b3fc1535c",
+    "versionId": "73da5dc8-165c-41e1-a306-7a5e2cbba005",
     "triggerCount": 0,
     "shared": [
         {
