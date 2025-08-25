@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-23T21:53:58.420Z",
-    "updatedAt": "2025-08-24T02:38:27.000Z",
+    "updatedAt": "2025-08-25T02:24:27.000Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
     "active": false,
@@ -11,8 +11,8 @@
             "type": "n8n-nodes-base.manualTrigger",
             "typeVersion": 1,
             "position": [
-                -720,
-                272
+                -1360,
+                176
             ],
             "id": "db9de757-fa03-44c4-9d3a-9bd9065c53d7",
             "name": "When clicking ‘Execute workflow’"
@@ -25,7 +25,7 @@
             "typeVersion": 1.3,
             "position": [
                 -624,
-                -208
+                -288
             ],
             "id": "d0e975d9-ce9a-4e28-a31f-e623b5a085fe",
             "name": "When chat message received",
@@ -33,27 +33,29 @@
         },
         {
             "parameters": {
+                "promptType": "define",
+                "text": "=Ajoute {{ $json.chatInput }}  question(s), proposition(s) et réponse(s) à Notion. Fait en sorte de ne pas avoir de doublon avec les valeurs présentes dans la base de données. En terme de sctructure de sortie par sur un JSON ressemblant à \n\n{\n  \"created_at\": \"\",\n  \"question\": \"\",\n  \"proposition\": {\n    \"a\": \"\",\n    \"b\": \"\",\n    \"c\": \"\",\n    \"d\": \"\"\n  },\n  \"answer\": \"\"\n}",
                 "options": {}
             },
             "type": "@n8n/n8n-nodes-langchain.agent",
             "typeVersion": 2.2,
             "position": [
                 -384,
-                -208
+                -288
             ],
             "id": "86b63935-3b1b-4ee6-bff1-d1453750022f",
             "name": "AI Agent"
         },
         {
             "parameters": {
-                "model": "deepseek/deepseek-chat-v3-0324:free",
+                "model": "deepseek/deepseek-chat-v3-0324",
                 "options": {}
             },
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
             "typeVersion": 1,
             "position": [
                 -560,
-                48
+                -32
             ],
             "id": "0f707644-0a88-4bb9-a038-a313b6b72c06",
             "name": "OpenRouter Chat Model",
@@ -69,8 +71,8 @@
             "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
             "typeVersion": 1.3,
             "position": [
-                -416,
-                48
+                -432,
+                -32
             ],
             "id": "ea3296f9-dcb0-4e94-af6e-5d1404d5b7ca",
             "name": "Postgres Chat Memory",
@@ -80,12 +82,424 @@
                     "name": "Postgres Supabase account"
                 }
             }
+        },
+        {
+            "parameters": {
+                "resource": "databasePage",
+                "databaseId": {
+                    "__rl": true,
+                    "value": "25843d11-1336-80be-aa2c-cad738ad1c7b",
+                    "mode": "list",
+                    "cachedResultName": "QCM",
+                    "cachedResultUrl": "https://www.notion.so/25843d11133680beaa2ccad738ad1c7b"
+                },
+                "title": "QCM",
+                "propertiesUi": {
+                    "propertyValues": [
+                        {
+                            "key": "CreatedAt|date",
+                            "date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('propertyValues0_Date', ``, 'string') }}",
+                            "timezone": "Europe/Paris"
+                        },
+                        {
+                            "key": "Question|title",
+                            "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('propertyValues1_Title', ``, 'string') }}"
+                        },
+                        {
+                            "key": "Choices|rich_text",
+                            "textContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('propertyValues2_Text', ``, 'string') }}"
+                        },
+                        {
+                            "key": "Answer|rich_text",
+                            "textContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('propertyValues3_Text', ``, 'string') }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.notionTool",
+            "typeVersion": 2.2,
+            "position": [
+                -144,
+                -32
+            ],
+            "id": "8272794f-5e2c-4098-84c1-9c8ca88f7d0a",
+            "name": "Create a database page in Notion",
+            "credentials": {
+                "notionApi": {
+                    "id": "g3AwBtYd70JlJQfn",
+                    "name": "Notion SnakeTech account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "databasePage",
+                "operation": "getAll",
+                "databaseId": {
+                    "__rl": true,
+                    "value": "25843d11-1336-80be-aa2c-cad738ad1c7b",
+                    "mode": "list",
+                    "cachedResultName": "QCM",
+                    "cachedResultUrl": "https://www.notion.so/25843d11133680beaa2ccad738ad1c7b"
+                },
+                "limit": 100,
+                "options": {}
+            },
+            "type": "n8n-nodes-base.notionTool",
+            "typeVersion": 2.2,
+            "position": [
+                -288,
+                -32
+            ],
+            "id": "28efd1bd-d0c8-45fd-9ee4-91fe8e5f48a1",
+            "name": "Get many database pages in Notion",
+            "credentials": {
+                "notionApi": {
+                    "id": "g3AwBtYd70JlJQfn",
+                    "name": "Notion SnakeTech account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "databasePage",
+                "operation": "getAll",
+                "databaseId": {
+                    "__rl": true,
+                    "value": "25843d11-1336-80be-aa2c-cad738ad1c7b",
+                    "mode": "list",
+                    "cachedResultName": "QCM Questions Database",
+                    "cachedResultUrl": "https://www.notion.so/25843d11133680beaa2ccad738ad1c7b"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.notion",
+            "typeVersion": 2.2,
+            "position": [
+                -1136,
+                176
+            ],
+            "id": "68b780c5-274f-4c39-8f42-80c9315d19c7",
+            "name": "Get many database pages",
+            "credentials": {
+                "notionApi": {
+                    "id": "g3AwBtYd70JlJQfn",
+                    "name": "Notion SnakeTech account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "language": "python",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nproperties = []\n\nfor item in _input.all():\n  property = item.json.get(\"properties\", {})\n  p = {\n    \"id\": property[\"ID\"][\"unique_id\"].get(\"number\", None),\n    \"question\": property[\"Question\"][\"title\"][0].get(\"plain_text\", None)\n    \"option_a\": \n  }\n  properties.append(property)\nreturn properties"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                192,
+                -288
+            ],
+            "id": "d32c245e-9bd2-4281-a066-70f146215a29",
+            "name": "Code"
+        },
+        {
+            "parameters": {
+                "additionalOptions": {
+                    "regexReplacement": {
+                        "replacements": [
+                            {
+                                "searchRegex": "^property_(.*)",
+                                "replaceRegex": "=$1",
+                                "options": {}
+                            }
+                        ]
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.renameKeys",
+            "typeVersion": 1,
+            "position": [
+                -880,
+                176
+            ],
+            "id": "1bb06e57-431b-472b-831e-d2f1f85c85f8",
+            "name": "Rename Keys"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "307df18a-1dfb-4f37-87df-8e4c5f9bed1a",
+                            "name": "unused_questions_count",
+                            "value": "={{ $input.all().filter(item => item.json.used === false).length }}",
+                            "type": "number"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -512,
+                400
+            ],
+            "id": "16ed86f0-b395-4384-9621-e5e93f4eb8c9",
+            "name": "UnUsed",
+            "executeOnce": true
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "dc084b13-d6ff-40c9-99fa-a161fa9926eb",
+                            "leftValue": "={{ $json.unused_questions_count % 8}}",
+                            "rightValue": 0,
+                            "operator": {
+                                "type": "number",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                -288,
+                400
+            ],
+            "id": "3ae7d2c6-63c4-4f35-bd06-0312345f9b3f",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Génère {{ Math.abs($json.unused_questions_count - 8) }} QCM. Dans le \"correct_answer\" ne met que la lettre. Format les informations à l'aide du JSON suivant. \n\n{\n  \"question\": \"\",\n  \"option_a\": \"\",\n  \"option_b\": \"\",\n  \"option_c\": \"\",\n  \"option_d\": \"\",\n  \"correct_answer\": \"\",\n  \"category\": \"\"\n}\n\nN'affiche que le JSON. Et ajoute le résultat systématique dans une liste.",
+                "batching": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chainLlm",
+            "typeVersion": 1.7,
+            "position": [
+                0,
+                480
+            ],
+            "id": "14a5a35b-65fa-42f8-b860-a6b10e9230f8",
+            "name": "Basic LLM Chain"
+        },
+        {
+            "parameters": {
+                "model": "deepseek/deepseek-chat-v3-0324",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+            "typeVersion": 1,
+            "position": [
+                -32,
+                736
+            ],
+            "id": "e6501d7a-5af6-4cf3-a828-867274173e5f",
+            "name": "OpenRouter Chat Model1",
+            "credentials": {
+                "openRouterApi": {
+                    "id": "eJL3ulSkeT8Q0dwT",
+                    "name": "OpenRouter account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "language": "python",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                192,
+                -80
+            ],
+            "id": "dfa42958-e2d1-4a25-9767-c4ca70141462",
+            "name": "Code1"
+        },
+        {
+            "parameters": {
+                "resource": "databasePage",
+                "databaseId": {
+                    "__rl": true,
+                    "value": "25843d11-1336-80be-aa2c-cad738ad1c7b",
+                    "mode": "list",
+                    "cachedResultName": "QCM Questions Database",
+                    "cachedResultUrl": "https://www.notion.so/25843d11133680beaa2ccad738ad1c7b"
+                },
+                "propertiesUi": {
+                    "propertyValues": [
+                        {
+                            "key": "CreatedAt|date",
+                            "date": "={{ $now.format('yyyy-MM-dd HH:mm:ss') }}"
+                        },
+                        {
+                            "key": "Question|title",
+                            "title": "={{ $json.question }}"
+                        },
+                        {
+                            "key": "Option A|rich_text",
+                            "textContent": "={{ $json.option_a }}"
+                        },
+                        {
+                            "key": "Option B|rich_text",
+                            "textContent": "={{ $json.option_b }}"
+                        },
+                        {
+                            "key": "Option C|rich_text",
+                            "textContent": "={{ $json.option_c }}"
+                        },
+                        {
+                            "key": "Option D|rich_text",
+                            "textContent": "={{ $json.option_d }}"
+                        },
+                        {
+                            "key": "Correct Answer|select",
+                            "selectValue": "={{ $json.correct_answer.toUpperCase() }}"
+                        },
+                        {
+                            "key": "Category|select",
+                            "selectValue": "={{ $json.category }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.notion",
+            "typeVersion": 2.2,
+            "position": [
+                560,
+                480
+            ],
+            "id": "6ced83c9-c612-4451-9364-730fb58cbb24",
+            "name": "Create a database page",
+            "credentials": {
+                "notionApi": {
+                    "id": "g3AwBtYd70JlJQfn",
+                    "name": "Notion SnakeTech account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "language": "python",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport json\nimport re\n\ntext = _input.first().json.text\n\njson_content = re.search(\"```json\\n([\\s\\S]*?)\\n```\", text)[1]\n\nquestions = json.loads(json_content)\n\nall_questions_items = _('Rename Keys').all()\nall_questions = [item.get(\"question\", \"\").strip().lower() for item in all_questions_items]\n\nnew_questions = [q1 for q1 in questions if q1.get(\"question\", \"\").strip().lower() not in all_questions]\n\nreturn new_questions"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                352,
+                480
+            ],
+            "id": "13a2d2a1-29e6-4e72-8518-f68964192f07",
+            "name": "Get new questions"
+        },
+        {
+            "parameters": {
+                "language": "python",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nitems = _('Rename Keys').all()[:8]\n\nvoice_script = \"\"\n\nfor item in items:\n  voice_script += f\"{item.json.get(\"question\")}\\n\\n\"\n  voice_script += \"[PAUSE 5 SECONDES]\\n\\n\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\\n\"\n\nparams = \"\"\"\nVoice Affect: Calm, composed, and reassuring. Competent and in control, instilling trust.\n\nTone: Sincere, empathetic, with genuine concern for the customer and understanding of the situation.\n\nPacing: Slower during the apology to allow for clarity and processing. Faster when offering solutions to signal action and resolution.\n\nEmotions: Calm reassurance, empathy, and gratitude.\n\nPronunciation: Clear, precise: Ensures clarity, especially with key details. Focus on key words like \"refund\" and \"patience.\" \n\nPauses: Before and after the apology to give space for processing the apology.\n\"\"\"\n\n\n\nreturn {\n  \"voice_script\": voice_script\n}"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                0,
+                272
+            ],
+            "id": "2d15acf2-b013-4bd1-bf37-1cf2f03ec40b",
+            "name": "Get 8 questions"
+        },
+        {
+            "parameters": {
+                "resource": "audio",
+                "input": "={{ $json.voice_script }}",
+                "voice": "shimmer",
+                "options": {
+                    "response_format": "aac"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.openAi",
+            "typeVersion": 1.8,
+            "position": [
+                224,
+                128
+            ],
+            "id": "9d5b3f0c-550b-4a94-bfdb-19a4e6f20eee",
+            "name": "Generate audio",
+            "credentials": {
+                "openAiApi": {
+                    "id": "H0VcOhL36gFHQbme",
+                    "name": "OpenAi mickael.lcq account"
+                }
+            },
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "url": "https://francecentral.tts.speech.microsoft.com/cognitiveservices/v1",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/ssml+xml"
+                        },
+                        {
+                            "name": "X-Microsoft-OutputFormat",
+                            "value": "audio-16khz-128kbitrate-mono-mp3"
+                        },
+                        {
+                            "name": "User-Agent",
+                            "value": "n8n"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "contentType": "raw",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                224,
+                336
+            ],
+            "id": "36f20921-940f-4803-a7c3-c6812e43e5de",
+            "name": "HTTP Request",
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "l6NvN4FQFZ0OQb13",
+                    "name": "Azure SnakeTech account"
+                }
+            }
         }
     ],
     "connections": {
         "When clicking ‘Execute workflow’": {
             "main": [
-                []
+                [
+                    {
+                        "node": "Get many database pages",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
             ]
         },
         "When chat message received": {
@@ -120,6 +534,149 @@
                     }
                 ]
             ]
+        },
+        "Create a database page in Notion": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get many database pages in Notion": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get many database pages": {
+            "main": [
+                [
+                    {
+                        "node": "Rename Keys",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Rename Keys": {
+            "main": [
+                [
+                    {
+                        "node": "UnUsed",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "UnUsed": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code": {
+            "main": [
+                []
+            ]
+        },
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Get 8 questions",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "OpenRouter Chat Model1": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Basic LLM Chain": {
+            "main": [
+                [
+                    {
+                        "node": "Get new questions",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create a database page": {
+            "main": [
+                [
+                    {
+                        "node": "Get many database pages",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get new questions": {
+            "main": [
+                [
+                    {
+                        "node": "Create a database page",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get 8 questions": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Generate audio",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "main": [
+                []
+            ]
         }
     },
     "settings": {
@@ -130,7 +687,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "80bb2947-3ec9-4f76-ba91-f6299b0fd67c",
+    "versionId": "904c2dd1-58df-4c7d-a617-ac9411e728a7",
     "triggerCount": 0,
     "shared": [
         {
