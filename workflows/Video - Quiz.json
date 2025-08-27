@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-23T21:53:58.420Z",
-    "updatedAt": "2025-08-25T02:24:27.000Z",
+    "updatedAt": "2025-08-27T04:01:36.000Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
     "active": false,
@@ -24,8 +24,8 @@
             "type": "@n8n/n8n-nodes-langchain.chatTrigger",
             "typeVersion": 1.3,
             "position": [
-                -624,
-                -288
+                -944,
+                -432
             ],
             "id": "d0e975d9-ce9a-4e28-a31f-e623b5a085fe",
             "name": "When chat message received",
@@ -40,8 +40,8 @@
             "type": "@n8n/n8n-nodes-langchain.agent",
             "typeVersion": 2.2,
             "position": [
-                -384,
-                -288
+                -704,
+                -432
             ],
             "id": "86b63935-3b1b-4ee6-bff1-d1453750022f",
             "name": "AI Agent"
@@ -54,8 +54,8 @@
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
             "typeVersion": 1,
             "position": [
-                -560,
-                -32
+                -880,
+                -176
             ],
             "id": "0f707644-0a88-4bb9-a038-a313b6b72c06",
             "name": "OpenRouter Chat Model",
@@ -71,8 +71,8 @@
             "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
             "typeVersion": 1.3,
             "position": [
-                -432,
-                -32
+                -752,
+                -176
             ],
             "id": "ea3296f9-dcb0-4e94-af6e-5d1404d5b7ca",
             "name": "Postgres Chat Memory",
@@ -120,8 +120,8 @@
             "type": "n8n-nodes-base.notionTool",
             "typeVersion": 2.2,
             "position": [
-                -144,
-                -32
+                -464,
+                -176
             ],
             "id": "8272794f-5e2c-4098-84c1-9c8ca88f7d0a",
             "name": "Create a database page in Notion",
@@ -149,8 +149,8 @@
             "type": "n8n-nodes-base.notionTool",
             "typeVersion": 2.2,
             "position": [
-                -288,
-                -32
+                -608,
+                -176
             ],
             "id": "28efd1bd-d0c8-45fd-9ee4-91fe8e5f48a1",
             "name": "Get many database pages in Notion",
@@ -197,8 +197,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                192,
-                -288
+                -128,
+                -432
             ],
             "id": "d32c245e-9bd2-4281-a066-70f146215a29",
             "name": "Code"
@@ -220,7 +220,7 @@
             "type": "n8n-nodes-base.renameKeys",
             "typeVersion": 1,
             "position": [
-                -880,
+                -928,
                 176
             ],
             "id": "1bb06e57-431b-472b-831e-d2f1f85c85f8",
@@ -243,8 +243,8 @@
             "type": "n8n-nodes-base.set",
             "typeVersion": 3.4,
             "position": [
-                -512,
-                400
+                -496,
+                176
             ],
             "id": "16ed86f0-b395-4384-9621-e5e93f4eb8c9",
             "name": "UnUsed",
@@ -277,8 +277,8 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.2,
             "position": [
-                -288,
-                400
+                -272,
+                176
             ],
             "id": "3ae7d2c6-63c4-4f35-bd06-0312345f9b3f",
             "name": "If"
@@ -292,8 +292,8 @@
             "type": "@n8n/n8n-nodes-langchain.chainLlm",
             "typeVersion": 1.7,
             "position": [
-                0,
-                480
+                32,
+                272
             ],
             "id": "14a5a35b-65fa-42f8-b860-a6b10e9230f8",
             "name": "Basic LLM Chain"
@@ -306,8 +306,8 @@
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
             "typeVersion": 1,
             "position": [
-                -32,
-                736
+                32,
+                528
             ],
             "id": "e6501d7a-5af6-4cf3-a828-867274173e5f",
             "name": "OpenRouter Chat Model1",
@@ -326,8 +326,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                192,
-                -80
+                -128,
+                -224
             ],
             "id": "dfa42958-e2d1-4a25-9767-c4ca70141462",
             "name": "Code1"
@@ -383,8 +383,8 @@
             "type": "n8n-nodes-base.notion",
             "typeVersion": 2.2,
             "position": [
-                560,
-                480
+                576,
+                272
             ],
             "id": "6ced83c9-c612-4451-9364-730fb58cbb24",
             "name": "Create a database page",
@@ -403,8 +403,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                352,
-                480
+                368,
+                272
             ],
             "id": "13a2d2a1-29e6-4e72-8518-f68964192f07",
             "name": "Get new questions"
@@ -417,8 +417,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                0,
-                272
+                32,
+                80
             ],
             "id": "2d15acf2-b013-4bd1-bf37-1cf2f03ec40b",
             "name": "Get 8 questions"
@@ -435,8 +435,8 @@
             "type": "@n8n/n8n-nodes-langchain.openAi",
             "typeVersion": 1.8,
             "position": [
-                224,
-                128
+                368,
+                -128
             ],
             "id": "9d5b3f0c-550b-4a94-bfdb-19a4e6f20eee",
             "name": "Generate audio",
@@ -477,11 +477,92 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                224,
-                336
+                368,
+                80
             ],
             "id": "36f20921-940f-4803-a7c3-c6812e43e5de",
             "name": "HTTP Request",
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "l6NvN4FQFZ0OQb13",
+                    "name": "Azure SnakeTech account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "tableId": "QCM Questions",
+                "dataToSend": "autoMapInputData"
+            },
+            "type": "n8n-nodes-base.supabase",
+            "typeVersion": 1,
+            "position": [
+                784,
+                272
+            ],
+            "id": "5be626eb-de12-40bf-8031-a1711d95c7cd",
+            "name": "Create a row",
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "tableId": "QCM Questions",
+                "dataToSend": "autoMapInputData"
+            },
+            "type": "n8n-nodes-base.supabase",
+            "typeVersion": 1,
+            "position": [
+                -720,
+                64
+            ],
+            "id": "9b1ec131-843a-4593-9d46-f3712eaee124",
+            "name": "Update a row",
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech"
+                }
+            },
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "url": "https://francecentral.tts.speech.microsoft.com",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/ssml+xml"
+                        },
+                        {
+                            "name": "X-Microsoft-OutputFormat",
+                            "value": "audio-16khz-128kbitrate-mono-mp3"
+                        },
+                        {
+                            "name": "User-Agent",
+                            "value": "n8n"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                640,
+                -16
+            ],
+            "id": "deaa4378-fbbd-4833-b48e-1ced8b6896da",
+            "name": "HTTP Request1",
             "credentials": {
                 "httpHeaderAuth": {
                     "id": "l6NvN4FQFZ0OQb13",
@@ -639,7 +720,7 @@
             "main": [
                 [
                     {
-                        "node": "Get many database pages",
+                        "node": "Create a row",
                         "type": "main",
                         "index": 0
                     }
@@ -669,11 +750,32 @@
                         "node": "Generate audio",
                         "type": "main",
                         "index": 0
+                    },
+                    {
+                        "node": "HTTP Request1",
+                        "type": "main",
+                        "index": 0
                     }
                 ]
             ]
         },
         "HTTP Request": {
+            "main": [
+                []
+            ]
+        },
+        "Create a row": {
+            "main": [
+                [
+                    {
+                        "node": "Get many database pages",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update a row": {
             "main": [
                 []
             ]
@@ -687,7 +789,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "904c2dd1-58df-4c7d-a617-ac9411e728a7",
+    "versionId": "6ff936e5-6f52-446b-8d71-0729cf2a75d6",
     "triggerCount": 0,
     "shared": [
         {
