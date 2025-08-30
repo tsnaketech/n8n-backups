@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-23T21:53:58.420Z",
-    "updatedAt": "2025-08-27T04:01:36.000Z",
+    "updatedAt": "2025-08-30T01:11:19.000Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
     "active": false,
@@ -197,8 +197,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                -128,
-                -432
+                -304,
+                -400
             ],
             "id": "d32c245e-9bd2-4281-a066-70f146215a29",
             "name": "Code"
@@ -220,7 +220,7 @@
             "type": "n8n-nodes-base.renameKeys",
             "typeVersion": 1,
             "position": [
-                -928,
+                -896,
                 176
             ],
             "id": "1bb06e57-431b-472b-831e-d2f1f85c85f8",
@@ -326,7 +326,7 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                -128,
+                -304,
                 -224
             ],
             "id": "dfa42958-e2d1-4a25-9767-c4ca70141462",
@@ -412,7 +412,7 @@
         {
             "parameters": {
                 "language": "python",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nitems = _('Rename Keys').all()[:8]\n\nvoice_script = \"\"\n\nfor item in items:\n  voice_script += f\"{item.json.get(\"question\")}\\n\\n\"\n  voice_script += \"[PAUSE 5 SECONDES]\\n\\n\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\\n\"\n\nparams = \"\"\"\nVoice Affect: Calm, composed, and reassuring. Competent and in control, instilling trust.\n\nTone: Sincere, empathetic, with genuine concern for the customer and understanding of the situation.\n\nPacing: Slower during the apology to allow for clarity and processing. Faster when offering solutions to signal action and resolution.\n\nEmotions: Calm reassurance, empathy, and gratitude.\n\nPronunciation: Clear, precise: Ensures clarity, especially with key details. Focus on key words like \"refund\" and \"patience.\" \n\nPauses: Before and after the apology to give space for processing the apology.\n\"\"\"\n\n\n\nreturn {\n  \"voice_script\": voice_script\n}"
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nitems = _('Rename Keys').all()[:8]\n\nvoice_script = \"\"\n\nvoice_script += \"<speak version='1.0' xml:lang='fr-FR'><voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\"\n\nfor item in items:\n  voice_script += \"<p>\"\n  voice_script += f\"{item.json.get(\"question\")}\\n\\n\"\n  voice_script += \"<break time='5s' />\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += \"<break strength='medium' />\"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\\n\"\n  voice_script += \"</p>\"\n\n\n\n  \n\nvoice_script += \"</voice></speak>\"\n\n\nreturn {\n  \"voice_script\": voice_script\n}"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
@@ -435,8 +435,8 @@
             "type": "@n8n/n8n-nodes-langchain.openAi",
             "typeVersion": 1.8,
             "position": [
-                368,
-                -128
+                0,
+                -416
             ],
             "id": "9d5b3f0c-550b-4a94-bfdb-19a4e6f20eee",
             "name": "Generate audio",
@@ -447,47 +447,6 @@
                 }
             },
             "disabled": true
-        },
-        {
-            "parameters": {
-                "url": "https://francecentral.tts.speech.microsoft.com/cognitiveservices/v1",
-                "authentication": "genericCredentialType",
-                "genericAuthType": "httpHeaderAuth",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/ssml+xml"
-                        },
-                        {
-                            "name": "X-Microsoft-OutputFormat",
-                            "value": "audio-16khz-128kbitrate-mono-mp3"
-                        },
-                        {
-                            "name": "User-Agent",
-                            "value": "n8n"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "contentType": "raw",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                368,
-                80
-            ],
-            "id": "36f20921-940f-4803-a7c3-c6812e43e5de",
-            "name": "HTTP Request",
-            "credentials": {
-                "httpHeaderAuth": {
-                    "id": "l6NvN4FQFZ0OQb13",
-                    "name": "Azure SnakeTech account"
-                }
-            }
         },
         {
             "parameters": {
@@ -518,8 +477,8 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                -720,
-                64
+                -1264,
+                -144
             ],
             "id": "9b1ec131-843a-4593-9d46-f3712eaee124",
             "name": "Update a row",
@@ -533,23 +492,30 @@
         },
         {
             "parameters": {
-                "url": "https://francecentral.tts.speech.microsoft.com",
+                "mode": "jsonToxml",
+                "dataPropertyName": "={{ $json.voice_script }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.xml",
+            "typeVersion": 1,
+            "position": [
+                256,
+                80
+            ],
+            "id": "b441ab1f-5ff3-428d-b4e4-2a617131e383",
+            "name": "XML"
+        },
+        {
+            "parameters": {
+                "url": "https://westeurope.tts.speech.microsoft.com/cognitiveservices/voices/list",
                 "authentication": "genericCredentialType",
                 "genericAuthType": "httpHeaderAuth",
-                "sendHeaders": true,
-                "headerParameters": {
+                "sendQuery": true,
+                "queryParameters": {
                     "parameters": [
                         {
-                            "name": "Content-Type",
-                            "value": "application/ssml+xml"
-                        },
-                        {
-                            "name": "X-Microsoft-OutputFormat",
-                            "value": "audio-16khz-128kbitrate-mono-mp3"
-                        },
-                        {
-                            "name": "User-Agent",
-                            "value": "n8n"
+                            "name": "Locale",
+                            "value": "fr-FR"
                         }
                     ]
                 },
@@ -558,15 +524,59 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                640,
-                -16
+                192,
+                -288
             ],
-            "id": "deaa4378-fbbd-4833-b48e-1ced8b6896da",
-            "name": "HTTP Request1",
+            "id": "8730a3a2-5524-4cb4-afad-b0df047a9caa",
+            "name": "Get Voices",
             "credentials": {
                 "httpHeaderAuth": {
                     "id": "l6NvN4FQFZ0OQb13",
                     "name": "Azure SnakeTech account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://westeurope.tts.speech.microsoft.com/cognitiveservices/v1",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "X-Microsoft-OutputFormat",
+                            "value": "audio-16khz-128kbitrate-mono-mp3"
+                        },
+                        {
+                            "name": "User-Agent",
+                            "value": "SnakeTech"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "contentType": "raw",
+                "rawContentType": "application/ssml+xml",
+                "body": "={{ $json.keys()[0] }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                480,
+                80
+            ],
+            "id": "a9f6eeab-ec84-44fe-984f-f62650f26e89",
+            "name": "Generate Voice",
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "l6NvN4FQFZ0OQb13",
+                    "name": "Azure SnakeTech account"
+                },
+                "httpBearerAuth": {
+                    "id": "YOplG9WUCOFF5T4t",
+                    "name": "Bearer Azure SnakeTech account"
                 }
             }
         }
@@ -742,26 +752,11 @@
             "main": [
                 [
                     {
-                        "node": "HTTP Request",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Generate audio",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "HTTP Request1",
+                        "node": "XML",
                         "type": "main",
                         "index": 0
                     }
                 ]
-            ]
-        },
-        "HTTP Request": {
-            "main": [
-                []
             ]
         },
         "Create a row": {
@@ -779,6 +774,17 @@
             "main": [
                 []
             ]
+        },
+        "XML": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Voice",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
         }
     },
     "settings": {
@@ -789,7 +795,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "6ff936e5-6f52-446b-8d71-0729cf2a75d6",
+    "versionId": "15fda7e0-5d86-47b4-9658-ae49c411c18b",
     "triggerCount": 0,
     "shared": [
         {
