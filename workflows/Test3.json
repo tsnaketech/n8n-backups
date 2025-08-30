@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-24T00:20:39.940Z",
-    "updatedAt": "2025-08-25T02:24:30.000Z",
+    "updatedAt": "2025-08-30T01:00:04.000Z",
     "id": "hWfazNhHPQI4TYzk",
     "name": "Test3",
     "active": false,
@@ -595,46 +595,6 @@
                 2048,
                 288
             ]
-        },
-        {
-            "parameters": {
-                "options": {}
-            },
-            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
-            "typeVersion": 1.3,
-            "position": [
-                1744,
-                432
-            ],
-            "id": "79116b34-baa8-4c98-9e0c-f712240259e5",
-            "name": "When chat message received",
-            "webhookId": "13c47e51-950a-4d03-8c05-02bf8851f9a0"
-        },
-        {
-            "parameters": {
-                "batching": {}
-            },
-            "type": "@n8n/n8n-nodes-langchain.chainLlm",
-            "typeVersion": 1.7,
-            "position": [
-                1952,
-                432
-            ],
-            "id": "5e662f51-e70f-4f79-b9ef-e6d80ad6a4a9",
-            "name": "Basic LLM Chain"
-        },
-        {
-            "parameters": {
-                "options": {}
-            },
-            "type": "@n8n/n8n-nodes-langchain.lmChatAzureOpenAi",
-            "typeVersion": 1,
-            "position": [
-                2160,
-                432
-            ],
-            "id": "dbe1eed4-469b-46db-b6f8-0fb0e2d4c704",
-            "name": "Azure OpenAI Chat Model"
         }
     ],
     "connections": {
@@ -824,28 +784,6 @@
                     }
                 ]
             ]
-        },
-        "Azure OpenAI Chat Model": {
-            "ai_languageModel": [
-                [
-                    {
-                        "node": "Basic LLM Chain",
-                        "type": "ai_languageModel",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "When chat message received": {
-            "main": [
-                [
-                    {
-                        "node": "Basic LLM Chain",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
         }
     },
     "settings": {
@@ -856,7 +794,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "73da5dc8-165c-41e1-a306-7a5e2cbba005",
+    "versionId": "e3b62ccb-11e7-4102-8653-1969c9ae6c81",
     "triggerCount": 0,
     "shared": [
         {
