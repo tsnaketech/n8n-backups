@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-05-27T21:55:06.402Z",
-    "updatedAt": "2025-07-22T22:57:17.000Z",
+    "updatedAt": "2025-08-30T00:59:01.000Z",
     "id": "kx94Z2Th3dyVsVrw",
     "name": "Notification",
     "active": true,
@@ -15,8 +15,8 @@
             "type": "n8n-nodes-base.webhook",
             "typeVersion": 2,
             "position": [
-                -140,
-                -300
+                -144,
+                -304
             ],
             "id": "aa795329-6fc0-4c2e-9b37-98b722f66cdf",
             "name": "Webhook",
@@ -33,8 +33,8 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                1740,
-                -280
+                1744,
+                -288
             ],
             "id": "3e894bfb-62bb-4f57-9cab-26716d9289b1",
             "name": "Telegram",
@@ -82,8 +82,8 @@
             "type": "n8n-nodes-base.switch",
             "typeVersion": 3.2,
             "position": [
-                140,
-                -300
+                144,
+                -304
             ],
             "id": "07dacf5a-9e19-4891-9142-311e88929ac2",
             "name": "Switch"
@@ -96,8 +96,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                500,
-                -600
+                512,
+                -608
             ],
             "id": "808f4e25-6124-46d0-8c02-8202a7f49dc5",
             "name": "Text to JSON"
@@ -110,8 +110,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                780,
-                -600
+                784,
+                -608
             ],
             "id": "bfd3caed-1193-4415-8c15-8d322522e253",
             "name": "Get Free Games"
@@ -127,7 +127,7 @@
             "typeVersion": 3,
             "position": [
                 1040,
-                -600
+                -608
             ],
             "id": "5d085f6a-9df8-42bf-97f4-796e9280b4fb",
             "name": "Loop Over Items",
@@ -143,8 +143,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1340,
-                -580
+                1344,
+                -576
             ],
             "id": "e4dd9677-6867-496e-b5be-7879a4b36288",
             "name": "HTTP Request"
@@ -177,8 +177,8 @@
             "type": "n8n-nodes-base.discord",
             "typeVersion": 2,
             "position": [
-                1580,
-                -580
+                1584,
+                -576
             ],
             "id": "0efafb46-16bd-4338-889e-f5bc42ac4662",
             "name": "TiSnake",
@@ -200,8 +200,8 @@
             "type": "n8n-nodes-base.stickyNote",
             "typeVersion": 1,
             "position": [
-                420,
-                -760
+                432,
+                -768
             ],
             "id": "2a4596fa-c936-4571-a74b-b24fc21b50c5",
             "name": "Sticky Note"
@@ -234,8 +234,8 @@
             "type": "n8n-nodes-base.discord",
             "typeVersion": 2,
             "position": [
-                1580,
-                -740
+                1584,
+                -736
             ],
             "id": "7a4a8e84-2698-4aaa-98b7-8746d5138fd5",
             "name": "WadaCorp",
@@ -253,7 +253,7 @@
             "typeVersion": 1,
             "position": [
                 -160,
-                60
+                64
             ],
             "id": "3ada0ba4-a7cb-4214-93dd-323a482b129f",
             "name": "When clicking ‘Execute workflow’"
@@ -296,8 +296,8 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.2,
             "position": [
-                1300,
-                180
+                1312,
+                192
             ],
             "id": "eedc8463-0347-4ae5-93a7-7301869695f8",
             "name": "If"
@@ -359,7 +359,7 @@
             "typeVersion": 2,
             "position": [
                 1840,
-                40
+                48
             ],
             "id": "f6a6eb22-e664-4b4b-b03f-e077d4045ac9",
             "name": "TiSnake1",
@@ -381,8 +381,8 @@
             "type": "n8n-nodes-base.stickyNote",
             "typeVersion": 1,
             "position": [
-                -260,
-                -120
+                -256,
+                -128
             ],
             "id": "52f5a1d3-fb8a-47ec-b44e-8f482324ed05",
             "name": "Sticky Note1"
@@ -411,7 +411,7 @@
             "typeVersion": 2,
             "position": [
                 1840,
-                -120
+                -128
             ],
             "id": "66073280-fd18-478e-a8e9-d115b178c250",
             "name": "WadaCorp1",
@@ -473,7 +473,7 @@
             "type": "n8n-nodes-text-manipulation.textManipulation",
             "typeVersion": 1,
             "position": [
-                260,
+                272,
                 160
             ],
             "id": "b5dac6c2-fcfe-4fda-85ff-fc811a21a8ac",
@@ -499,7 +499,7 @@
             "type": "n8n-nodes-base.html",
             "typeVersion": 1.2,
             "position": [
-                440,
+                448,
                 160
             ],
             "id": "2c0ef3b0-a0d5-42d5-b0e5-77775d63c52a",
@@ -517,8 +517,8 @@
             "type": "n8n-nodes-base.nocoDb",
             "typeVersion": 3,
             "position": [
-                740,
-                60
+                752,
+                64
             ],
             "id": "8a96ae9f-3966-4b99-8a0c-838c163928ad",
             "name": "Get Games Saved",
@@ -527,7 +527,8 @@
                     "id": "2FSJIjcnclw7k16X",
                     "name": "NocoDB Token account"
                 }
-            }
+            },
+            "onError": "continueRegularOutput"
         },
         {
             "parameters": {
@@ -537,8 +538,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                740,
-                260
+                752,
+                272
             ],
             "id": "e5836b5d-c65a-44e3-809b-18da60e1f358",
             "name": "Load JSON"
@@ -578,7 +579,7 @@
             "typeVersion": 3,
             "position": [
                 1600,
-                -40
+                -48
             ],
             "id": "ec4a0480-a705-4eff-b0c4-e71b24751edf",
             "name": "Add Game",
@@ -832,7 +833,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "19c0d44e-6aad-4382-ae29-c4840b837983",
+    "versionId": "6471f378-285c-4047-8427-5ffb9de43fb1",
     "triggerCount": 2,
     "shared": [
         {
