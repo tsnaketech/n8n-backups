@@ -1,0 +1,477 @@
+{
+    "createdAt": "2025-08-30T01:04:50.737Z",
+    "updatedAt": "2025-08-30T01:05:24.000Z",
+    "id": "UTZ5IcSj5ry0oVFz",
+    "name": "Test4",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "tiktok-transform",
+                "options": {}
+            },
+            "id": "d581c3d0-0d53-4749-b0a8-54ceb8949e3c",
+            "name": "Webhook TikTok",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                -944,
+                16
+            ],
+            "webhookId": "tiktok-webhook"
+        },
+        {
+            "parameters": {
+                "functionCode": "// Validation et extraction de l'URL TikTok\nconst inputData = $input.first().json;\nconst tiktokUrl = inputData.url || inputData.tiktok_url;\n\nif (!tiktokUrl) {\n  throw new Error('URL TikTok manquante');\n}\n\n// Vérification format URL TikTok\nif (!tiktokUrl.includes('tiktok.com')) {\n  throw new Error('URL TikTok invalide');\n}\n\nreturn {\n  json: {\n    tiktok_url: tiktokUrl,\n    timestamp: new Date().toISOString(),\n    workflow_id: `workflow_${Date.now()}`\n  }\n};"
+            },
+            "id": "85d639de-0ec3-4620-9345-d21b9e7975d3",
+            "name": "Valider URL",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                -720,
+                16
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://tikwm.com/api/",
+                "options": {}
+            },
+            "id": "ee61e926-2872-4e20-9e91-d5b3d354e588",
+            "name": "Télécharger TikTok",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                -496,
+                16
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Traitement de la réponse de téléchargement\nconst response = $input.first().json;\n\nif (response.code !== 0) {\n  throw new Error('Échec du téléchargement TikTok');\n}\n\nconst videoData = response.data;\n\nreturn {\n  json: {\n    video_url: videoData.hdplay || videoData.play,\n    video_title: videoData.title,\n    duration: videoData.duration,\n    author: videoData.author.nickname,\n    workflow_id: $('Valider URL').first().json.workflow_id,\n    download_success: true\n  }\n};"
+            },
+            "id": "b82c9c13-dadb-4608-b5e5-96f5ec44e0e3",
+            "name": "Traiter Téléchargement",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                -288,
+                16
+            ]
+        },
+        {
+            "parameters": {
+                "command": "wget -O /tmp/video_{{ $json.workflow_id }}.mp4 \"{{ $json.video_url }}\""
+            },
+            "id": "8b677a7c-255d-4cb7-9fcc-30f0714c4f33",
+            "name": "Sauvegarder Vidéo",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                -64,
+                16
+            ]
+        },
+        {
+            "parameters": {
+                "command": "ffmpeg -i /tmp/video_{{ $json.workflow_id }}.mp4 -vn -acodec pcm_s16le /tmp/audio_{{ $json.workflow_id }}.wav"
+            },
+            "id": "0ef6265d-9c44-46ee-baa3-9b3fb015df16",
+            "name": "Extraire Audio",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                160,
+                -64
+            ]
+        },
+        {
+            "parameters": {
+                "command": "ffmpeg -i /tmp/video_{{ $json.workflow_id }}.mp4 -vf fps=2 /tmp/frames_{{ $json.workflow_id }}/frame_%04d.png"
+            },
+            "id": "f0eab749-83b6-4c00-bbf8-d057bf86e3e6",
+            "name": "Extraire Frames",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                160,
+                96
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Script Python pour détecter les visages avec MediaPipe\nconst pythonScript = `\nimport cv2\nimport mediapipe as mp\nimport json\nimport glob\nimport os\n\nmp_face_detection = mp.solutions.face_detection\nmp_drawing = mp.solutions.drawing_utils\n\nworkflow_id = \"${$json.workflow_id}\"\nframes_path = f\"/tmp/frames_{workflow_id}/*.png\"\nresults = []\n\nwith mp_face_detection.FaceDetection(model_selection=0, min_detection_confidence=0.5) as face_detection:\n    frame_files = sorted(glob.glob(frames_path))\n    \n    for i, frame_path in enumerate(frame_files):\n        image = cv2.imread(frame_path)\n        image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)\n        \n        detection_results = face_detection.process(image_rgb)\n        \n        if detection_results.detections:\n            for j, detection in enumerate(detection_results.detections):\n                bbox = detection.location_data.relative_bounding_box\n                results.append({\n                    \"frame_number\": i,\n                    \"face_id\": j,\n                    \"timestamp\": i * 0.5,  # 2 FPS\n                    \"bbox\": {\n                        \"x\": bbox.xmin,\n                        \"y\": bbox.ymin,\n                        \"width\": bbox.width,\n                        \"height\": bbox.height\n                    },\n                    \"confidence\": detection.score[0],\n                    \"frame_path\": frame_path\n                })\n\nwith open(f\"/tmp/faces_{workflow_id}.json\", \"w\") as f:\n    json.dump(results, f)\n\nprint(json.dumps({\"faces_detected\": len(results), \"output_file\": f\"/tmp/faces_{workflow_id}.json\"}))\n`;\n\nreturn {\n  json: {\n    python_script: pythonScript,\n    workflow_id: $json.workflow_id\n  }\n};"
+            },
+            "id": "bcceb57d-9d5c-44b5-8096-93c657a38150",
+            "name": "Préparer Détection Visages",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                384,
+                16
+            ]
+        },
+        {
+            "parameters": {
+                "command": "python3 -c \"{{ $json.python_script }}\""
+            },
+            "id": "a3b77d12-7270-4680-923e-f75c840ca475",
+            "name": "Détecter Visages",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                608,
+                16
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Lire et traiter les résultats de détection\nconst fs = require('fs');\nconst workflowId = $('Préparer Détection Visages').first().json.workflow_id;\nconst facesFile = `/tmp/faces_${workflowId}.json`;\n\ntry {\n  const facesData = JSON.parse(fs.readFileSync(facesFile, 'utf8'));\n  \n  // Grouper les visages par position pour identifier les différentes personnes\n  const speakers = [];\n  const threshold = 0.3; // Seuil de similarité de position\n  \n  facesData.forEach(face => {\n    let assigned = false;\n    \n    for (let speaker of speakers) {\n      const avgX = speaker.faces.reduce((sum, f) => sum + f.bbox.x, 0) / speaker.faces.length;\n      const avgY = speaker.faces.reduce((sum, f) => sum + f.bbox.y, 0) / speaker.faces.length;\n      \n      if (Math.abs(face.bbox.x - avgX) < threshold && Math.abs(face.bbox.y - avgY) < threshold) {\n        speaker.faces.push(face);\n        assigned = true;\n        break;\n      }\n    }\n    \n    if (!assigned) {\n      speakers.push({\n        speaker_id: speakers.length,\n        faces: [face],\n        avg_position: { x: face.bbox.x, y: face.bbox.y }\n      });\n    }\n  });\n  \n  return speakers.map(speaker => ({\n    json: {\n      speaker_id: speaker.speaker_id,\n      face_count: speaker.faces.length,\n      first_appearance: speaker.faces[0].timestamp,\n      last_appearance: speaker.faces[speaker.faces.length - 1].timestamp,\n      avg_position: speaker.avg_position,\n      sample_frame: speaker.faces[0].frame_path,\n      workflow_id: workflowId\n    }\n  }));\n  \n} catch (error) {\n  throw new Error(`Erreur lecture détection: ${error.message}`);\n}"
+            },
+            "id": "2171cf19-8440-4086-97d9-c2ea7b96e14b",
+            "name": "Traiter Visages Détectés",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                832,
+                16
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Préparer la transformation en avatar enfant\nconst speakerData = $input.first().json;\n\n// Extraire le visage de l'image de référence\nconst extractCommand = `ffmpeg -i \"${speakerData.sample_frame}\" -vf \"crop=w*${speakerData.avg_position.x + 0.2}:h*${speakerData.avg_position.y + 0.2}:w*${speakerData.avg_position.x}:h*${speakerData.avg_position.y}\" /tmp/face_${speakerData.workflow_id}_${speakerData.speaker_id}.png`;\n\nreturn {\n  json: {\n    extract_command: extractCommand,\n    face_file: `/tmp/face_${speakerData.workflow_id}_${speakerData.speaker_id}.png`,\n    speaker_id: speakerData.speaker_id,\n    workflow_id: speakerData.workflow_id\n  }\n};"
+            },
+            "id": "5377068b-ff69-4693-8112-2766530ece92",
+            "name": "Préparer Extraction Visage",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                1040,
+                16
+            ]
+        },
+        {
+            "parameters": {
+                "command": "{{ $json.extract_command }}"
+            },
+            "id": "6f2b99f0-d34f-4523-8e96-3b81ac7fb33d",
+            "name": "Extraire Visage",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                1264,
+                16
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.replicate.com/v1/predictions",
+                "authentication": "headerAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "Token YOUR_REPLICATE_TOKEN"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "version",
+                            "value": "ac732df83cea7fff18b8472768c88ad041fa750ff7682a21affe81863cbe77e4"
+                        },
+                        {
+                            "name": "input",
+                            "value": "={\"image\": \"data:image/png;base64,{{ $binary.data.toString('base64') }}\", \"prompt\": \"cute child cartoon character, pixar disney style, bright colors, animated, friendly face\", \"num_outputs\": 1}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "ba426a53-356f-4c95-81b8-85e61ac95e0e",
+            "name": "Transformer en Enfant",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                1488,
+                16
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Préparer l'animation avec Wav2Lip\nconst transformResult = $input.first().json;\nconst speakerData = $('Préparer Extraction Visage').first().json;\n\n// Commande Wav2Lip pour animer le visage\nconst wav2lipCommand = `python wav2lip/inference.py --checkpoint_path checkpoints/wav2lip.pth --face \"${transformResult.output[0]}\" --audio \"/tmp/audio_${speakerData.workflow_id}.wav\" --outfile \"/tmp/animated_${speakerData.workflow_id}_${speakerData.speaker_id}.mp4\"`;\n\nreturn {\n  json: {\n    wav2lip_command: wav2lipCommand,\n    animated_file: `/tmp/animated_${speakerData.workflow_id}_${speakerData.speaker_id}.mp4`,\n    child_avatar: transformResult.output[0],\n    speaker_id: speakerData.speaker_id,\n    workflow_id: speakerData.workflow_id\n  }\n};"
+            },
+            "id": "4bf69295-4ca6-4e13-a080-0c84c90e8d6b",
+            "name": "Préparer Animation",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                1712,
+                16
+            ]
+        },
+        {
+            "parameters": {
+                "command": "{{ $json.wav2lip_command }}"
+            },
+            "id": "039219e5-9cb4-4535-83b8-6bbf55ec61b3",
+            "name": "Animer Visage",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                1920,
+                16
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Assembler la vidéo finale\nconst animationData = $input.all();\nconst workflowId = animationData[0].json.workflow_id;\n\n// Créer la commande FFmpeg pour assembler toutes les animations\nlet overlayFilter = '[0:v]';\nlet inputs = `-i /tmp/video_${workflowId}.mp4`;\n\nanimationData.forEach((data, index) => {\n  inputs += ` -i \"${data.json.animated_file}\"`;\n  const nextIndex = index + 1;\n  const outputLabel = index === animationData.length - 1 ? '[out]' : `[v${nextIndex}]`;\n  overlayFilter += `overlay=0:0:enable='between(t,${data.json.start_time || 0},${data.json.end_time || 999})'${outputLabel}`;\n  if (index < animationData.length - 1) {\n    overlayFilter = `${outputLabel}`;\n  }\n});\n\nconst finalCommand = `ffmpeg ${inputs} -filter_complex \"${overlayFilter}\" -map \"[out]\" -map 0:a -c:a copy /tmp/final_${workflowId}.mp4`;\n\nreturn {\n  json: {\n    final_command: finalCommand,\n    final_video: `/tmp/final_${workflowId}.mp4`,\n    workflow_id: workflowId,\n    speakers_count: animationData.length\n  }\n};"
+            },
+            "id": "0a3bd4e8-8d90-421f-b91c-f5bee61e6466",
+            "name": "Préparer Assemblage Final",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                2144,
+                16
+            ]
+        },
+        {
+            "parameters": {
+                "command": "{{ $json.final_command }}"
+            },
+            "id": "333c8b44-62b8-48e7-b2d9-2bcd5736d234",
+            "name": "Assembler Vidéo Finale",
+            "type": "n8n-nodes-base.executeCommand",
+            "typeVersion": 1,
+            "position": [
+                2368,
+                16
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "// Réponse finale avec les résultats\nconst finalData = $input.first().json;\n\nreturn {\n  json: {\n    success: true,\n    message: \"Transformation terminée avec succès\",\n    final_video_path: finalData.final_video,\n    workflow_id: finalData.workflow_id,\n    speakers_processed: finalData.speakers_count,\n    download_url: `http://your-server.com/download/${finalData.workflow_id}`,\n    processing_time: new Date().toISOString()\n  }\n};"
+            },
+            "id": "d7a2ad45-8b3a-4147-a751-94a1b4d414d5",
+            "name": "Réponse Finale",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                2592,
+                16
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook TikTok": {
+            "main": [
+                [
+                    {
+                        "node": "Valider URL",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Valider URL": {
+            "main": [
+                [
+                    {
+                        "node": "Télécharger TikTok",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Télécharger TikTok": {
+            "main": [
+                [
+                    {
+                        "node": "Traiter Téléchargement",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Traiter Téléchargement": {
+            "main": [
+                [
+                    {
+                        "node": "Sauvegarder Vidéo",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Sauvegarder Vidéo": {
+            "main": [
+                [
+                    {
+                        "node": "Extraire Audio",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Extraire Frames",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extraire Frames": {
+            "main": [
+                [
+                    {
+                        "node": "Préparer Détection Visages",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Préparer Détection Visages": {
+            "main": [
+                [
+                    {
+                        "node": "Détecter Visages",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Détecter Visages": {
+            "main": [
+                [
+                    {
+                        "node": "Traiter Visages Détectés",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Traiter Visages Détectés": {
+            "main": [
+                [
+                    {
+                        "node": "Préparer Extraction Visage",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Préparer Extraction Visage": {
+            "main": [
+                [
+                    {
+                        "node": "Extraire Visage",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extraire Visage": {
+            "main": [
+                [
+                    {
+                        "node": "Transformer en Enfant",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Transformer en Enfant": {
+            "main": [
+                [
+                    {
+                        "node": "Préparer Animation",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Préparer Animation": {
+            "main": [
+                [
+                    {
+                        "node": "Animer Visage",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Animer Visage": {
+            "main": [
+                [
+                    {
+                        "node": "Préparer Assemblage Final",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Préparer Assemblage Final": {
+            "main": [
+                [
+                    {
+                        "node": "Assembler Vidéo Finale",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Assembler Vidéo Finale": {
+            "main": [
+                [
+                    {
+                        "node": "Réponse Finale",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "2580315f-f3e9-4c5d-9fb1-150d8e22118f",
+    "triggerCount": 0,
+    "shared": [
+        {
+            "createdAt": "2025-08-30T01:04:50.739Z",
+            "updatedAt": "2025-08-30T01:04:50.739Z",
+            "role": "workflow:owner",
+            "workflowId": "UTZ5IcSj5ry0oVFz",
+            "projectId": "lnYpJLFYV8VS8Mcd"
+        }
+    ],
+    "tags": []
+}
