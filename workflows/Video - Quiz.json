@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-23T21:53:58.420Z",
-    "updatedAt": "2025-08-30T01:11:19.000Z",
+    "updatedAt": "2025-09-04T01:09:09.000Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
     "active": false,
@@ -411,20 +411,6 @@
         },
         {
             "parameters": {
-                "language": "python",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nitems = _('Rename Keys').all()[:8]\n\nvoice_script = \"\"\n\nvoice_script += \"<speak version='1.0' xml:lang='fr-FR'><voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\"\n\nfor item in items:\n  voice_script += \"<p>\"\n  voice_script += f\"{item.json.get(\"question\")}\\n\\n\"\n  voice_script += \"<break time='5s' />\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += \"<break strength='medium' />\"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\\n\"\n  voice_script += \"</p>\"\n\n\n\n  \n\nvoice_script += \"</voice></speak>\"\n\n\nreturn {\n  \"voice_script\": voice_script\n}"
-            },
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                32,
-                80
-            ],
-            "id": "2d15acf2-b013-4bd1-bf37-1cf2f03ec40b",
-            "name": "Get 8 questions"
-        },
-        {
-            "parameters": {
                 "resource": "audio",
                 "input": "={{ $json.voice_script }}",
                 "voice": "shimmer",
@@ -492,21 +478,6 @@
         },
         {
             "parameters": {
-                "mode": "jsonToxml",
-                "dataPropertyName": "={{ $json.voice_script }}",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.xml",
-            "typeVersion": 1,
-            "position": [
-                256,
-                80
-            ],
-            "id": "b441ab1f-5ff3-428d-b4e4-2a617131e383",
-            "name": "XML"
-        },
-        {
-            "parameters": {
                 "url": "https://westeurope.tts.speech.microsoft.com/cognitiveservices/voices/list",
                 "authentication": "genericCredentialType",
                 "genericAuthType": "httpHeaderAuth",
@@ -538,6 +509,20 @@
         },
         {
             "parameters": {
+                "language": "python",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport os\nitems = _('Rename Keys').all()[:8]\n\nbackground_audio = \"\"\n\nbreak_audio = \"https://quizz7.blob.core.windows.net/sound/break_audio_5secondes.mp3?sp=r&amp;st=2025-09-04T00:25:18Z&amp;se=2030-02-27T09:40:18Z&amp;spr=https&amp;sv=2024-11-04&amp;sr=b&amp;sig=VNXgBxsW%2FKlx1eAbLHV2PWJWy%2FlFNbEeNp4n0l%2BCR4Y%3D\"\n\nvoice_script = \"\"\n\nvoice_script += \"\"\"\n<speak version='1.0' xml:lang='fr-FR'>\n\n  <voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\n\"\"\"\n\nfor item in items:\n  voice_script += \"<p>\"\n  voice_script += f\"{item.json.get(\"question\")}\"\n  if True: \n    voice_script += f\"<audio src='{break_audio}'/>\"\n  else:\n    voice_script += \"<break time='5s'/>\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += \"<break strength='medium' />\"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\"\n  voice_script += \"</p>\"\n\nvoice_script += \"</voice></speak>\"\n\n\nreturn {\n  \"voice_script\": voice_script\n}"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                32,
+                80
+            ],
+            "id": "2d15acf2-b013-4bd1-bf37-1cf2f03ec40b",
+            "name": "Get 8 questions"
+        },
+        {
+            "parameters": {
                 "method": "POST",
                 "url": "https://westeurope.tts.speech.microsoft.com/cognitiveservices/v1",
                 "authentication": "genericCredentialType",
@@ -558,16 +543,16 @@
                 "sendBody": true,
                 "contentType": "raw",
                 "rawContentType": "application/ssml+xml",
-                "body": "={{ $json.keys()[0] }}",
+                "body": "={{ $json.voice_script }}",
                 "options": {}
             },
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                480,
+                256,
                 80
             ],
-            "id": "a9f6eeab-ec84-44fe-984f-f62650f26e89",
+            "id": "0cc10271-9d59-4673-b8e2-ed4db36139d7",
             "name": "Generate Voice",
             "credentials": {
                 "httpHeaderAuth": {
@@ -748,17 +733,6 @@
                 ]
             ]
         },
-        "Get 8 questions": {
-            "main": [
-                [
-                    {
-                        "node": "XML",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
         "Create a row": {
             "main": [
                 [
@@ -775,7 +749,7 @@
                 []
             ]
         },
-        "XML": {
+        "Get 8 questions": {
             "main": [
                 [
                     {
@@ -795,7 +769,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "15fda7e0-5d86-47b4-9658-ae49c411c18b",
+    "versionId": "2144513f-c3b5-4225-82d4-80cfcaf9bf6b",
     "triggerCount": 0,
     "shared": [
         {
