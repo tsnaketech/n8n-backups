@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-23T21:53:58.420Z",
-    "updatedAt": "2025-09-04T01:09:09.000Z",
+    "updatedAt": "2025-09-09T01:26:40.000Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
     "active": false,
@@ -11,7 +11,7 @@
             "type": "n8n-nodes-base.manualTrigger",
             "typeVersion": 1,
             "position": [
-                -1360,
+                -1552,
                 176
             ],
             "id": "db9de757-fa03-44c4-9d3a-9bd9065c53d7",
@@ -220,7 +220,7 @@
             "type": "n8n-nodes-base.renameKeys",
             "typeVersion": 1,
             "position": [
-                -896,
+                -944,
                 176
             ],
             "id": "1bb06e57-431b-472b-831e-d2f1f85c85f8",
@@ -243,7 +243,7 @@
             "type": "n8n-nodes-base.set",
             "typeVersion": 3.4,
             "position": [
-                -496,
+                -752,
                 176
             ],
             "id": "16ed86f0-b395-4384-9621-e5e93f4eb8c9",
@@ -277,7 +277,7 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.2,
             "position": [
-                -272,
+                -560,
                 176
             ],
             "id": "3ae7d2c6-63c4-4f35-bd06-0312345f9b3f",
@@ -292,7 +292,7 @@
             "type": "@n8n/n8n-nodes-langchain.chainLlm",
             "typeVersion": 1.7,
             "position": [
-                32,
+                -272,
                 272
             ],
             "id": "14a5a35b-65fa-42f8-b860-a6b10e9230f8",
@@ -306,8 +306,8 @@
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
             "typeVersion": 1,
             "position": [
-                32,
-                528
+                -272,
+                512
             ],
             "id": "e6501d7a-5af6-4cf3-a828-867274173e5f",
             "name": "OpenRouter Chat Model1",
@@ -383,7 +383,7 @@
             "type": "n8n-nodes-base.notion",
             "typeVersion": 2.2,
             "position": [
-                576,
+                272,
                 272
             ],
             "id": "6ced83c9-c612-4451-9364-730fb58cbb24",
@@ -403,7 +403,7 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                368,
+                64,
                 272
             ],
             "id": "13a2d2a1-29e6-4e72-8518-f68964192f07",
@@ -442,7 +442,7 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                784,
+                480,
                 272
             ],
             "id": "5be626eb-de12-40bf-8031-a1711d95c7cd",
@@ -510,12 +510,12 @@
         {
             "parameters": {
                 "language": "python",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport os\nitems = _('Rename Keys').all()[:8]\n\nbackground_audio = \"\"\n\nbreak_audio = \"https://quizz7.blob.core.windows.net/sound/break_audio_5secondes.mp3?sp=r&amp;st=2025-09-04T00:25:18Z&amp;se=2030-02-27T09:40:18Z&amp;spr=https&amp;sv=2024-11-04&amp;sr=b&amp;sig=VNXgBxsW%2FKlx1eAbLHV2PWJWy%2FlFNbEeNp4n0l%2BCR4Y%3D\"\n\nvoice_script = \"\"\n\nvoice_script += \"\"\"\n<speak version='1.0' xml:lang='fr-FR'>\n\n  <voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\n\"\"\"\n\nfor item in items:\n  voice_script += \"<p>\"\n  voice_script += f\"{item.json.get(\"question\")}\"\n  if True: \n    voice_script += f\"<audio src='{break_audio}'/>\"\n  else:\n    voice_script += \"<break time='5s'/>\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += \"<break strength='medium' />\"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\"\n  voice_script += \"</p>\"\n\nvoice_script += \"</voice></speak>\"\n\n\nreturn {\n  \"voice_script\": voice_script\n}"
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport html\nimport os\n\nglob = _('Global Fields').first().json\nnumber = int(glob.question)\nitems = _('Rename Keys').all()[:number]\n\nbackground_audio = \"\"\n\nbreak_audio = html.escape(glob.sound_break)       \ncorrect_answer = html.escape(glob.sound_correct_answer)\n\nvoice_script = \"\"\n\nvoice_script += \"<speak version='1.0' xml:lang='fr-FR'>\"\nvoice_script += \"<voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\"\n\n\nfor item in items:\n  voice_script += \"<p>\"\n  voice_script += f\"{item.json.get(\"question\")}\"\n  if True: \n    voice_script += f\"<audio src='{break_audio}'/>\"\n  else:\n    voice_script += \"<break time='5s'/>\"\n  if True: \n    voice_script += f\"<audio src='{correct_answer}'/>\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += \"<break strength='medium' />\"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\"\n  voice_script += \"</p>\"\n\nvoice_script += \"</voice></speak>\"\n\n\nreturn {\n  \"voice_script\": voice_script\n}"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                32,
+                -272,
                 80
             ],
             "id": "2d15acf2-b013-4bd1-bf37-1cf2f03ec40b",
@@ -549,7 +549,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                256,
+                -64,
                 80
             ],
             "id": "0cc10271-9d59-4673-b8e2-ed4db36139d7",
@@ -564,6 +564,41 @@
                     "name": "Bearer Azure SnakeTech account"
                 }
             }
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "50d0fc56-410d-4d0c-982c-a1e88487d282",
+                            "name": "question",
+                            "value": 7,
+                            "type": "number"
+                        },
+                        {
+                            "id": "4b601a48-f14a-4fb9-a41a-66e891265f50",
+                            "name": "sound_break",
+                            "value": "https://quizz7.blob.core.windows.net/sound/break_audio_5secondes.mp3?sp=r&st=2025-09-09T01:11:05Z&se=2035-09-09T09:26:05Z&spr=https&sv=2024-11-04&sr=b&sig=su%2F%2FqxfKBtwPJ7x2KIckTipXaPKAEqVD0fsXqCMTJaQ%3D",
+                            "type": "string"
+                        },
+                        {
+                            "id": "ef2d3584-9047-4d2e-8941-7e871ea66813",
+                            "name": "sound_correct_answer",
+                            "value": "https://quizz7.blob.core.windows.net/sound/correct_answer_1.mp3?sp=r&st=2025-09-09T00:57:01Z&se=2035-09-09T09:12:01Z&spr=https&sv=2024-11-04&sr=b&sig=5ahXIO9WfmNH8GfT44beTyCAGWF6QvRUQe2h6eY8ijM%3D",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                -1344,
+                176
+            ],
+            "id": "375db4de-224c-4e84-bde0-bf3cfc81aec1",
+            "name": "Global Fields"
         }
     ],
     "connections": {
@@ -571,7 +606,7 @@
             "main": [
                 [
                     {
-                        "node": "Get many database pages",
+                        "node": "Global Fields",
                         "type": "main",
                         "index": 0
                     }
@@ -759,6 +794,17 @@
                     }
                 ]
             ]
+        },
+        "Global Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Get many database pages",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
         }
     },
     "settings": {
@@ -769,7 +815,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "2144513f-c3b5-4225-82d4-80cfcaf9bf6b",
+    "versionId": "28b2001b-0e94-4f6b-a0fa-d61c9a70fdf2",
     "triggerCount": 0,
     "shared": [
         {
