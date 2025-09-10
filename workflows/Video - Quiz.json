@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-23T21:53:58.420Z",
-    "updatedAt": "2025-09-09T01:26:40.000Z",
+    "updatedAt": "2025-09-10T00:42:20.000Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
     "active": false,
@@ -510,7 +510,7 @@
         {
             "parameters": {
                 "language": "python",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport html\nimport os\n\nglob = _('Global Fields').first().json\nnumber = int(glob.question)\nitems = _('Rename Keys').all()[:number]\n\nbackground_audio = \"\"\n\nbreak_audio = html.escape(glob.sound_break)       \ncorrect_answer = html.escape(glob.sound_correct_answer)\n\nvoice_script = \"\"\n\nvoice_script += \"<speak version='1.0' xml:lang='fr-FR'>\"\nvoice_script += \"<voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\"\n\n\nfor item in items:\n  voice_script += \"<p>\"\n  voice_script += f\"{item.json.get(\"question\")}\"\n  if True: \n    voice_script += f\"<audio src='{break_audio}'/>\"\n  else:\n    voice_script += \"<break time='5s'/>\"\n  if True: \n    voice_script += f\"<audio src='{correct_answer}'/>\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += \"<break strength='medium' />\"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\"\n  voice_script += \"</p>\"\n\nvoice_script += \"</voice></speak>\"\n\n\nreturn {\n  \"voice_script\": voice_script\n}"
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport html\nimport os\n\nglob = _('Global Fields').first().json\nnumber = int(glob.question)\nitems = _('Rename Keys').all()[:number]\n\naudio_background = html.escape(glob.get(\"audio_background\", \"\"))\naudio_break = html.escape(glob.get(\"audio_break\", \"\"))\naudio_correct_answer = html.escape(glob.get(\"audio_correct_answer\", \"\"))\n\nvoice_script = \"\"\n\nvoice_script += \"<speak version='1.0' xml:lang='fr-FR'>\"\nif audio_background:\n  voice_script += f\"\"\"<mstts:backgroundaudio\n      src='{audio_background}'\n      volume='30' fadein='1500' fadeout='2000'/>\"\"\"\nvoice_script += \"<voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\"\n\n\nfor item in items:\n  voice_script += \"<p>\"\n  voice_script += f\"{item.json.get(\"question\")}\"\n  if True: \n    voice_script += f\"<audio src='{audio_break}'/>\"\n  else:\n    voice_script += \"<break time='5s'/>\"\n  if True: \n    voice_script += f\"<audio src='{audio_correct_answer}'/>\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += \"<break strength='medium' />\"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\"\n  voice_script += \"</p>\"\n\nvoice_script += \"</voice></speak>\"\n\n\nreturn {\n  \"voice_script\": voice_script\n}"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
@@ -577,13 +577,13 @@
                         },
                         {
                             "id": "4b601a48-f14a-4fb9-a41a-66e891265f50",
-                            "name": "sound_break",
+                            "name": "audio_break",
                             "value": "https://quizz7.blob.core.windows.net/sound/break_audio_5secondes.mp3?sp=r&st=2025-09-09T01:11:05Z&se=2035-09-09T09:26:05Z&spr=https&sv=2024-11-04&sr=b&sig=su%2F%2FqxfKBtwPJ7x2KIckTipXaPKAEqVD0fsXqCMTJaQ%3D",
                             "type": "string"
                         },
                         {
                             "id": "ef2d3584-9047-4d2e-8941-7e871ea66813",
-                            "name": "sound_correct_answer",
+                            "name": "audio_correct_answer",
                             "value": "https://quizz7.blob.core.windows.net/sound/correct_answer_1.mp3?sp=r&st=2025-09-09T00:57:01Z&se=2035-09-09T09:12:01Z&spr=https&sv=2024-11-04&sr=b&sig=5ahXIO9WfmNH8GfT44beTyCAGWF6QvRUQe2h6eY8ijM%3D",
                             "type": "string"
                         }
@@ -599,6 +599,22 @@
             ],
             "id": "375db4de-224c-4e84-bde0-bf3cfc81aec1",
             "name": "Global Fields"
+        },
+        {
+            "parameters": {
+                "content": "[Azure Portal](https://portal.azure.com)",
+                "height": 80,
+                "width": 150,
+                "color": 5
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                -96,
+                -32
+            ],
+            "typeVersion": 1,
+            "id": "22ed662d-24f7-41c7-86f6-5d73f90ba1bf",
+            "name": "Sticky Note"
         }
     ],
     "connections": {
@@ -815,7 +831,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "28b2001b-0e94-4f6b-a0fa-d61c9a70fdf2",
+    "versionId": "68bbfef8-5bf8-41a1-9c95-d1aab0f3b0e0",
     "triggerCount": 0,
     "shared": [
         {
