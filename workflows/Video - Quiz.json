@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-23T21:53:58.420Z",
-    "updatedAt": "2025-09-11T00:35:51.000Z",
+    "updatedAt": "2025-09-12T12:27:58.000Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
     "active": false,
@@ -625,7 +625,7 @@
             "typeVersion": 1,
             "position": [
                 -48,
-                -96
+                -272
             ],
             "id": "f943b863-f00a-485d-a066-09dc7ed77c66",
             "name": "Run a prediction",
@@ -635,7 +635,8 @@
                     "id": "yLTOYBoSEWrxz8XH",
                     "name": "Replicate account"
                 }
-            }
+            },
+            "disabled": true
         },
         {
             "parameters": {
@@ -665,6 +666,41 @@
             "id": "6d448129-a482-4290-82ed-30435a79f5dd",
             "name": "HTTP Request",
             "executeOnce": true
+        },
+        {
+            "parameters": {
+                "modelName": "black-forest-labs/flux-schnell",
+                "modelVersion": {
+                    "__rl": true,
+                    "value": "8965384704862c7a5bbf186fd630ad5acf478dad45d383a855cd06f5fcaba62e",
+                    "mode": "list",
+                    "cachedResultName": "8965384704862c7a5bbf186fd630ad5acf478dad45d383a855cd06f5fcaba62e",
+                    "cachedResultUrl": "https://replicate.com/steliosm/backgrounds_v1/versions/8965384704862c7a5bbf186fd630ad5acf478dad45d383a855cd06f5fcaba62e"
+                },
+                "properties": {
+                    "propertyValues": [
+                        {
+                            "key": "prompt|string",
+                            "stringValue": "=SMBG1 Create a visual representation for this quiz question: {{ $ }}. Style: modern, colorful background, 16:9 ratio, high quality"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-replicate.ReplicateGen",
+            "typeVersion": 1,
+            "position": [
+                -48,
+                -96
+            ],
+            "id": "f317cd8a-7e25-4750-9c28-596d60ef338d",
+            "name": "Run a prediction1",
+            "executeOnce": true,
+            "credentials": {
+                "replicateApi": {
+                    "id": "yLTOYBoSEWrxz8XH",
+                    "name": "Replicate account"
+                }
+            }
         }
     ],
     "connections": {
@@ -884,11 +920,32 @@
                         "node": "Run a prediction",
                         "type": "main",
                         "index": 0
+                    },
+                    {
+                        "node": "Run a prediction1",
+                        "type": "main",
+                        "index": 0
                     }
                 ]
             ]
         },
         "Run a prediction": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "main": [
+                []
+            ]
+        },
+        "Run a prediction1": {
             "main": [
                 [
                     {
@@ -908,7 +965,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "684374bf-dae6-4d4d-bfd9-8683ad6d252d",
+    "versionId": "28ac5ace-6752-46e8-9882-c349bb1ae58f",
     "triggerCount": 0,
     "shared": [
         {
