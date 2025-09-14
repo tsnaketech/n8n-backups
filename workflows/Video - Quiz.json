@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-23T21:53:58.420Z",
-    "updatedAt": "2025-09-12T12:27:58.000Z",
+    "updatedAt": "2025-09-13T11:37:45.000Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
     "active": false,
@@ -604,42 +604,6 @@
         },
         {
             "parameters": {
-                "modelName": "steliosm/backgrounds_v1",
-                "modelVersion": {
-                    "__rl": true,
-                    "value": "8965384704862c7a5bbf186fd630ad5acf478dad45d383a855cd06f5fcaba62e",
-                    "mode": "list",
-                    "cachedResultName": "8965384704862c7a5bbf186fd630ad5acf478dad45d383a855cd06f5fcaba62e",
-                    "cachedResultUrl": "https://replicate.com/steliosm/backgrounds_v1/versions/8965384704862c7a5bbf186fd630ad5acf478dad45d383a855cd06f5fcaba62e"
-                },
-                "properties": {
-                    "propertyValues": [
-                        {
-                            "key": "prompt|string",
-                            "stringValue": "=SMBG1 Create a visual representation for this quiz question: {{ $ }}. Style: modern, colorful background, 16:9 ratio, high quality"
-                        }
-                    ]
-                }
-            },
-            "type": "n8n-nodes-replicate.ReplicateGen",
-            "typeVersion": 1,
-            "position": [
-                -48,
-                -272
-            ],
-            "id": "f943b863-f00a-485d-a066-09dc7ed77c66",
-            "name": "Run a prediction",
-            "executeOnce": true,
-            "credentials": {
-                "replicateApi": {
-                    "id": "yLTOYBoSEWrxz8XH",
-                    "name": "Replicate account"
-                }
-            },
-            "disabled": true
-        },
-        {
-            "parameters": {
                 "language": "python",
                 "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nglob = _('Global Fields').first().json\nnumber = int(glob.question)\nitems = _('Rename Keys').all()[:number]\nreturn items"
             },
@@ -660,45 +624,75 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                160,
-                -96
+                384,
+                -80
             ],
             "id": "6d448129-a482-4290-82ed-30435a79f5dd",
             "name": "HTTP Request",
-            "executeOnce": true
+            "executeOnce": false
         },
         {
             "parameters": {
-                "modelName": "black-forest-labs/flux-schnell",
-                "modelVersion": {
-                    "__rl": true,
-                    "value": "8965384704862c7a5bbf186fd630ad5acf478dad45d383a855cd06f5fcaba62e",
-                    "mode": "list",
-                    "cachedResultName": "8965384704862c7a5bbf186fd630ad5acf478dad45d383a855cd06f5fcaba62e",
-                    "cachedResultUrl": "https://replicate.com/steliosm/backgrounds_v1/versions/8965384704862c7a5bbf186fd630ad5acf478dad45d383a855cd06f5fcaba62e"
-                },
-                "properties": {
-                    "propertyValues": [
-                        {
-                            "key": "prompt|string",
-                            "stringValue": "=SMBG1 Create a visual representation for this quiz question: {{ $ }}. Style: modern, colorful background, 16:9 ratio, high quality"
-                        }
-                    ]
-                }
+                "text": "={{ $json.question }}",
+                "translateTo": "EN-GB",
+                "additionalFields": {}
             },
-            "type": "n8n-nodes-replicate.ReplicateGen",
+            "type": "n8n-nodes-base.deepL",
             "typeVersion": 1,
             "position": [
                 -48,
-                -96
+                -80
             ],
-            "id": "f317cd8a-7e25-4750-9c28-596d60ef338d",
-            "name": "Run a prediction1",
+            "id": "7310b33d-e08f-4d34-a856-41624607e3d7",
+            "name": "Translate a language",
+            "credentials": {
+                "deepLApi": {
+                    "id": "xlHLi2jtbfIcs8L6",
+                    "name": "DeepL account poubello"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://api.replicate.com/v1/models/leonardoai/lucid-origin/predictions",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpBearerAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        },
+                        {
+                            "name": "Prefer",
+                            "value": "wait"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"input\": {\n      \"prompt\": \"Create a background visual representation for this quiz question: {{ $json.text }}. Style: modern, colorful background, no text, no characters, does not answer the question, high quality\",\n      \"style\": \"none\",\n      \"contrast\": \"medium\",\n      \"num_images\": 1,\n      \"aspect_ratio\": \"9:16\",\n      \"prompt_enhance\": true,\n      \"generation_mode\": \"standard\"\n  }\n}\n",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                160,
+                -80
+            ],
+            "id": "cb76de42-39b5-420e-9c5c-cee94c55e2a4",
+            "name": "Replicate leonardoai/lucid-origin",
             "executeOnce": true,
             "credentials": {
-                "replicateApi": {
-                    "id": "yLTOYBoSEWrxz8XH",
-                    "name": "Replicate account"
+                "httpHeaderAuth": {
+                    "id": "3sytPF58vLXwSQtC",
+                    "name": "NocoDB"
+                },
+                "httpBearerAuth": {
+                    "id": "3cU5roeQm6SqG6i6",
+                    "name": "Replicate Bearer Auth account"
                 }
             }
         }
@@ -912,28 +906,7 @@
             "main": [
                 [
                     {
-                        "node": "Get voice prompting",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Run a prediction",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Run a prediction1",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Run a prediction": {
-            "main": [
-                [
-                    {
-                        "node": "HTTP Request",
+                        "node": "Translate a language",
                         "type": "main",
                         "index": 0
                     }
@@ -945,7 +918,18 @@
                 []
             ]
         },
-        "Run a prediction1": {
+        "Translate a language": {
+            "main": [
+                [
+                    {
+                        "node": "Replicate leonardoai/lucid-origin",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Replicate leonardoai/lucid-origin": {
             "main": [
                 [
                     {
@@ -965,7 +949,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "28ac5ace-6752-46e8-9882-c349bb1ae58f",
+    "versionId": "34a3f51f-607f-4bac-9b3d-d9b4dab06237",
     "triggerCount": 0,
     "shared": [
         {
