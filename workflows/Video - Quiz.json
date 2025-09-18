@@ -1,240 +1,234 @@
 {
     "createdAt": "2025-08-23T21:53:58.420Z",
-    "updatedAt": "2025-09-13T11:37:45.000Z",
+    "updatedAt": "2025-09-17T14:22:10.000Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
     "active": false,
     "isArchived": false,
     "nodes": [
         {
-            "parameters": {},
-            "type": "n8n-nodes-base.manualTrigger",
+            "parameters": {
+                "resource": "audio",
+                "input": "={{ $json.voice_script }}",
+                "voice": "shimmer",
+                "options": {
+                    "response_format": "aac"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.openAi",
+            "typeVersion": 1.8,
+            "position": [
+                1408,
+                -160
+            ],
+            "id": "9d5b3f0c-550b-4a94-bfdb-19a4e6f20eee",
+            "name": "Generate audio",
+            "credentials": {
+                "openAiApi": {
+                    "id": "H0VcOhL36gFHQbme",
+                    "name": "OpenAi mickael.lcq account"
+                }
+            },
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "tableId": "QCM Questions",
+                "dataToSend": "autoMapInputData"
+            },
+            "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                -1552,
-                176
+                -496,
+                -80
             ],
-            "id": "db9de757-fa03-44c4-9d3a-9bd9065c53d7",
-            "name": "When clicking ‘Execute workflow’"
-        },
-        {
-            "parameters": {
-                "options": {}
-            },
-            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
-            "typeVersion": 1.3,
-            "position": [
-                -1264,
-                -576
-            ],
-            "id": "d0e975d9-ce9a-4e28-a31f-e623b5a085fe",
-            "name": "When chat message received",
-            "webhookId": "85776b57-9100-4a67-9372-bfadf2beb6b4"
-        },
-        {
-            "parameters": {
-                "promptType": "define",
-                "text": "=Ajoute {{ $json.chatInput }}  question(s), proposition(s) et réponse(s) à Notion. Fait en sorte de ne pas avoir de doublon avec les valeurs présentes dans la base de données. En terme de sctructure de sortie par sur un JSON ressemblant à \n\n{\n  \"created_at\": \"\",\n  \"question\": \"\",\n  \"proposition\": {\n    \"a\": \"\",\n    \"b\": \"\",\n    \"c\": \"\",\n    \"d\": \"\"\n  },\n  \"answer\": \"\"\n}",
-                "options": {}
-            },
-            "type": "@n8n/n8n-nodes-langchain.agent",
-            "typeVersion": 2.2,
-            "position": [
-                -1024,
-                -576
-            ],
-            "id": "86b63935-3b1b-4ee6-bff1-d1453750022f",
-            "name": "AI Agent"
-        },
-        {
-            "parameters": {
-                "model": "deepseek/deepseek-chat-v3-0324",
-                "options": {}
-            },
-            "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
-            "typeVersion": 1,
-            "position": [
-                -1200,
-                -320
-            ],
-            "id": "0f707644-0a88-4bb9-a038-a313b6b72c06",
-            "name": "OpenRouter Chat Model",
+            "id": "9b1ec131-843a-4593-9d46-f3712eaee124",
+            "name": "Update a row",
             "credentials": {
-                "openRouterApi": {
-                    "id": "eJL3ulSkeT8Q0dwT",
-                    "name": "OpenRouter account"
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech"
                 }
-            }
-        },
-        {
-            "parameters": {},
-            "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
-            "typeVersion": 1.3,
-            "position": [
-                -1072,
-                -320
-            ],
-            "id": "ea3296f9-dcb0-4e94-af6e-5d1404d5b7ca",
-            "name": "Postgres Chat Memory",
-            "credentials": {
-                "postgres": {
-                    "id": "PdQplJt0kraauzJT",
-                    "name": "Postgres Supabase account"
-                }
-            }
+            },
+            "disabled": true
         },
         {
             "parameters": {
-                "resource": "databasePage",
-                "databaseId": {
-                    "__rl": true,
-                    "value": "25843d11-1336-80be-aa2c-cad738ad1c7b",
-                    "mode": "list",
-                    "cachedResultName": "QCM",
-                    "cachedResultUrl": "https://www.notion.so/25843d11133680beaa2ccad738ad1c7b"
-                },
-                "title": "QCM",
-                "propertiesUi": {
-                    "propertyValues": [
+                "url": "https://westeurope.tts.speech.microsoft.com/cognitiveservices/voices/list",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
                         {
-                            "key": "CreatedAt|date",
-                            "date": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('propertyValues0_Date', ``, 'string') }}",
-                            "timezone": "Europe/Paris"
-                        },
-                        {
-                            "key": "Question|title",
-                            "title": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('propertyValues1_Title', ``, 'string') }}"
-                        },
-                        {
-                            "key": "Choices|rich_text",
-                            "textContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('propertyValues2_Text', ``, 'string') }}"
-                        },
-                        {
-                            "key": "Answer|rich_text",
-                            "textContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('propertyValues3_Text', ``, 'string') }}"
+                            "name": "Locale",
+                            "value": "fr-FR"
                         }
                     ]
                 },
                 "options": {}
             },
-            "type": "n8n-nodes-base.notionTool",
-            "typeVersion": 2.2,
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
             "position": [
-                -784,
-                -320
+                1408,
+                64
             ],
-            "id": "8272794f-5e2c-4098-84c1-9c8ca88f7d0a",
-            "name": "Create a database page in Notion",
+            "id": "8730a3a2-5524-4cb4-afad-b0df047a9caa",
+            "name": "Get Voices",
             "credentials": {
-                "notionApi": {
-                    "id": "g3AwBtYd70JlJQfn",
-                    "name": "Notion SnakeTech account"
+                "httpHeaderAuth": {
+                    "id": "l6NvN4FQFZ0OQb13",
+                    "name": "Azure SnakeTech account"
                 }
             }
         },
         {
             "parameters": {
-                "resource": "databasePage",
-                "operation": "getAll",
-                "databaseId": {
-                    "__rl": true,
-                    "value": "25843d11-1336-80be-aa2c-cad738ad1c7b",
-                    "mode": "list",
-                    "cachedResultName": "QCM",
-                    "cachedResultUrl": "https://www.notion.so/25843d11133680beaa2ccad738ad1c7b"
+                "method": "POST",
+                "url": "https://api.replicate.com/v1/models/leonardoai/lucid-origin/predictions",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpBearerAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        },
+                        {
+                            "name": "Prefer",
+                            "value": "wait"
+                        }
+                    ]
                 },
-                "limit": 100,
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"input\": {\n      \"prompt\": \"Create a background visual representation for this quiz question: {{ $json.text }}. Style: modern, colorful background, no text, no characters, does not answer the question, high quality\",\n      \"style\": \"none\",\n      \"contrast\": \"medium\",\n      \"num_images\": 1,\n      \"aspect_ratio\": \"9:16\",\n      \"prompt_enhance\": true,\n      \"generation_mode\": \"standard\"\n  }\n}\n",
                 "options": {}
             },
-            "type": "n8n-nodes-base.notionTool",
-            "typeVersion": 2.2,
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
             "position": [
-                -928,
-                -320
+                1168,
+                384
             ],
-            "id": "28efd1bd-d0c8-45fd-9ee4-91fe8e5f48a1",
-            "name": "Get many database pages in Notion",
+            "id": "f1124172-cac5-4d93-ae53-831449ba999f",
+            "name": "Replicate leonardoai/lucid-origin",
+            "executeOnce": true,
             "credentials": {
-                "notionApi": {
-                    "id": "g3AwBtYd70JlJQfn",
-                    "name": "Notion SnakeTech account"
+                "httpHeaderAuth": {
+                    "id": "3sytPF58vLXwSQtC",
+                    "name": "NocoDB"
+                },
+                "httpBearerAuth": {
+                    "id": "3cU5roeQm6SqG6i6",
+                    "name": "Replicate Bearer Auth account"
                 }
             }
         },
         {
             "parameters": {
-                "resource": "databasePage",
-                "operation": "getAll",
-                "databaseId": {
-                    "__rl": true,
-                    "value": "25843d11-1336-80be-aa2c-cad738ad1c7b",
-                    "mode": "list",
-                    "cachedResultName": "QCM Questions Database",
-                    "cachedResultUrl": "https://www.notion.so/25843d11133680beaa2ccad738ad1c7b"
-                },
-                "options": {}
+                "text": "={{ $json.question }}",
+                "translateTo": "EN-GB",
+                "additionalFields": {}
             },
-            "type": "n8n-nodes-base.notion",
-            "typeVersion": 2.2,
+            "type": "n8n-nodes-base.deepL",
+            "typeVersion": 1,
             "position": [
-                -1136,
-                176
+                960,
+                384
             ],
-            "id": "68b780c5-274f-4c39-8f42-80c9315d19c7",
-            "name": "Get many database pages",
+            "id": "5ef4e151-eefe-4cdc-959d-b95d6bb29b71",
+            "name": "Translate a language",
             "credentials": {
-                "notionApi": {
-                    "id": "g3AwBtYd70JlJQfn",
-                    "name": "Notion SnakeTech account"
+                "deepLApi": {
+                    "id": "xlHLi2jtbfIcs8L6",
+                    "name": "DeepL account poubello"
                 }
             }
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.output }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1392,
+                384
+            ],
+            "id": "be508378-fda0-4d8d-b85d-72bc2b35047a",
+            "name": "HTTP Request",
+            "executeOnce": false
         },
         {
             "parameters": {
                 "language": "python",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nproperties = []\n\nfor item in _input.all():\n  property = item.json.get(\"properties\", {})\n  p = {\n    \"id\": property[\"ID\"][\"unique_id\"].get(\"number\", None),\n    \"question\": property[\"Question\"][\"title\"][0].get(\"plain_text\", None)\n    \"option_a\": \n  }\n  properties.append(property)\nreturn properties"
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nglob = _('Global Fields').first().json\nnumber = int(glob.question)\nitems = _('Rename Keys').all()[:number]\nreturn items"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                -624,
-                -544
+                736,
+                560
             ],
-            "id": "d32c245e-9bd2-4281-a066-70f146215a29",
-            "name": "Code"
+            "id": "182a4a2e-240f-4813-96e9-f07331316cac",
+            "name": "Get limited question"
         },
         {
             "parameters": {
-                "additionalOptions": {
-                    "regexReplacement": {
-                        "replacements": [
-                            {
-                                "searchRegex": "^property_(.*)",
-                                "replaceRegex": "=$1",
-                                "options": {}
-                            }
-                        ]
-                    }
-                }
+                "language": "python",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport html\nimport os\n\nglob = _('Global Fields').first().json\naudio_background = html.escape(glob.get(\"audio_background\", \"\"))\naudio_break = html.escape(glob.get(\"audio_break\", \"\"))\naudio_correct_answer = html.escape(glob.get(\"audio_correct_answer\", \"\"))\n\nfor item in _input.all():\n\n  voice_script = \"\"\n\n  voice_script += \"<speak version='1.0' xml:lang='fr-FR'>\"\n  if audio_background:\n    voice_script += f\"\"\"<mstts:backgroundaudio\n        src='{audio_background}'\n        volume='30' fadein='1500' fadeout='2000'/>\"\"\"\n  voice_script += \"<voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\"\n  \n  voice_script += \"<p>\"\n  voice_script += f\"{item.json.get(\"question\")}\"\n  if True: \n    voice_script += f\"<audio src='{audio_break}'/>\"\n  else:\n    voice_script += \"<break time='5s'/>\"\n  if True: \n    voice_script += f\"<audio src='{audio_correct_answer}'/>\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += \"<break strength='medium' />\"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\"\n  voice_script += \"</p>\"\n\n  voice_script += \"</voice></speak>\"\n\n  item.json.voice_script = voice_script\n\n\nreturn _input.all()"
             },
-            "type": "n8n-nodes-base.renameKeys",
-            "typeVersion": 1,
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
             "position": [
-                -944,
-                176
+                960,
+                560
             ],
-            "id": "1bb06e57-431b-472b-831e-d2f1f85c85f8",
-            "name": "Rename Keys"
+            "id": "5aed2c62-3b22-4143-82a6-bc6ce089fec7",
+            "name": "Get voice prompting"
+        },
+        {
+            "parameters": {
+                "content": "[Azure Portal](https://portal.azure.com)",
+                "height": 80,
+                "width": 150,
+                "color": 5
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                64,
+                464
+            ],
+            "typeVersion": 1,
+            "id": "baec10bc-b934-4b6e-b695-a69cdaf6701b",
+            "name": "Sticky Note"
         },
         {
             "parameters": {
                 "assignments": {
                     "assignments": [
                         {
-                            "id": "307df18a-1dfb-4f37-87df-8e4c5f9bed1a",
-                            "name": "unused_questions_count",
-                            "value": "={{ $input.all().filter(item => item.json.used === false).length }}",
+                            "id": "50d0fc56-410d-4d0c-982c-a1e88487d282",
+                            "name": "question",
+                            "value": 7,
                             "type": "number"
+                        },
+                        {
+                            "id": "4b601a48-f14a-4fb9-a41a-66e891265f50",
+                            "name": "audio_break",
+                            "value": "https://quizz7.blob.core.windows.net/sound/break_audio_5secondes.mp3?sp=r&st=2025-09-09T01:11:05Z&se=2035-09-09T09:26:05Z&spr=https&sv=2024-11-04&sr=b&sig=su%2F%2FqxfKBtwPJ7x2KIckTipXaPKAEqVD0fsXqCMTJaQ%3D",
+                            "type": "string"
+                        },
+                        {
+                            "id": "ef2d3584-9047-4d2e-8941-7e871ea66813",
+                            "name": "audio_correct_answer",
+                            "value": "https://quizz7.blob.core.windows.net/sound/correct_answer_1.mp3?sp=r&st=2025-09-09T00:57:01Z&se=2035-09-09T09:12:01Z&spr=https&sv=2024-11-04&sr=b&sig=5ahXIO9WfmNH8GfT44beTyCAGWF6QvRUQe2h6eY8ijM%3D",
+                            "type": "string"
                         }
                     ]
                 },
@@ -243,80 +237,89 @@
             "type": "n8n-nodes-base.set",
             "typeVersion": 3.4,
             "position": [
-                -752,
-                176
+                -336,
+                640
             ],
-            "id": "16ed86f0-b395-4384-9621-e5e93f4eb8c9",
-            "name": "UnUsed",
-            "executeOnce": true
+            "id": "3ad7dc1c-5a09-4d31-88eb-7830b9aac15b",
+            "name": "Global Fields"
         },
         {
             "parameters": {
-                "conditions": {
-                    "options": {
-                        "caseSensitive": true,
-                        "leftValue": "",
-                        "typeValidation": "strict",
-                        "version": 2
-                    },
-                    "conditions": [
+                "method": "POST",
+                "url": "https://westeurope.tts.speech.microsoft.com/cognitiveservices/v1",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
                         {
-                            "id": "dc084b13-d6ff-40c9-99fa-a161fa9926eb",
-                            "leftValue": "={{ $json.unused_questions_count % 8}}",
-                            "rightValue": 0,
-                            "operator": {
-                                "type": "number",
-                                "operation": "equals"
-                            }
+                            "name": "X-Microsoft-OutputFormat",
+                            "value": "audio-16khz-128kbitrate-mono-mp3"
+                        },
+                        {
+                            "name": "User-Agent",
+                            "value": "SnakeTech"
                         }
-                    ],
-                    "combinator": "and"
+                    ]
                 },
+                "sendBody": true,
+                "contentType": "raw",
+                "rawContentType": "application/ssml+xml",
+                "body": "={{ $json.voice_script }}",
                 "options": {}
             },
-            "type": "n8n-nodes-base.if",
-            "typeVersion": 2.2,
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
             "position": [
-                -560,
-                176
+                1168,
+                560
             ],
-            "id": "3ae7d2c6-63c4-4f35-bd06-0312345f9b3f",
-            "name": "If"
-        },
-        {
-            "parameters": {
-                "promptType": "define",
-                "text": "=Génère {{ Math.abs($json.unused_questions_count - 8) }} QCM. Dans le \"correct_answer\" ne met que la lettre. Format les informations à l'aide du JSON suivant. \n\n{\n  \"question\": \"\",\n  \"option_a\": \"\",\n  \"option_b\": \"\",\n  \"option_c\": \"\",\n  \"option_d\": \"\",\n  \"correct_answer\": \"\",\n  \"category\": \"\"\n}\n\nN'affiche que le JSON. Et ajoute le résultat systématique dans une liste.",
-                "batching": {}
-            },
-            "type": "@n8n/n8n-nodes-langchain.chainLlm",
-            "typeVersion": 1.7,
-            "position": [
-                -272,
-                272
-            ],
-            "id": "14a5a35b-65fa-42f8-b860-a6b10e9230f8",
-            "name": "Basic LLM Chain"
-        },
-        {
-            "parameters": {
-                "model": "deepseek/deepseek-chat-v3-0324",
-                "options": {}
-            },
-            "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
-            "typeVersion": 1,
-            "position": [
-                -272,
-                512
-            ],
-            "id": "e6501d7a-5af6-4cf3-a828-867274173e5f",
-            "name": "OpenRouter Chat Model1",
+            "id": "db688aaa-9047-492f-9013-78511c1b69cb",
+            "name": "Generate Voice",
             "credentials": {
-                "openRouterApi": {
-                    "id": "eJL3ulSkeT8Q0dwT",
-                    "name": "OpenRouter account"
+                "httpHeaderAuth": {
+                    "id": "l6NvN4FQFZ0OQb13",
+                    "name": "Azure SnakeTech account"
+                },
+                "httpBearerAuth": {
+                    "id": "YOplG9WUCOFF5T4t",
+                    "name": "Bearer Azure SnakeTech account"
                 }
             }
+        },
+        {
+            "parameters": {
+                "tableId": "QCM Questions",
+                "dataToSend": "autoMapInputData"
+            },
+            "type": "n8n-nodes-base.supabase",
+            "typeVersion": 1,
+            "position": [
+                1488,
+                736
+            ],
+            "id": "4d9d84bb-20e4-47f2-8571-39bc0b38a0d5",
+            "name": "Create a row",
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "language": "python",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport json\nimport re\n\ntext = _input.first().json.text\n\njson_content = re.search(\"```json\\n([\\s\\S]*?)\\n```\", text)[1]\n\nquestions = json.loads(json_content)\n\nall_questions_items = _('Rename Keys').all()\nall_questions = [item.get(\"question\", \"\").strip().lower() for item in all_questions_items]\n\nnew_questions = [q1 for q1 in questions if q1.get(\"question\", \"\").strip().lower() not in all_questions]\n\nreturn new_questions"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1072,
+                736
+            ],
+            "id": "57dff129-12d2-466a-9f9d-0349b493a1da",
+            "name": "Get new questions"
         },
         {
             "parameters": {
@@ -369,10 +372,10 @@
             "type": "n8n-nodes-base.notion",
             "typeVersion": 2.2,
             "position": [
-                272,
-                272
+                1280,
+                736
             ],
-            "id": "6ced83c9-c612-4451-9364-730fb58cbb24",
+            "id": "a26f574e-b64f-4cf7-adc5-cbaa336b5359",
             "name": "Create a database page",
             "credentials": {
                 "notionApi": {
@@ -383,181 +386,81 @@
         },
         {
             "parameters": {
-                "language": "python",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport json\nimport re\n\ntext = _input.first().json.text\n\njson_content = re.search(\"```json\\n([\\s\\S]*?)\\n```\", text)[1]\n\nquestions = json.loads(json_content)\n\nall_questions_items = _('Rename Keys').all()\nall_questions = [item.get(\"question\", \"\").strip().lower() for item in all_questions_items]\n\nnew_questions = [q1 for q1 in questions if q1.get(\"question\", \"\").strip().lower() not in all_questions]\n\nreturn new_questions"
+                "model": "deepseek/deepseek-chat-v3-0324",
+                "options": {}
             },
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                64,
-                272
-            ],
-            "id": "13a2d2a1-29e6-4e72-8518-f68964192f07",
-            "name": "Get new questions"
-        },
-        {
-            "parameters": {
-                "resource": "audio",
-                "input": "={{ $json.voice_script }}",
-                "voice": "shimmer",
-                "options": {
-                    "response_format": "aac"
-                }
-            },
-            "type": "@n8n/n8n-nodes-langchain.openAi",
-            "typeVersion": 1.8,
-            "position": [
-                -320,
-                -560
-            ],
-            "id": "9d5b3f0c-550b-4a94-bfdb-19a4e6f20eee",
-            "name": "Generate audio",
-            "credentials": {
-                "openAiApi": {
-                    "id": "H0VcOhL36gFHQbme",
-                    "name": "OpenAi mickael.lcq account"
-                }
-            },
-            "disabled": true
-        },
-        {
-            "parameters": {
-                "tableId": "QCM Questions",
-                "dataToSend": "autoMapInputData"
-            },
-            "type": "n8n-nodes-base.supabase",
+            "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
             "typeVersion": 1,
             "position": [
-                480,
-                272
+                736,
+                976
             ],
-            "id": "5be626eb-de12-40bf-8031-a1711d95c7cd",
-            "name": "Create a row",
+            "id": "17a5d6ea-3270-4911-bb48-55da80bf9a2a",
+            "name": "OpenRouter Chat Model1",
             "credentials": {
-                "supabaseApi": {
-                    "id": "WbnVqEv2ZGhdAeSX",
-                    "name": "Supabase SnakeTech"
+                "openRouterApi": {
+                    "id": "eJL3ulSkeT8Q0dwT",
+                    "name": "OpenRouter account"
                 }
             }
         },
         {
             "parameters": {
-                "operation": "update",
-                "tableId": "QCM Questions",
-                "dataToSend": "autoMapInputData"
+                "promptType": "define",
+                "text": "=Génère {{ Math.abs($json.unused_questions_count - 8) }} QCM. Dans le \"correct_answer\" ne met que la lettre. Format les informations à l'aide du JSON suivant. \n\n{\n  \"question\": \"\",\n  \"option_a\": \"\",\n  \"option_b\": \"\",\n  \"option_c\": \"\",\n  \"option_d\": \"\",\n  \"correct_answer\": \"\",\n  \"category\": \"\"\n}\n\nN'affiche que le JSON. Et ajoute le résultat systématique dans une liste.",
+                "batching": {}
             },
-            "type": "n8n-nodes-base.supabase",
-            "typeVersion": 1,
+            "type": "@n8n/n8n-nodes-langchain.chainLlm",
+            "typeVersion": 1.7,
             "position": [
-                -1584,
-                -288
+                736,
+                736
             ],
-            "id": "9b1ec131-843a-4593-9d46-f3712eaee124",
-            "name": "Update a row",
-            "credentials": {
-                "supabaseApi": {
-                    "id": "WbnVqEv2ZGhdAeSX",
-                    "name": "Supabase SnakeTech"
-                }
-            },
-            "disabled": true
+            "id": "662dd6e4-3dfb-4dfc-8350-75da4a2c36eb",
+            "name": "Basic LLM Chain"
         },
         {
             "parameters": {
-                "url": "https://westeurope.tts.speech.microsoft.com/cognitiveservices/voices/list",
-                "authentication": "genericCredentialType",
-                "genericAuthType": "httpHeaderAuth",
-                "sendQuery": true,
-                "queryParameters": {
-                    "parameters": [
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
                         {
-                            "name": "Locale",
-                            "value": "fr-FR"
+                            "id": "dc084b13-d6ff-40c9-99fa-a161fa9926eb",
+                            "leftValue": "={{ $json.unused_questions_count % 8}}",
+                            "rightValue": 0,
+                            "operator": {
+                                "type": "number",
+                                "operation": "equals"
+                            }
                         }
-                    ]
+                    ],
+                    "combinator": "and"
                 },
                 "options": {}
             },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
             "position": [
-                -96,
-                -544
+                448,
+                640
             ],
-            "id": "8730a3a2-5524-4cb4-afad-b0df047a9caa",
-            "name": "Get Voices",
-            "credentials": {
-                "httpHeaderAuth": {
-                    "id": "l6NvN4FQFZ0OQb13",
-                    "name": "Azure SnakeTech account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://westeurope.tts.speech.microsoft.com/cognitiveservices/v1",
-                "authentication": "genericCredentialType",
-                "genericAuthType": "httpHeaderAuth",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "X-Microsoft-OutputFormat",
-                            "value": "audio-16khz-128kbitrate-mono-mp3"
-                        },
-                        {
-                            "name": "User-Agent",
-                            "value": "SnakeTech"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "contentType": "raw",
-                "rawContentType": "application/ssml+xml",
-                "body": "={{ $json.voice_script }}",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                160,
-                96
-            ],
-            "id": "0cc10271-9d59-4673-b8e2-ed4db36139d7",
-            "name": "Generate Voice",
-            "credentials": {
-                "httpHeaderAuth": {
-                    "id": "l6NvN4FQFZ0OQb13",
-                    "name": "Azure SnakeTech account"
-                },
-                "httpBearerAuth": {
-                    "id": "YOplG9WUCOFF5T4t",
-                    "name": "Bearer Azure SnakeTech account"
-                }
-            }
+            "id": "00280a24-c249-411e-aad3-5c51c3941c15",
+            "name": "If"
         },
         {
             "parameters": {
                 "assignments": {
                     "assignments": [
                         {
-                            "id": "50d0fc56-410d-4d0c-982c-a1e88487d282",
-                            "name": "question",
-                            "value": 7,
+                            "id": "307df18a-1dfb-4f37-87df-8e4c5f9bed1a",
+                            "name": "unused_questions_count",
+                            "value": "={{ $input.all().filter(item => item.json.used === false).length }}",
                             "type": "number"
-                        },
-                        {
-                            "id": "4b601a48-f14a-4fb9-a41a-66e891265f50",
-                            "name": "audio_break",
-                            "value": "https://quizz7.blob.core.windows.net/sound/break_audio_5secondes.mp3?sp=r&st=2025-09-09T01:11:05Z&se=2035-09-09T09:26:05Z&spr=https&sv=2024-11-04&sr=b&sig=su%2F%2FqxfKBtwPJ7x2KIckTipXaPKAEqVD0fsXqCMTJaQ%3D",
-                            "type": "string"
-                        },
-                        {
-                            "id": "ef2d3584-9047-4d2e-8941-7e871ea66813",
-                            "name": "audio_correct_answer",
-                            "value": "https://quizz7.blob.core.windows.net/sound/correct_answer_1.mp3?sp=r&st=2025-09-09T00:57:01Z&se=2035-09-09T09:12:01Z&spr=https&sv=2024-11-04&sr=b&sig=5ahXIO9WfmNH8GfT44beTyCAGWF6QvRUQe2h6eY8ijM%3D",
-                            "type": "string"
                         }
                     ]
                 },
@@ -566,254 +469,183 @@
             "type": "n8n-nodes-base.set",
             "typeVersion": 3.4,
             "position": [
-                -1344,
-                176
+                256,
+                640
             ],
-            "id": "375db4de-224c-4e84-bde0-bf3cfc81aec1",
-            "name": "Global Fields"
+            "id": "1d9d1283-2c65-4d6c-acf1-40562c098195",
+            "name": "UnUsed",
+            "executeOnce": true
         },
         {
             "parameters": {
-                "content": "[Azure Portal](https://portal.azure.com)",
-                "height": 80,
-                "width": 150,
-                "color": 5
+                "additionalOptions": {
+                    "regexReplacement": {
+                        "replacements": [
+                            {
+                                "searchRegex": "^property_(.*)",
+                                "replaceRegex": "=$1",
+                                "options": {}
+                            }
+                        ]
+                    }
+                }
             },
-            "type": "n8n-nodes-base.stickyNote",
+            "type": "n8n-nodes-base.renameKeys",
+            "typeVersion": 1,
             "position": [
-                -944,
+                64,
+                640
+            ],
+            "id": "779e9388-c3ce-4404-a931-452ba411f06a",
+            "name": "Rename Keys"
+        },
+        {
+            "parameters": {
+                "resource": "databasePage",
+                "operation": "getAll",
+                "databaseId": {
+                    "__rl": true,
+                    "value": "25843d11-1336-80be-aa2c-cad738ad1c7b",
+                    "mode": "list",
+                    "cachedResultName": "QCM Questions Database",
+                    "cachedResultUrl": "https://www.notion.so/25843d11133680beaa2ccad738ad1c7b"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.notion",
+            "typeVersion": 2.2,
+            "position": [
+                -128,
+                640
+            ],
+            "id": "2beb6e12-5e5d-4dbb-b460-13be978214ed",
+            "name": "Get many database pages",
+            "credentials": {
+                "notionApi": {
+                    "id": "g3AwBtYd70JlJQfn",
+                    "name": "Notion SnakeTech account"
+                }
+            }
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                -544,
+                640
+            ],
+            "id": "750403d1-97fc-4154-8fe6-412fa6c363bd",
+            "name": "When clicking ‘Execute workflow’"
+        },
+        {
+            "parameters": {
+                "language": "python",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1664,
                 0
             ],
-            "typeVersion": 1,
-            "id": "22ed662d-24f7-41c7-86f6-5d73f90ba1bf",
-            "name": "Sticky Note"
-        },
-        {
-            "parameters": {
-                "language": "python",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport html\nimport os\n\nglob = _('Global Fields').first().json\naudio_background = html.escape(glob.get(\"audio_background\", \"\"))\naudio_break = html.escape(glob.get(\"audio_break\", \"\"))\naudio_correct_answer = html.escape(glob.get(\"audio_correct_answer\", \"\"))\n\nvoice_script = \"\"\n\nvoice_script += \"<speak version='1.0' xml:lang='fr-FR'>\"\nif audio_background:\n  voice_script += f\"\"\"<mstts:backgroundaudio\n      src='{audio_background}'\n      volume='30' fadein='1500' fadeout='2000'/>\"\"\"\nvoice_script += \"<voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\"\n\n\nfor item in items:\n  voice_script += \"<p>\"\n  voice_script += f\"{item.json.get(\"question\")}\"\n  if True: \n    voice_script += f\"<audio src='{audio_break}'/>\"\n  else:\n    voice_script += \"<break time='5s'/>\"\n  if True: \n    voice_script += f\"<audio src='{audio_correct_answer}'/>\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += \"<break strength='medium' />\"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\"\n  voice_script += \"</p>\"\n\nvoice_script += \"</voice></speak>\"\n\n\nreturn {\n  \"voice_script\": voice_script\n}"
-            },
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                -48,
-                96
-            ],
-            "id": "2d15acf2-b013-4bd1-bf37-1cf2f03ec40b",
-            "name": "Get voice prompting"
-        },
-        {
-            "parameters": {
-                "language": "python",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nglob = _('Global Fields').first().json\nnumber = int(glob.question)\nitems = _('Rename Keys').all()[:number]\nreturn items"
-            },
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                -272,
-                96
-            ],
-            "id": "dfa42958-e2d1-4a25-9767-c4ca70141462",
-            "name": "Get limited question"
-        },
-        {
-            "parameters": {
-                "url": "={{ $json.output }}",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                384,
-                -80
-            ],
-            "id": "6d448129-a482-4290-82ed-30435a79f5dd",
-            "name": "HTTP Request",
-            "executeOnce": false
-        },
-        {
-            "parameters": {
-                "text": "={{ $json.question }}",
-                "translateTo": "EN-GB",
-                "additionalFields": {}
-            },
-            "type": "n8n-nodes-base.deepL",
-            "typeVersion": 1,
-            "position": [
-                -48,
-                -80
-            ],
-            "id": "7310b33d-e08f-4d34-a856-41624607e3d7",
-            "name": "Translate a language",
-            "credentials": {
-                "deepLApi": {
-                    "id": "xlHLi2jtbfIcs8L6",
-                    "name": "DeepL account poubello"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "https://api.replicate.com/v1/models/leonardoai/lucid-origin/predictions",
-                "authentication": "genericCredentialType",
-                "genericAuthType": "httpBearerAuth",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Prefer",
-                            "value": "wait"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"input\": {\n      \"prompt\": \"Create a background visual representation for this quiz question: {{ $json.text }}. Style: modern, colorful background, no text, no characters, does not answer the question, high quality\",\n      \"style\": \"none\",\n      \"contrast\": \"medium\",\n      \"num_images\": 1,\n      \"aspect_ratio\": \"9:16\",\n      \"prompt_enhance\": true,\n      \"generation_mode\": \"standard\"\n  }\n}\n",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                160,
-                -80
-            ],
-            "id": "cb76de42-39b5-420e-9c5c-cee94c55e2a4",
-            "name": "Replicate leonardoai/lucid-origin",
-            "executeOnce": true,
-            "credentials": {
-                "httpHeaderAuth": {
-                    "id": "3sytPF58vLXwSQtC",
-                    "name": "NocoDB"
-                },
-                "httpBearerAuth": {
-                    "id": "3cU5roeQm6SqG6i6",
-                    "name": "Replicate Bearer Auth account"
-                }
-            }
+            "id": "382008cb-cec4-4445-a45c-6ced900e7846",
+            "name": "Code"
         }
     ],
     "connections": {
-        "When clicking ‘Execute workflow’": {
-            "main": [
-                [
-                    {
-                        "node": "Global Fields",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "When chat message received": {
-            "main": [
-                [
-                    {
-                        "node": "AI Agent",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "OpenRouter Chat Model": {
-            "ai_languageModel": [
-                [
-                    {
-                        "node": "AI Agent",
-                        "type": "ai_languageModel",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Postgres Chat Memory": {
-            "ai_memory": [
-                [
-                    {
-                        "node": "AI Agent",
-                        "type": "ai_memory",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Create a database page in Notion": {
-            "ai_tool": [
-                [
-                    {
-                        "node": "AI Agent",
-                        "type": "ai_tool",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Get many database pages in Notion": {
-            "ai_tool": [
-                [
-                    {
-                        "node": "AI Agent",
-                        "type": "ai_tool",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Get many database pages": {
-            "main": [
-                [
-                    {
-                        "node": "Rename Keys",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Rename Keys": {
-            "main": [
-                [
-                    {
-                        "node": "UnUsed",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "UnUsed": {
-            "main": [
-                [
-                    {
-                        "node": "If",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Code": {
+        "Update a row": {
             "main": [
                 []
             ]
         },
-        "If": {
+        "Translate a language": {
             "main": [
                 [
                     {
-                        "node": "Get limited question",
+                        "node": "Replicate leonardoai/lucid-origin",
                         "type": "main",
                         "index": 0
                     }
-                ],
+                ]
+            ]
+        },
+        "Replicate leonardoai/lucid-origin": {
+            "main": [
                 [
                     {
-                        "node": "Basic LLM Chain",
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get limited question": {
+            "main": [
+                [
+                    {
+                        "node": "Translate a language",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Get voice prompting",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Global Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Get many database pages",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get voice prompting": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Voice",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create a row": {
+            "main": [
+                [
+                    {
+                        "node": "Get many database pages",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get new questions": {
+            "main": [
+                [
+                    {
+                        "node": "Create a database page",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create a database page": {
+            "main": [
+                [
+                    {
+                        "node": "Create a row",
                         "type": "main",
                         "index": 0
                     }
@@ -842,98 +674,62 @@
                 ]
             ]
         },
-        "Create a database page": {
+        "If": {
             "main": [
                 [
                     {
-                        "node": "Create a row",
+                        "node": "Get limited question",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Basic LLM Chain",
                         "type": "main",
                         "index": 0
                     }
                 ]
             ]
         },
-        "Get new questions": {
+        "UnUsed": {
             "main": [
                 [
                     {
-                        "node": "Create a database page",
+                        "node": "If",
                         "type": "main",
                         "index": 0
                     }
                 ]
             ]
         },
-        "Create a row": {
+        "Rename Keys": {
             "main": [
                 [
                     {
-                        "node": "Get many database pages",
+                        "node": "UnUsed",
                         "type": "main",
                         "index": 0
                     }
                 ]
             ]
         },
-        "Update a row": {
-            "main": [
-                []
-            ]
-        },
-        "Global Fields": {
+        "Get many database pages": {
             "main": [
                 [
                     {
-                        "node": "Get many database pages",
+                        "node": "Rename Keys",
                         "type": "main",
                         "index": 0
                     }
                 ]
             ]
         },
-        "Get voice prompting": {
+        "When clicking ‘Execute workflow’": {
             "main": [
                 [
                     {
-                        "node": "Generate Voice",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Get limited question": {
-            "main": [
-                [
-                    {
-                        "node": "Translate a language",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "HTTP Request": {
-            "main": [
-                []
-            ]
-        },
-        "Translate a language": {
-            "main": [
-                [
-                    {
-                        "node": "Replicate leonardoai/lucid-origin",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Replicate leonardoai/lucid-origin": {
-            "main": [
-                [
-                    {
-                        "node": "HTTP Request",
+                        "node": "Global Fields",
                         "type": "main",
                         "index": 0
                     }
@@ -949,7 +745,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "34a3f51f-607f-4bac-9b3d-d9b4dab06237",
+    "versionId": "e47003ce-7044-4cd3-abee-05221810c8a9",
     "triggerCount": 0,
     "shared": [
         {
