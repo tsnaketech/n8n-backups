@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-23T21:53:58.420Z",
-    "updatedAt": "2025-09-17T14:22:10.000Z",
+    "updatedAt": "2025-09-21T18:53:52.000Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
     "active": false,
@@ -18,8 +18,8 @@
             "type": "@n8n/n8n-nodes-langchain.openAi",
             "typeVersion": 1.8,
             "position": [
-                1408,
-                -160
+                928,
+                112
             ],
             "id": "9d5b3f0c-550b-4a94-bfdb-19a4e6f20eee",
             "name": "Generate audio",
@@ -40,8 +40,8 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                -496,
-                -80
+                -400,
+                256
             ],
             "id": "9b1ec131-843a-4593-9d46-f3712eaee124",
             "name": "Update a row",
@@ -72,8 +72,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1408,
-                64
+                1168,
+                128
             ],
             "id": "8730a3a2-5524-4cb4-afad-b0df047a9caa",
             "name": "Get Voices",
@@ -105,7 +105,7 @@
                 },
                 "sendBody": true,
                 "specifyBody": "json",
-                "jsonBody": "={\n  \"input\": {\n      \"prompt\": \"Create a background visual representation for this quiz question: {{ $json.text }}. Style: modern, colorful background, no text, no characters, does not answer the question, high quality\",\n      \"style\": \"none\",\n      \"contrast\": \"medium\",\n      \"num_images\": 1,\n      \"aspect_ratio\": \"9:16\",\n      \"prompt_enhance\": true,\n      \"generation_mode\": \"standard\"\n  }\n}\n",
+                "jsonBody": "={\n  \"input\": {\n      \"prompt\": \"Create a background visual representation for this quiz question: {{ $json.text }}. Style: modern, colorful background, no text, no text, no text, no characters, does not answer the question, high quality\",\n      \"style\": \"none\",\n      \"contrast\": \"medium\",\n      \"num_images\": 1,\n      \"aspect_ratio\": \"9:16\",\n      \"prompt_enhance\": true,\n      \"generation_mode\": \"standard\"\n  }\n}\n",
                 "options": {}
             },
             "type": "n8n-nodes-base.httpRequest",
@@ -537,20 +537,6 @@
             ],
             "id": "750403d1-97fc-4154-8fe6-412fa6c363bd",
             "name": "When clicking ‘Execute workflow’"
-        },
-        {
-            "parameters": {
-                "language": "python",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor item in _input.all():\n  item.json.myNewField = 1\nreturn _input.all()"
-            },
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                1664,
-                0
-            ],
-            "id": "382008cb-cec4-4445-a45c-6ced900e7846",
-            "name": "Code"
         }
     ],
     "connections": {
@@ -745,7 +731,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "e47003ce-7044-4cd3-abee-05221810c8a9",
+    "versionId": "1b08458c-b34b-4719-b16e-100aabcb2a74",
     "triggerCount": 0,
     "shared": [
         {
