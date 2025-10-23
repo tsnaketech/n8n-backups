@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-23T21:53:58.420Z",
-    "updatedAt": "2025-10-21T21:54:07.000Z",
+    "updatedAt": "2025-10-22T23:49:04.000Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
     "active": false,
@@ -18,8 +18,8 @@
             "type": "@n8n/n8n-nodes-langchain.openAi",
             "typeVersion": 1.8,
             "position": [
-                816,
-                -48
+                800,
+                -368
             ],
             "id": "9d5b3f0c-550b-4a94-bfdb-19a4e6f20eee",
             "name": "Generate audio",
@@ -72,8 +72,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1024,
-                -32
+                1008,
+                -352
             ],
             "id": "8730a3a2-5524-4cb4-afad-b0df047a9caa",
             "name": "Get Voices",
@@ -151,7 +151,7 @@
         },
         {
             "parameters": {
-                "url": "={{ $json.output }}",
+                "url": "={{ $json.output[0] }}",
                 "options": {}
             },
             "type": "n8n-nodes-base.httpRequest",
@@ -167,7 +167,7 @@
         {
             "parameters": {
                 "language": "python",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nglob = _('Global Fields').first().json\nnumber = int(glob.question)\nitems = _('Rename Keys').all()[:number]\nreturn items"
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nglob = _('Global Fields').first().json\nnumber = int(glob.number_question)\nitems = _('Rename Keys').all()[:number]\nreturn items"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
@@ -181,7 +181,7 @@
         {
             "parameters": {
                 "language": "python",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport html\nimport os\n\nglob = _('Global Fields').first().json\naudio_background = html.escape(glob.get(\"audio_background\", \"\"))\naudio_break = html.escape(glob.get(\"audio_break\", \"\"))\naudio_correct_answer = html.escape(glob.get(\"audio_correct_answer\", \"\"))\ni = 0\n\nfor item in _input.all():\n  i += 1\n  voice_script = \"\"\n\n  voice_script += \"<speak version='1.0' xml:lang='fr-FR'>\"\n  if audio_background:\n    voice_script += f\"\"\"<mstts:backgroundaudio\n        src='{audio_background}'\n        volume='30' fadein='1500' fadeout='2000'/>\"\"\"\n  voice_script += \"<voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\"\n  \n  voice_script += \"<p>\"\n  voice_script += f\"{item.json.get(\"question\")}\"\n  if True: \n    voice_script += f\"<audio src='{audio_break}'/>\"\n  else:\n    voice_script += \"<break time='5s'/>\"\n  if True: \n    voice_script += f\"<audio src='{audio_correct_answer}'/>\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += \"<break strength='medium' />\"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\"\n  voice_script += \"</p>\"\n\n  voice_script += \"</voice></speak>\"\n\n  item.json.voice_script = voice_script\n  item.json.filename = \"audio_\" + str(i) + \".mp3\"\n  item.json.aws_url = \"https://\" + glob.get(\"aws_bucket_name\", \"\") + \".s3.\" + glob.get(\"aws_region\", \"\") + \".amazonaws.com/\" + item.json.filename\n\nreturn _input.all()"
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport html\nimport os\n\nglob = _('Global Fields').first().json\naudio_background = html.escape(glob.get(\"audio_background\", \"\"))\naudio_break = html.escape(glob.get(\"audio_break\", \"\"))\naudio_correct_answer = html.escape(glob.get(\"audio_correct_answer\", \"\"))\ni = 0\n\nfor item in _input.all():\n  i += 1\n  voice_script = \"\"\n\n  voice_script += \"<speak version='1.0' xml:lang='fr-FR'>\"\n  if audio_background:\n    voice_script += f\"\"\"<mstts:backgroundaudio\n        src='{audio_background}'\n        volume='30' fadein='1500' fadeout='2000'/>\"\"\"\n  voice_script += \"<voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\"\n  \n  voice_script += \"<p>\"\n  voice_script += f\"{item.json.get(\"question\")}\"\n  if True: \n    voice_script += f\"<audio src='{audio_break}'/>\"\n  else:\n    voice_script += \"<break time='5s'/>\"\n  if True: \n    voice_script += f\"<audio src='{audio_correct_answer}'/>\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += \"<break strength='medium' />\"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\"\n  voice_script += \"</p>\"\n\n  voice_script += \"</voice></speak>\"\n\n  item.json.voice_script = voice_script\n  item.json.filename = glob.get(\"aws_prefix_audio_file\", \"\") + str(i) + \".mp3\"\n  item.json.aws_url = \"https://\" + glob.get(\"aws_bucket_name\", \"\") + \".s3.\" + glob.get(\"aws_region\", \"\") + \".amazonaws.com/\" + item.json.filename\n\nreturn _input.all()"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
@@ -214,7 +214,7 @@
                     "assignments": [
                         {
                             "id": "50d0fc56-410d-4d0c-982c-a1e88487d282",
-                            "name": "question",
+                            "name": "number_question",
                             "value": 7,
                             "type": "number"
                         },
@@ -240,6 +240,12 @@
                             "id": "34cdf547-2e37-44f4-b493-9e561b2bd8d1",
                             "name": "aws_bucket_name",
                             "value": "tsnake-automation",
+                            "type": "string"
+                        },
+                        {
+                            "id": "06872125-2672-4649-a277-c2658d16cb22",
+                            "name": "aws_prefix_audio_file",
+                            "value": "audio_",
                             "type": "string"
                         }
                     ]
@@ -270,21 +276,21 @@
                         },
                         {
                             "name": "User-Agent",
-                            "value": "SnakeTech"
+                            "value": "n8n-snaketech"
                         }
                     ]
                 },
                 "sendBody": true,
                 "contentType": "raw",
                 "rawContentType": "application/ssml+xml",
-                "body": "={{ $json.voice_script }}",
+                "body": "={{ $node[\"Get voice prompting\"].json.voice_script }}",
                 "options": {}
             },
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1120,
-                592
+                1552,
+                768
             ],
             "id": "db688aaa-9047-492f-9013-78511c1b69cb",
             "name": "Generate Voice",
@@ -312,6 +318,7 @@
             ],
             "id": "4d9d84bb-20e4-47f2-8571-39bc0b38a0d5",
             "name": "Create a row",
+            "alwaysOutputData": true,
             "credentials": {
                 "supabaseApi": {
                     "id": "WbnVqEv2ZGhdAeSX",
@@ -405,8 +412,8 @@
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
             "typeVersion": 1,
             "position": [
-                752,
-                1168
+                704,
+                1040
             ],
             "id": "17a5d6ea-3270-4911-bb48-55da80bf9a2a",
             "name": "OpenRouter Chat Model1",
@@ -553,50 +560,6 @@
         },
         {
             "parameters": {
-                "method": "POST",
-                "url": "https://api.replicate.com/v1/predictions",
-                "authentication": "genericCredentialType",
-                "genericAuthType": "httpBearerAuth",
-                "sendHeaders": true,
-                "headerParameters": {
-                    "parameters": [
-                        {
-                            "name": "Content-Type",
-                            "value": "application/json"
-                        },
-                        {
-                            "name": "Prefer",
-                            "value": "wait"
-                        }
-                    ]
-                },
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={\n  \"version\": \"8099696689d249cf8b122d833c36ac3f75505c666a395ca40ef26f68e7d3d16e\",\n  \"input\": {\n    \"audio\": \"{{ $('Generate Voice').item.json.aws_url }}\",\n    \"language\": \"auto\",\n    \"translate\": false,\n    \"temperature\": 0,\n    \"transcription\": \"plain text\",\n    \"suppress_tokens\": \"-1\",\n    \"logprob_threshold\": -1,\n    \"no_speech_threshold\": 0.6,\n    \"condition_on_previous_text\": true,\n    \"compression_ratio_threshold\": 2.4,\n    \"temperature_increment_on_fallback\": 0.2\n  }\n}\n",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.2,
-            "position": [
-                1520,
-                592
-            ],
-            "id": "bfa63a14-47f4-40cf-960c-1547a4b16a96",
-            "name": "Replicate leonardoai/lucid-origin1",
-            "executeOnce": false,
-            "credentials": {
-                "httpHeaderAuth": {
-                    "id": "3sytPF58vLXwSQtC",
-                    "name": "NocoDB"
-                },
-                "httpBearerAuth": {
-                    "id": "3cU5roeQm6SqG6i6",
-                    "name": "Replicate Bearer Auth account"
-                }
-            }
-        },
-        {
-            "parameters": {
                 "chatId": "1037310358",
                 "text": "={{ $json.text }}",
                 "additionalFields": {
@@ -606,8 +569,8 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                624,
-                -32
+                608,
+                -352
             ],
             "id": "d77d5b82-eb59-45aa-a8a8-859bf5021793",
             "name": "Telegram",
@@ -630,8 +593,8 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                1280,
-                -32
+                1264,
+                -352
             ],
             "id": "81b22477-d4fa-4a44-b181-69cbcd00ec1b",
             "name": "Send an audio file",
@@ -646,37 +609,13 @@
         },
         {
             "parameters": {
-                "operation": "upload",
-                "bucketName": "={{ $('Global Fields').first().json.aws_bucket_name }}",
-                "fileName": "={{ $json.filename }}",
-                "additionalFields": {
-                    "acl": "publicRead"
-                }
-            },
-            "type": "n8n-nodes-base.awsS3",
-            "typeVersion": 2,
-            "position": [
-                1312,
-                592
-            ],
-            "id": "087eee0a-203c-4f32-a994-3a82db996833",
-            "name": "Upload a file",
-            "executeOnce": false,
-            "credentials": {
-                "aws": {
-                    "id": "TVt2s9BRalpzLzvl",
-                    "name": "AWS account n8n tsnake7"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "content": "https://telegra.ph/api"
+                "content": "https://telegra.ph/api",
+                "height": 80
             },
             "type": "n8n-nodes-base.stickyNote",
             "position": [
-                2304,
-                112
+                1456,
+                -448
             ],
             "typeVersion": 1,
             "id": "4621ae5c-2ec9-465c-be3e-77bfa1011fb5",
@@ -711,13 +650,217 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1504,
-                -32
+                1488,
+                -352
             ],
             "id": "c2697fae-b1bc-4685-a351-fb8cd7270b6e",
             "name": "HTTP Request2",
             "alwaysOutputData": false,
             "executeOnce": true
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://api.replicate.com/v1/predictions",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpBearerAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        },
+                        {
+                            "name": "Prefer",
+                            "value": "wait"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"version\": \"8099696689d249cf8b122d833c36ac3f75505c666a395ca40ef26f68e7d3d16e\",\n  \"input\": {\n    \"audio\": \"{{ $node[\"Get voice prompting\"].json.aws_url }}\",\n    \"language\": \"auto\",\n    \"translate\": false,\n    \"temperature\": 0,\n    \"transcription\": \"plain text\",\n    \"suppress_tokens\": \"-1\",\n    \"logprob_threshold\": -1,\n    \"no_speech_threshold\": 0.6,\n    \"condition_on_previous_text\": true,\n    \"compression_ratio_threshold\": 2.4,\n    \"temperature_increment_on_fallback\": 0.2\n  }\n}\n",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                1936,
+                768
+            ],
+            "id": "bfa63a14-47f4-40cf-960c-1547a4b16a96",
+            "name": "Replicate openai/whisper",
+            "executeOnce": false,
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "3sytPF58vLXwSQtC",
+                    "name": "NocoDB"
+                },
+                "httpBearerAuth": {
+                    "id": "3cU5roeQm6SqG6i6",
+                    "name": "Replicate Bearer Auth account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "45dd38b3-736f-4807-af36-3c07125a3c83",
+                            "leftValue": "={{ $json.LastModified }}",
+                            "rightValue": "={{ $now.minus(200, 'minutes') }}",
+                            "operator": {
+                                "type": "dateTime",
+                                "operation": "after"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                1312,
+                592
+            ],
+            "id": "cb3d21df-7b33-4d75-90fb-5e9ab3d871c1",
+            "name": "If1"
+        },
+        {
+            "parameters": {
+                "operation": "getAll",
+                "bucketName": "={{ $('Global Fields').first().json.aws_bucket_name }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.awsS3",
+            "typeVersion": 2,
+            "position": [
+                48,
+                112
+            ],
+            "id": "aa55f906-df7a-4f45-a754-ea9572062c42",
+            "name": "Get many files1",
+            "executeOnce": false,
+            "credentials": {
+                "aws": {
+                    "id": "TVt2s9BRalpzLzvl",
+                    "name": "AWS account n8n tsnake7"
+                }
+            },
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json = JSON.parse(item.json.data)\n}\n\nreturn $input.all();"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                2128,
+                576
+            ],
+            "id": "836bc558-f156-4376-a482-2b39357b0f9c",
+            "name": "String to Json"
+        },
+        {
+            "parameters": {
+                "operation": "get",
+                "propertyName": "data",
+                "key": "={{ $node[\"Get voice prompting\"].json.filename }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.redis",
+            "typeVersion": 1,
+            "position": [
+                1936,
+                576
+            ],
+            "id": "80ade5a2-3ecc-4815-bb06-427dfe80610c",
+            "name": "Retrieve data",
+            "credentials": {
+                "redis": {
+                    "id": "ua59kyvCowPL9ZRc",
+                    "name": "Redis pika account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "set",
+                "key": "={{ $json.input.audio.split('/').pop() }}",
+                "value": "={{ $json.toJsonString() }}"
+            },
+            "type": "n8n-nodes-base.redis",
+            "typeVersion": 1,
+            "position": [
+                2128,
+                768
+            ],
+            "id": "68a37856-a4b4-4a7b-b6d0-604845a15e5e",
+            "name": "Save data",
+            "credentials": {
+                "redis": {
+                    "id": "ua59kyvCowPL9ZRc",
+                    "name": "Redis pika account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "upload",
+                "bucketName": "={{ $('Global Fields').first().json.aws_bucket_name }}",
+                "fileName": "={{ $node[\"Get voice prompting\"].json.filename }}",
+                "additionalFields": {
+                    "acl": "publicRead"
+                }
+            },
+            "type": "n8n-nodes-base.awsS3",
+            "typeVersion": 2,
+            "position": [
+                1744,
+                768
+            ],
+            "id": "087eee0a-203c-4f32-a994-3a82db996833",
+            "name": "Save audio file",
+            "executeOnce": false,
+            "credentials": {
+                "aws": {
+                    "id": "TVt2s9BRalpzLzvl",
+                    "name": "AWS account n8n tsnake7"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "getAll",
+                "bucketName": "={{ $('Global Fields').first().json.aws_bucket_name }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.awsS3",
+            "typeVersion": 2,
+            "position": [
+                1120,
+                592
+            ],
+            "id": "070c3c6e-4f09-463e-b3f9-18af6ab9da2b",
+            "name": "Retrieve audio data",
+            "executeOnce": false,
+            "alwaysOutputData": true,
+            "credentials": {
+                "aws": {
+                    "id": "TVt2s9BRalpzLzvl",
+                    "name": "AWS account n8n tsnake7"
+                }
+            }
         }
     ],
     "connections": {
@@ -771,6 +914,11 @@
                         "node": "Get many database pages",
                         "type": "main",
                         "index": 0
+                    },
+                    {
+                        "node": "Get many files1",
+                        "type": "main",
+                        "index": 0
                     }
                 ]
             ]
@@ -779,7 +927,7 @@
             "main": [
                 [
                     {
-                        "node": "Generate Voice",
+                        "node": "Retrieve audio data",
                         "type": "main",
                         "index": 0
                     }
@@ -912,7 +1060,7 @@
             "main": [
                 [
                     {
-                        "node": "Upload a file",
+                        "node": "Save audio file",
                         "type": "main",
                         "index": 0
                     }
@@ -929,11 +1077,67 @@
                 []
             ]
         },
-        "Upload a file": {
+        "If1": {
             "main": [
                 [
                     {
-                        "node": "Replicate leonardoai/lucid-origin1",
+                        "node": "Retrieve data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Generate Voice",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Replicate openai/whisper": {
+            "main": [
+                [
+                    {
+                        "node": "Save data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Retrieve data": {
+            "main": [
+                [
+                    {
+                        "node": "String to Json",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save data": {
+            "main": [
+                []
+            ]
+        },
+        "Save audio file": {
+            "main": [
+                [
+                    {
+                        "node": "Replicate openai/whisper",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Retrieve audio data": {
+            "main": [
+                [
+                    {
+                        "node": "If1",
                         "type": "main",
                         "index": 0
                     }
@@ -949,7 +1153,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "ade64031-6973-46e5-b287-5d354b20ac74",
+    "versionId": "1f6eb9f3-d756-4ae2-af96-9fdcb44d8c4c",
     "triggerCount": 0,
     "shared": [
         {
