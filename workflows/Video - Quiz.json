@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-23T21:53:58.420Z",
-    "updatedAt": "2025-10-22T23:49:04.000Z",
+    "updatedAt": "2025-10-23T16:18:43.000Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
     "active": false,
@@ -18,8 +18,8 @@
             "type": "@n8n/n8n-nodes-langchain.openAi",
             "typeVersion": 1.8,
             "position": [
-                800,
-                -368
+                816,
+                -352
             ],
             "id": "9d5b3f0c-550b-4a94-bfdb-19a4e6f20eee",
             "name": "Generate audio",
@@ -40,8 +40,8 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                -400,
-                256
+                400,
+                -320
             ],
             "id": "9b1ec131-843a-4593-9d46-f3712eaee124",
             "name": "Update a row",
@@ -72,7 +72,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1008,
+                1024,
                 -352
             ],
             "id": "8730a3a2-5524-4cb4-afad-b0df047a9caa",
@@ -201,8 +201,8 @@
             },
             "type": "n8n-nodes-base.stickyNote",
             "position": [
-                64,
-                464
+                48,
+                512
             ],
             "typeVersion": 1,
             "id": "baec10bc-b934-4b6e-b695-a69cdaf6701b",
@@ -289,7 +289,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1552,
+                1728,
                 768
             ],
             "id": "db688aaa-9047-492f-9013-78511c1b69cb",
@@ -650,7 +650,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1488,
+                1472,
                 -352
             ],
             "id": "c2697fae-b1bc-4685-a351-fb8cd7270b6e",
@@ -685,7 +685,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1936,
+                2128,
                 768
             ],
             "id": "bfa63a14-47f4-40cf-960c-1547a4b16a96",
@@ -737,82 +737,16 @@
         },
         {
             "parameters": {
-                "operation": "getAll",
-                "bucketName": "={{ $('Global Fields').first().json.aws_bucket_name }}",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.awsS3",
-            "typeVersion": 2,
-            "position": [
-                48,
-                112
-            ],
-            "id": "aa55f906-df7a-4f45-a754-ea9572062c42",
-            "name": "Get many files1",
-            "executeOnce": false,
-            "credentials": {
-                "aws": {
-                    "id": "TVt2s9BRalpzLzvl",
-                    "name": "AWS account n8n tsnake7"
-                }
-            },
-            "disabled": true
-        },
-        {
-            "parameters": {
                 "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json = JSON.parse(item.json.data)\n}\n\nreturn $input.all();"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                2128,
+                2336,
                 576
             ],
             "id": "836bc558-f156-4376-a482-2b39357b0f9c",
             "name": "String to Json"
-        },
-        {
-            "parameters": {
-                "operation": "get",
-                "propertyName": "data",
-                "key": "={{ $node[\"Get voice prompting\"].json.filename }}",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.redis",
-            "typeVersion": 1,
-            "position": [
-                1936,
-                576
-            ],
-            "id": "80ade5a2-3ecc-4815-bb06-427dfe80610c",
-            "name": "Retrieve data",
-            "credentials": {
-                "redis": {
-                    "id": "ua59kyvCowPL9ZRc",
-                    "name": "Redis pika account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "operation": "set",
-                "key": "={{ $json.input.audio.split('/').pop() }}",
-                "value": "={{ $json.toJsonString() }}"
-            },
-            "type": "n8n-nodes-base.redis",
-            "typeVersion": 1,
-            "position": [
-                2128,
-                768
-            ],
-            "id": "68a37856-a4b4-4a7b-b6d0-604845a15e5e",
-            "name": "Save data",
-            "credentials": {
-                "redis": {
-                    "id": "ua59kyvCowPL9ZRc",
-                    "name": "Redis pika account"
-                }
-            }
         },
         {
             "parameters": {
@@ -826,7 +760,7 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                1744,
+                1920,
                 768
             ],
             "id": "087eee0a-203c-4f32-a994-3a82db996833",
@@ -859,6 +793,71 @@
                 "aws": {
                     "id": "TVt2s9BRalpzLzvl",
                     "name": "AWS account n8n tsnake7"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "delete",
+                "bucketName": "={{ $('Global Fields').first().json.aws_bucket_name }}",
+                "fileKey": "={{ $node[\"Get voice prompting\"].json.filename }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.awsS3",
+            "typeVersion": 2,
+            "position": [
+                1520,
+                768
+            ],
+            "id": "744b2f79-26a1-4578-9abf-ab6324dd6f7a",
+            "name": "Delete audio file",
+            "credentials": {
+                "aws": {
+                    "id": "TVt2s9BRalpzLzvl",
+                    "name": "AWS account n8n tsnake7"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "get",
+                "propertyName": "data",
+                "key": "={{ $node[\"Get voice prompting\"].json.filename }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.redis",
+            "typeVersion": 1,
+            "position": [
+                2128,
+                576
+            ],
+            "id": "80ade5a2-3ecc-4815-bb06-427dfe80610c",
+            "name": "Retrieve transcribe data",
+            "credentials": {
+                "redis": {
+                    "id": "ua59kyvCowPL9ZRc",
+                    "name": "Redis pika account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "set",
+                "key": "={{ $json.input.audio.split('/').pop() }}",
+                "value": "={{ $json.toJsonString() }}"
+            },
+            "type": "n8n-nodes-base.redis",
+            "typeVersion": 1,
+            "position": [
+                2336,
+                768
+            ],
+            "id": "68a37856-a4b4-4a7b-b6d0-604845a15e5e",
+            "name": "Save transcribe data",
+            "credentials": {
+                "redis": {
+                    "id": "ua59kyvCowPL9ZRc",
+                    "name": "Redis pika account"
                 }
             }
         }
@@ -912,11 +911,6 @@
                 [
                     {
                         "node": "Get many database pages",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Get many files1",
                         "type": "main",
                         "index": 0
                     }
@@ -1081,14 +1075,14 @@
             "main": [
                 [
                     {
-                        "node": "Retrieve data",
+                        "node": "Retrieve transcribe data",
                         "type": "main",
                         "index": 0
                     }
                 ],
                 [
                     {
-                        "node": "Generate Voice",
+                        "node": "Delete audio file",
                         "type": "main",
                         "index": 0
                     }
@@ -1099,27 +1093,11 @@
             "main": [
                 [
                     {
-                        "node": "Save data",
+                        "node": "Save transcribe data",
                         "type": "main",
                         "index": 0
                     }
                 ]
-            ]
-        },
-        "Retrieve data": {
-            "main": [
-                [
-                    {
-                        "node": "String to Json",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Save data": {
-            "main": [
-                []
             ]
         },
         "Save audio file": {
@@ -1143,6 +1121,33 @@
                     }
                 ]
             ]
+        },
+        "Delete audio file": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Voice",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Retrieve transcribe data": {
+            "main": [
+                [
+                    {
+                        "node": "String to Json",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Save transcribe data": {
+            "main": [
+                []
+            ]
         }
     },
     "settings": {
@@ -1153,7 +1158,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "1f6eb9f3-d756-4ae2-af96-9fdcb44d8c4c",
+    "versionId": "2e267be0-9ff4-4f55-9578-87ba288f8c3b",
     "triggerCount": 0,
     "shared": [
         {
