@@ -1,6 +1,6 @@
 {
     "createdAt": "2025-08-23T21:53:58.420Z",
-    "updatedAt": "2025-10-23T16:18:43.000Z",
+    "updatedAt": "2025-10-24T15:04:57.000Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
     "active": false,
@@ -222,6 +222,12 @@
                             "id": "4b601a48-f14a-4fb9-a41a-66e891265f50",
                             "name": "audio_break",
                             "value": "https://quizz7.blob.core.windows.net/sound/break_audio_5secondes.mp3?sp=r&st=2025-09-09T01:11:05Z&se=2035-09-09T09:26:05Z&spr=https&sv=2024-11-04&sr=b&sig=su%2F%2FqxfKBtwPJ7x2KIckTipXaPKAEqVD0fsXqCMTJaQ%3D",
+                            "type": "string"
+                        },
+                        {
+                            "id": "707031bc-5ae1-4e56-82fc-58f43e339f5b",
+                            "name": "audio_break_time",
+                            "value": "1.38",
                             "type": "string"
                         },
                         {
@@ -860,6 +866,19 @@
                     "name": "Redis pika account"
                 }
             }
+        },
+        {
+            "parameters": {
+                "jsCode": "// Iterate over each item in the input\nconst items = []\nconst questions = $(\"Get voice prompting\").all()\n$input.all().forEach((item, i) => {\n  // Map the segments array to keep only specific fields\n  if (item.json && item.json.output && Array.isArray(item.json.output.segments)) {\n    var segments = item.json.output.segments;\n\n    // Ensure there are at least two segments to merge\n    if (segments.length >= 3) {\n      const last = segments[segments.length - 2];\n      const secondLast = segments[segments.length - 1];\n\n      // Create merged segment\n      const mergedSegment = {\n        id: last.id, // Keep the earlier id or use a new one\n        start: last.start, // Use start of the earlier segment\n        end: secondLast.end, // Use end of the last segment\n        text: `${last.text} ${secondLast.text}`.trim() // Concatenate text\n      };\n\n      // Build new segments array: keep all except last two, then add merged\n      const newSegments = segments.slice(0, -2); // Keep all but last two\n      newSegments.push(mergedSegment); // Add merged segment\n      segments = newSegments\n    }\n\n    const data = {};\n    data.audio = item.json.input.audio\n    data.question = questions[i].json.name\n    data.option_a = questions[i].json.option_a\n    data.option_b = questions[i].json.option_b\n    data.option_c = questions[i].json.option_c\n    data.option_d = questions[i].json.option_d\n    data.correct_answer = questions[i].json.correct_answer\n    data.category = questions[i].json.category\n    data.remotion = segments.map(segment => ({\n      id: segment.id,\n      start: segment.start,\n      end: segment.end,\n      text: segment.text.trim()\n    }));\n    items.push(data);\n  }\n});\n\n// Return the modified items\nreturn items;;"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                2576,
+                672
+            ],
+            "id": "15649dbe-8957-4258-8ee8-4a47d79d77cc",
+            "name": "Code in JavaScript"
         }
     ],
     "connections": {
@@ -1146,7 +1165,24 @@
         },
         "Save transcribe data": {
             "main": [
-                []
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "String to Json": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
             ]
         }
     },
@@ -1158,7 +1194,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "2e267be0-9ff4-4f55-9578-87ba288f8c3b",
+    "versionId": "9ccee1dc-60b0-41ff-89eb-0f97765c4f66",
     "triggerCount": 0,
     "shared": [
         {
