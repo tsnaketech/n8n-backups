@@ -1,6 +1,6 @@
 {
-    "createdAt": "2025-08-11T22:17:19.789Z",
     "updatedAt": "2025-08-12T07:47:32.000Z",
+    "createdAt": "2025-08-11T22:17:19.789Z",
     "id": "faLgq7WA8mepwvto",
     "name": "Test2",
     "active": false,
@@ -449,15 +449,17 @@
     "meta": null,
     "pinData": {},
     "versionId": "39ca6dd2-453d-4e41-94e6-85d4f092c419",
+    "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
         {
-            "createdAt": "2025-08-11T22:17:19.795Z",
             "updatedAt": "2025-08-11T22:17:19.795Z",
+            "createdAt": "2025-08-11T22:17:19.795Z",
             "role": "workflow:owner",
             "workflowId": "faLgq7WA8mepwvto",
             "projectId": "lnYpJLFYV8VS8Mcd"
         }
     ],
+    "activeVersion": null,
     "tags": []
 }
