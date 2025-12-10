@@ -1,6 +1,6 @@
 {
-    "createdAt": "2025-07-22T21:36:13.119Z",
     "updatedAt": "2025-07-22T21:36:13.119Z",
+    "createdAt": "2025-07-22T21:36:13.119Z",
     "id": "JZZlppXV5YFAiG9q",
     "name": "✨🤖Automate Multi-Platform Social Media Content Creation with AI",
     "active": false,
@@ -1602,15 +1602,17 @@
     },
     "pinData": {},
     "versionId": "f82cd7c5-3c87-47b6-ba75-d4b3887e352e",
+    "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
         {
-            "createdAt": "2025-07-22T21:36:13.126Z",
             "updatedAt": "2025-07-22T21:36:13.126Z",
+            "createdAt": "2025-07-22T21:36:13.126Z",
             "role": "workflow:owner",
             "workflowId": "JZZlppXV5YFAiG9q",
             "projectId": "lnYpJLFYV8VS8Mcd"
         }
     ],
+    "activeVersion": null,
     "tags": []
 }
