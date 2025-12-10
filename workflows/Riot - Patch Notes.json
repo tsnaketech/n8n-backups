@@ -1,6 +1,6 @@
 {
-    "createdAt": "2024-09-25T21:20:52.431Z",
     "updatedAt": "2025-05-27T10:27:10.000Z",
+    "createdAt": "2024-09-25T21:20:52.431Z",
     "id": "c3QrzISqRohMxXPb",
     "name": "Riot - Patch Notes",
     "active": true,
@@ -319,20 +319,335 @@
     },
     "pinData": {},
     "versionId": "d12a85e1-9c4c-45aa-a5c3-23d12cfc25bf",
+    "activeVersionId": "d12a85e1-9c4c-45aa-a5c3-23d12cfc25bf",
     "triggerCount": 1,
     "shared": [
         {
-            "createdAt": "2024-09-25T21:20:52.434Z",
             "updatedAt": "2024-09-25T21:20:52.434Z",
+            "createdAt": "2024-09-25T21:20:52.434Z",
             "role": "workflow:owner",
             "workflowId": "c3QrzISqRohMxXPb",
             "projectId": "lnYpJLFYV8VS8Mcd"
         }
     ],
+    "activeVersion": {
+        "updatedAt": "2025-12-09T13:23:58.759Z",
+        "createdAt": "2025-12-09T13:23:58.759Z",
+        "versionId": "d12a85e1-9c4c-45aa-a5c3-23d12cfc25bf",
+        "workflowId": "c3QrzISqRohMxXPb",
+        "nodes": [
+            {
+                "parameters": {
+                    "mode": "runOnceForEachItem",
+                    "language": "python",
+                    "pythonCode": "# Add a new field called 'myNewField' to the JSON of the item\nimport re\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', _input.item.json.body.message)\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"\")\n\nreturn {\"title\": _input.item.json.body.title, \"version\": version, \"version_print\": version_print}"
+                },
+                "id": "56d59074-e94d-44ba-bfbe-28f5baaf33f5",
+                "name": "Code",
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    920,
+                    160
+                ]
+            },
+            {
+                "parameters": {
+                    "mode": "runOnceForEachItem",
+                    "language": "python",
+                    "pythonCode": "# Add a new field called 'myNewField' to the JSON of the item\nimport re\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', _input.item.json.body.message)\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"-\")\n\nreturn {\"title\": _input.item.json.body.title, \"version\": version, \"version_print\": version_print}"
+                },
+                "id": "b2ef8961-f0e5-4905-8dbe-de9ab10bf90d",
+                "name": "Code1",
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    920,
+                    500
+                ]
+            },
+            {
+                "parameters": {
+                    "rules": {
+                        "values": [
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 2
+                                    },
+                                    "conditions": [
+                                        {
+                                            "leftValue": "={{ $json.body.title }}",
+                                            "rightValue": "Valorant",
+                                            "operator": {
+                                                "type": "string",
+                                                "operation": "contains"
+                                            }
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                }
+                            },
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 2
+                                    },
+                                    "conditions": [
+                                        {
+                                            "id": "dd8efa0d-5ef4-46cb-a196-747b5eed97f0",
+                                            "leftValue": "={{ $json.body.title }}",
+                                            "rightValue": "=League Of Legends",
+                                            "operator": {
+                                                "type": "string",
+                                                "operation": "contains"
+                                            }
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                }
+                            },
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 2
+                                    },
+                                    "conditions": [
+                                        {
+                                            "id": "7b3ad3b9-1b69-4378-91f2-cfd29495a54a",
+                                            "leftValue": "={{ $json.body.title }}",
+                                            "rightValue": "Teamfight Tactics",
+                                            "operator": {
+                                                "type": "string",
+                                                "operation": "contains"
+                                            }
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                }
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "id": "e23eb00d-03a8-4454-bc8b-8cd61bedfb63",
+                "name": "Switch",
+                "type": "n8n-nodes-base.switch",
+                "typeVersion": 3.2,
+                "position": [
+                    720,
+                    340
+                ]
+            },
+            {
+                "parameters": {
+                    "httpMethod": "POST",
+                    "path": "riot",
+                    "options": {
+                        "noResponseBody": true
+                    }
+                },
+                "id": "52d76b93-6bad-4e11-8d35-a9cc692281d1",
+                "name": "Webhook",
+                "type": "n8n-nodes-base.webhook",
+                "typeVersion": 2,
+                "position": [
+                    480,
+                    340
+                ],
+                "webhookId": "420c36a1-0fda-4026-854f-0fcb56c43b94"
+            },
+            {
+                "parameters": {
+                    "resource": "message",
+                    "guildId": {
+                        "__rl": true,
+                        "value": "361960679042973697",
+                        "mode": "list",
+                        "cachedResultName": "Wada Corp",
+                        "cachedResultUrl": "https://discord.com/channels/361960679042973697"
+                    },
+                    "channelId": {
+                        "__rl": true,
+                        "value": "931920576057073714",
+                        "mode": "list",
+                        "cachedResultName": "🤖_bot",
+                        "cachedResultUrl": "https://discord.com/channels/361960679042973697/931920576057073714"
+                    },
+                    "content": "=Nouveau {{ $json.title }} - {{ $json[\"version_print\"] }} \nhttps://www.leagueoflegends.com/fr-fr/news/game-updates/patch-{{ $json[\"version\"]  }}-notes/",
+                    "options": {}
+                },
+                "id": "7cd78c7e-4407-4050-8904-22769da1beac",
+                "name": "Wada Corp",
+                "type": "n8n-nodes-base.discord",
+                "typeVersion": 2,
+                "position": [
+                    1180,
+                    600
+                ],
+                "webhookId": "64597e50-5a2a-41ea-80d5-72e19a94a44c",
+                "credentials": {
+                    "discordBotApi": {
+                        "id": "xd5GBOjpfOLDyBSR",
+                        "name": "Discord Bot account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "message",
+                    "guildId": {
+                        "__rl": true,
+                        "value": "702577437850206298",
+                        "mode": "list",
+                        "cachedResultName": "TiSnake",
+                        "cachedResultUrl": "https://discord.com/channels/702577437850206298"
+                    },
+                    "channelId": {
+                        "__rl": true,
+                        "value": "711584353703952435",
+                        "mode": "list",
+                        "cachedResultName": "wadabot",
+                        "cachedResultUrl": "https://discord.com/channels/702577437850206298/711584353703952435"
+                    },
+                    "content": "=Nouveau {{ $json.title }} - {{ $json.version_print }}\nhttps://playvalorant.com/en-us/news/game-updates/valorant-patch-notes-{{ $json[\"version\"]  }}",
+                    "options": {}
+                },
+                "id": "f5ed15fe-e825-4bae-8ebe-c576b53547fc",
+                "name": "TiSnake1",
+                "type": "n8n-nodes-base.discord",
+                "typeVersion": 2,
+                "position": [
+                    1180,
+                    160
+                ],
+                "webhookId": "a5c3d857-dd13-45da-bcce-75a6b372c5c2",
+                "credentials": {
+                    "discordBotApi": {
+                        "id": "xd5GBOjpfOLDyBSR",
+                        "name": "Discord Bot account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "resource": "message",
+                    "guildId": {
+                        "__rl": true,
+                        "value": "702577437850206298",
+                        "mode": "list",
+                        "cachedResultName": "TiSnake",
+                        "cachedResultUrl": "https://discord.com/channels/702577437850206298"
+                    },
+                    "channelId": {
+                        "__rl": true,
+                        "value": "711584353703952435",
+                        "mode": "list",
+                        "cachedResultName": "wadabot",
+                        "cachedResultUrl": "https://discord.com/channels/702577437850206298/711584353703952435"
+                    },
+                    "content": "=Nouveau {{ $json.title }} - {{ $json[\"version_print\"] }} \nhttps://www.leagueoflegends.com/fr-fr/news/game-updates/patch-{{ $json[\"version\"]  }}-notes/",
+                    "options": {}
+                },
+                "id": "3015bd49-acfc-49c3-a64f-e073dda14120",
+                "name": "TiSnake2",
+                "type": "n8n-nodes-base.discord",
+                "typeVersion": 2,
+                "position": [
+                    1180,
+                    420
+                ],
+                "webhookId": "a5c3d857-dd13-45da-bcce-75a6b372c5c2",
+                "credentials": {
+                    "discordBotApi": {
+                        "id": "xd5GBOjpfOLDyBSR",
+                        "name": "Discord Bot account"
+                    }
+                }
+            }
+        ],
+        "connections": {
+            "Code": {
+                "main": [
+                    [
+                        {
+                            "node": "TiSnake1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Code1": {
+                "main": [
+                    [
+                        {
+                            "node": "Wada Corp",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "TiSnake2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Switch": {
+                "main": [
+                    [
+                        {
+                            "node": "Code",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Code1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Code1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Webhook": {
+                "main": [
+                    [
+                        {
+                            "node": "Switch",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "authors": "system migration",
+        "name": null,
+        "description": null
+    },
     "tags": [
         {
-            "createdAt": "2025-03-30T18:21:19.881Z",
             "updatedAt": "2025-03-30T18:21:19.881Z",
+            "createdAt": "2025-03-30T18:21:19.881Z",
             "id": "C6NiXPNmuO5EAjiJ",
             "name": "game"
         }
