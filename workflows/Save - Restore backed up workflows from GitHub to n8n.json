@@ -1,6 +1,6 @@
 {
-    "createdAt": "2025-04-06T15:57:38.594Z",
     "updatedAt": "2025-06-12T22:34:39.000Z",
+    "createdAt": "2025-04-06T15:57:38.594Z",
     "id": "xOTtK1CYu6OBwj9o",
     "name": "Save - Restore backed up workflows from GitHub to n8n",
     "active": false,
@@ -510,20 +510,22 @@
     },
     "pinData": {},
     "versionId": "bc029144-a413-4984-888b-ae7c427baffc",
+    "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
         {
-            "createdAt": "2025-04-06T15:57:38.598Z",
             "updatedAt": "2025-04-06T15:57:38.598Z",
+            "createdAt": "2025-04-06T15:57:38.598Z",
             "role": "workflow:owner",
             "workflowId": "xOTtK1CYu6OBwj9o",
             "projectId": "lnYpJLFYV8VS8Mcd"
         }
     ],
+    "activeVersion": null,
     "tags": [
         {
-            "createdAt": "2025-04-06T22:25:36.119Z",
             "updatedAt": "2025-04-06T22:25:36.119Z",
+            "createdAt": "2025-04-06T22:25:36.119Z",
             "id": "FonH40fYgFPBKvBz",
             "name": "save"
         }
