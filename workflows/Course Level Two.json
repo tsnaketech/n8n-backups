@@ -1,6 +1,6 @@
 {
-    "createdAt": "2025-06-17T07:17:36.077Z",
     "updatedAt": "2025-06-25T23:46:03.000Z",
+    "createdAt": "2025-06-17T07:17:36.077Z",
     "id": "GpaOaxHt1EaH0F5T",
     "name": "Course Level Two",
     "active": false,
@@ -828,15 +828,17 @@
     },
     "pinData": {},
     "versionId": "031a2a52-0370-418f-805f-c3988418e0cc",
+    "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
         {
-            "createdAt": "2025-06-17T07:17:36.080Z",
             "updatedAt": "2025-06-17T07:17:36.080Z",
+            "createdAt": "2025-06-17T07:17:36.080Z",
             "role": "workflow:owner",
             "workflowId": "GpaOaxHt1EaH0F5T",
             "projectId": "lnYpJLFYV8VS8Mcd"
         }
     ],
+    "activeVersion": null,
     "tags": []
 }
