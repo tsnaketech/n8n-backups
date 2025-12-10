@@ -1,6 +1,6 @@
 {
-    "createdAt": "2025-06-05T23:46:55.974Z",
     "updatedAt": "2025-06-06T20:16:56.000Z",
+    "createdAt": "2025-06-05T23:46:55.974Z",
     "id": "VKYpGCCiItx12YaV",
     "name": "NocoDB - Update Primary Key",
     "active": false,
@@ -465,20 +465,22 @@
     "meta": null,
     "pinData": {},
     "versionId": "58b38518-391a-4d57-9bd3-3b775844127b",
+    "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
         {
-            "createdAt": "2025-06-05T23:46:55.978Z",
             "updatedAt": "2025-06-05T23:46:55.978Z",
+            "createdAt": "2025-06-05T23:46:55.978Z",
             "role": "workflow:owner",
             "workflowId": "VKYpGCCiItx12YaV",
             "projectId": "lnYpJLFYV8VS8Mcd"
         }
     ],
+    "activeVersion": null,
     "tags": [
         {
-            "createdAt": "2025-06-06T13:15:51.246Z",
             "updatedAt": "2025-06-06T13:15:51.246Z",
+            "createdAt": "2025-06-06T13:15:51.246Z",
             "id": "UoY0Epw1lOg3BLHy",
             "name": "software"
         }
