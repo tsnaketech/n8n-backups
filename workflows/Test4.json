@@ -1,10 +1,10 @@
 {
-    "updatedAt": "2025-08-30T01:05:24.000Z",
+    "updatedAt": "2025-12-15T21:59:44.000Z",
     "createdAt": "2025-08-30T01:04:50.737Z",
     "id": "UTZ5IcSj5ry0oVFz",
     "name": "Test4",
     "active": false,
-    "isArchived": false,
+    "isArchived": true,
     "nodes": [
         {
             "parameters": {
@@ -462,7 +462,7 @@
     "staticData": null,
     "meta": null,
     "pinData": {},
-    "versionId": "2580315f-f3e9-4c5d-9fb1-150d8e22118f",
+    "versionId": "1edef844-2a5e-4ea0-ab0f-77cc0cbe5a90",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
