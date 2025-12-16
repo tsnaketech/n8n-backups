@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2025-08-12T07:47:17.000Z",
+    "updatedAt": "2025-12-15T21:58:45.930Z",
     "createdAt": "2025-06-06T20:25:30.273Z",
     "id": "YPjY5Fm5h3SpijZI",
     "name": "Tiktok - Video with kids",
@@ -339,7 +339,7 @@
         },
         {
             "parameters": {
-                "language": "python",
+                "language": "pythonNative",
                 "pythonCode": "# Validation et extraction de l'URL TikTok\nimport time\nfrom datetime import datetime\n\ninput = _input.first().json\ntiktok_url = input.get(\"url\") or input.get(\"tiktok_url\") or input.get(\"chatInput\")\n\nif not tiktok_url:\n  raise ValueError('URL TikTok manquante')\n\n# Vérification format URL TikTok\nif 'tiktok.com' not in tiktok_url:\n  raise ValueError('URL TikTok invalide')\n\nreturn {\n    \"tiktok_url\": tiktok_url,\n    \"timestamp\": datetime.now().isoformat(),\n    \"workflow_id\": f\"workflow_{int(time.time() * 1000)}\"\n  }"
             },
             "id": "03381ea7-c87c-44a8-8fa3-7142d570cf02",
@@ -380,7 +380,7 @@
         },
         {
             "parameters": {
-                "language": "python",
+                "language": "pythonNative",
                 "pythonCode": "# Traitement de la réponse de téléchargement\nimport json\n\nresponse = _input.first().json\n\nif response.code != 0:\n  raise ValueError('Échec du téléchargement TikTok')\n\ndata = response.get('data', {})\n\nif hasattr(data, 'to_py'):\n    data = data.to_py()  # ou data.valueOf()\n\nauthor = data.get('author', {})\n\nreturn {\n    'video_url': data.get('hdplay') or data.get('play'),\n    'video_title': data.get('title'),\n    'duration': data.get('duration'),\n    'author': author.get('nickname'),\n    'workflow_id': _('Validate Input').first().json.get(\"workflow_id\"),\n    'download_success': True\n}"
             },
             "id": "220253b5-470c-4bff-97bd-5f92ec13578a",
@@ -394,7 +394,7 @@
         },
         {
             "parameters": {
-                "language": "python",
+                "language": "pythonNative",
                 "pythonCode": "# Créer liste des frames à traiter\nworkflow_id = _(\"Process Download\").first().json.get(\"workflow_id\")\ndata = _input.first().json\nframe_count = 10 # Optimisé pour les coûts\nframes = []\n\n# Créer liste des frames à traiter\nfor i in range(1, frame_count + 1):\n    frame_info = {\n        # **data,  # Décommentez si vous voulez inclure toutes les données\n        'frame_number': i,\n        'frame_path': f'/tmp/{workflow_id}/frames/frame_{str(i).zfill(4)}.png',\n        'timestamp': (i - 1) * 1.0\n    }\n    frames.append(frame_info)\n\nreturn frames"
             },
             "id": "12d29f29-a3ab-425b-a9cf-00fe02766fac",
@@ -576,7 +576,7 @@
         },
         {
             "parameters": {
-                "language": "python",
+                "language": "pythonNative",
                 "pythonCode": "# Collecter tous les visages détectés avec leurs métadonnées\nall_faces = []\nitems = _input.all()\n\nfor item in items:\n  faces = item.json.get('FaceDetails', [])\n  \n  for face_index, face in enumerate(faces):\n    all_faces.append({\n       'frame_number': (_('Prepare Frames').all())[face_index].json.frame_number,\n       'timestamp': item.json.get('timestamp'),\n       'face_id': f\"frame_{(_('Prepare Frames').all())[face_index].json.frame_number}_face_{face_index}\",\n       'bounding_box': face.get('BoundingBox'),\n       'confidence': face.get('Confidence'),\n       'emotions': face.get('Emotions'),\n       'age_range': face.get('AgeRange'),\n       'gender': face.get('Gender'),\n       'landmarks': face.get('Landmarks')\n    })\n\nreturn [{'json': {'detected_faces': all_faces, 'total_faces': len(all_faces)}}]"
             },
             "type": "n8n-nodes-base.code",
@@ -590,7 +590,7 @@
         },
         {
             "parameters": {
-                "language": "python",
+                "language": "pythonNative",
                 "pythonCode": "import math\n\n# Grouper les visages similaires par comparaison de landmarks\nfaces = _json.get('detected_faces', {})\ngroups = []\nprocessed = set()\n\nfor index, face in enumerate(faces):\n  if index in processed:\n     continue\n  \n  group = {\n     'group_id': f\"person_{len(groups) + 1}\",\n     'faces': [face],\n     'first_appearance': face.get('timestamp'),\n     'appearances': [face.get('timestamp')]\n  }\n  \n  # Chercher des visages similaires\n  for i in range(index + 1, len(faces)):\n    if i in processed:\n      continue\n     \n    other_face = faces[i]\n     \n    # Comparaison basique sur la position et taille du visage\n    bbox1 = face.get('bounding_box', {})\n    bbox2 = other_face.get('bounding_box', {})\n     \n    center_diff = math.sqrt(\n      (bbox1.get('Left', 0) - bbox2.get('Left', 0)) ** 2 + \n      (bbox1.get('Top', 0) - bbox2.get('Top', 0)) ** 2\n    )\n     \n    size_diff = abs(\n      (bbox1.get('Width', 0) * bbox1.get('Height', 0)) - \n      (bbox2.get('Width', 0) * bbox2.get('Height', 0))\n    )\n     \n    # Si les visages sont dans des positions/tailles similaires et même genre/âge approximatif\n    face_age_low = face.get('age_range', {}).get('Low', 0)\n    other_age_low = other_face.get('age_range', {}).get('Low', 0)\n     \n    if (center_diff < 0.3 and size_diff < 0.1 and \n      abs(face_age_low - other_age_low) < 10):\n      group['faces'].append(other_face)\n      group['appearances'].append(other_face.get('timestamp'))\n      processed.add(i)\n  \n  groups.append(group)\n  processed.add(index)\n\nreturn [{'json': {'person_groups': groups, 'total_persons': len(groups)}}]"
             },
             "type": "n8n-nodes-base.code",
@@ -945,7 +945,7 @@
     "staticData": null,
     "meta": null,
     "pinData": {},
-    "versionId": "3edde786-ea02-43b9-9fd5-0670c3ce61a4",
+    "versionId": "d24a9be4-49bf-4df7-b29e-68aef3bf4421",
     "activeVersionId": null,
     "triggerCount": 2,
     "shared": [
