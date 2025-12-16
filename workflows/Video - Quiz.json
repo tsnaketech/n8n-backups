@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2025-10-24T15:04:57.000Z",
+    "updatedAt": "2025-12-15T21:58:12.510Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -166,7 +166,7 @@
         },
         {
             "parameters": {
-                "language": "python",
+                "language": "pythonNative",
                 "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nglob = _('Global Fields').first().json\nnumber = int(glob.number_question)\nitems = _('Rename Keys').all()[:number]\nreturn items"
             },
             "type": "n8n-nodes-base.code",
@@ -180,7 +180,7 @@
         },
         {
             "parameters": {
-                "language": "python",
+                "language": "pythonNative",
                 "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport html\nimport os\n\nglob = _('Global Fields').first().json\naudio_background = html.escape(glob.get(\"audio_background\", \"\"))\naudio_break = html.escape(glob.get(\"audio_break\", \"\"))\naudio_correct_answer = html.escape(glob.get(\"audio_correct_answer\", \"\"))\ni = 0\n\nfor item in _input.all():\n  i += 1\n  voice_script = \"\"\n\n  voice_script += \"<speak version='1.0' xml:lang='fr-FR'>\"\n  if audio_background:\n    voice_script += f\"\"\"<mstts:backgroundaudio\n        src='{audio_background}'\n        volume='30' fadein='1500' fadeout='2000'/>\"\"\"\n  voice_script += \"<voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\"\n  \n  voice_script += \"<p>\"\n  voice_script += f\"{item.json.get(\"question\")}\"\n  if True: \n    voice_script += f\"<audio src='{audio_break}'/>\"\n  else:\n    voice_script += \"<break time='5s'/>\"\n  if True: \n    voice_script += f\"<audio src='{audio_correct_answer}'/>\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += \"<break strength='medium' />\"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\"\n  voice_script += \"</p>\"\n\n  voice_script += \"</voice></speak>\"\n\n  item.json.voice_script = voice_script\n  item.json.filename = glob.get(\"aws_prefix_audio_file\", \"\") + str(i) + \".mp3\"\n  item.json.aws_url = \"https://\" + glob.get(\"aws_bucket_name\", \"\") + \".s3.\" + glob.get(\"aws_region\", \"\") + \".amazonaws.com/\" + item.json.filename\n\nreturn _input.all()"
             },
             "type": "n8n-nodes-base.code",
@@ -335,7 +335,7 @@
         },
         {
             "parameters": {
-                "language": "python",
+                "language": "pythonNative",
                 "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport json\nimport re\n\ntext = _input.first().json.text\n\njson_content = re.search(\"```json\\n([\\s\\S]*?)\\n```\", text)[1]\n\nquestions = json.loads(json_content)\n\nall_questions_items = _('Rename Keys').all()\nall_questions = [item.get(\"question\", \"\").strip().lower() for item in all_questions_items]\n\nnew_questions = [q1 for q1 in questions if q1.get(\"question\", \"\").strip().lower() not in all_questions]\n\nreturn new_questions"
             },
             "type": "n8n-nodes-base.code",
@@ -1194,7 +1194,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "9ccee1dc-60b0-41ff-89eb-0f97765c4f66",
+    "versionId": "65478fa6-cc30-426a-9e0c-5168be491345",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
