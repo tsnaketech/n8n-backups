@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2025-09-30T22:48:45.000Z",
+    "updatedAt": "2026-01-09T08:53:34.499Z",
     "createdAt": "2025-06-24T23:53:55.351Z",
     "id": "cBpT07OPrRHZfQ7z",
     "name": "Test1",
@@ -8,206 +8,36 @@
     "nodes": [
         {
             "parameters": {},
-            "id": "d49a2ec7-5113-4c9c-9d78-eeae71a60fec",
-            "name": "Manual Trigger",
             "type": "n8n-nodes-base.manualTrigger",
             "typeVersion": 1,
             "position": [
-                -768,
-                80
-            ]
-        },
-        {
-            "parameters": {},
-            "id": "d855954c-8f02-446d-aae7-fc63ef8e8466",
-            "name": "OCR Extract Text",
-            "type": "n8n-nodes-base.ocr",
-            "typeVersion": 1,
-            "position": [
-                -576,
-                80
-            ]
-        },
-        {
-            "parameters": {
-                "model": "gpt-4-vision-preview",
-                "options": {
-                    "maxTokens": 4000,
-                    "temperature": 0.2
-                },
-                "requestOptions": {}
-            },
-            "id": "9cacfa77-a26e-4e52-9547-f14a2e8786d9",
-            "name": "OpenAI Vision Analysis",
-            "type": "n8n-nodes-base.openAi",
-            "typeVersion": 1,
-            "position": [
-                -368,
-                80
+                0,
+                0
             ],
-            "credentials": {
-                "openAiApi": {
-                    "id": "H0VcOhL36gFHQbme",
-                    "name": "OpenAi mickael.lcq account"
-                }
-            }
+            "id": "cd4f37fb-73d6-440a-91ce-fc7405543929",
+            "name": "When clicking ‘Execute workflow’"
         },
         {
             "parameters": {
-                "jsCode": "// Extraire le JSON de la réponse OpenAI\nconst aiResponse = $input.first().json.message.content;\n\n// Nettoyer la réponse pour extraire uniquement le JSON\nlet jsonString = aiResponse;\n\n// Rechercher le JSON dans la réponse\nconst jsonMatch = aiResponse.match(/\\{[\\s\\S]*\\}/m);\nif (jsonMatch) {\n  jsonString = jsonMatch[0];\n}\n\ntry {\n  // Parser le JSON\n  const workflowJson = JSON.parse(jsonString);\n  \n  // Ajouter les métadonnées manquantes si nécessaire\n  if (!workflowJson.meta) {\n    workflowJson.meta = {\n      instanceId: generateId(),\n      templateId: null,\n      templateCredsSetupCompleted: false\n    };\n  }\n  \n  // S'assurer que les connexions sont bien formées\n  if (!workflowJson.connections) {\n    workflowJson.connections = {};\n  }\n  \n  // Valider et corriger les positions des nodes\n  if (workflowJson.nodes) {\n    workflowJson.nodes.forEach((node, index) => {\n      if (!node.id) {\n        node.id = `node_${generateId()}`;\n      }\n      if (!node.position) {\n        node.position = [250 + (index * 200), 300];\n      }\n    });\n  }\n  \n  return {\n    json: {\n      workflow: workflowJson,\n      valid: true,\n      message: \"Workflow JSON extrait avec succès\"\n    }\n  };\n  \n} catch (error) {\n  return {\n    json: {\n      error: error.message,\n      valid: false,\n      rawResponse: aiResponse,\n      message: \"Erreur lors du parsing du JSON\"\n    }\n  };\n}\n\n// Fonction pour générer un ID unique\nfunction generateId() {\n  return Math.random().toString(36).substring(2, 15);\n}"
+                "language": "pythonNative",
+                "pythonCode": "# Loop over input items and add a new field called 'my_new_field' to the JSON of each one\nfor item in _items:\n  item[\"json\"][\"my_new_field\"] = 1\nreturn _items"
             },
-            "id": "d1945497-5f74-4ea1-993e-6c7d5c6195e7",
-            "name": "Parse & Validate JSON",
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                -176,
-                80
-            ]
-        },
-        {
-            "parameters": {
-                "fileName": "={{$now.format('yyyy-MM-dd_HH-mm-ss')}}_workflow.json",
-                "options": {}
-            },
-            "id": "ac74a3d3-8fb3-41b9-869b-c48e0f953040",
-            "name": "Save JSON File",
-            "type": "n8n-nodes-base.writeBinaryFile",
-            "typeVersion": 1,
-            "position": [
-                288,
-                144
-            ]
-        },
-        {
-            "parameters": {
-                "options": {}
-            },
-            "id": "a58c072b-7f31-4e5a-9eb9-b3f6fac15547",
-            "name": "Format Output",
-            "type": "n8n-nodes-base.set",
-            "typeVersion": 3,
-            "position": [
-                288,
-                -32
-            ]
-        },
-        {
-            "parameters": {},
-            "id": "00ef37e0-fcb4-4b6e-af85-46a58d42b3d0",
-            "name": "Anthropic Fallback Analysis",
-            "type": "n8n-nodes-base.anthropic",
-            "typeVersion": 1,
-            "position": [
-                -368,
-                272
-            ]
-        },
-        {
-            "parameters": {
-                "rules": {
-                    "values": [
-                        {
-                            "conditions": {
-                                "conditions": [
-                                    {
-                                        "leftValue": "={{$json.valid}}",
-                                        "rightValue": true,
-                                        "operator": "equal"
-                                    }
-                                ]
-                            },
-                            "renameOutput": "Valid JSON"
-                        },
-                        {
-                            "conditions": {
-                                "conditions": [
-                                    {
-                                        "leftValue": "={{$json.valid}}",
-                                        "rightValue": false,
-                                        "operator": "equal"
-                                    }
-                                ]
-                            },
-                            "renameOutput": "Invalid - Try Fallback"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "id": "62189476-ff96-4bdc-be5e-9fec427955ad",
-            "name": "Check Validity",
-            "type": "n8n-nodes-base.switch",
-            "typeVersion": 3,
-            "position": [
-                32,
-                96
-            ]
-        },
-        {
-            "parameters": {
-                "operation": "delete"
-            },
-            "type": "n8n-nodes-base.redis",
-            "typeVersion": 1,
-            "position": [
-                16,
-                336
+                208,
+                0
             ],
-            "id": "91e902e8-7578-4376-9f3b-bd8827ba9117",
-            "name": "Redis",
-            "credentials": {
-                "redis": {
-                    "id": "ua59kyvCowPL9ZRc",
-                    "name": "Redis pika account"
-                }
-            }
+            "id": "067a913b-dba8-45b6-9f06-cdb7ce8351d3",
+            "name": "Code in Python (Native)"
         }
     ],
     "connections": {
-        "Manual Trigger": {
+        "When clicking ‘Execute workflow’": {
             "main": [
                 [
                     {
-                        "node": "OpenAI Vision Analysis",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "OpenAI Vision Analysis": {
-            "main": [
-                [
-                    {
-                        "node": "Parse & Validate JSON",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Parse & Validate JSON": {
-            "main": [
-                [
-                    {
-                        "node": "Check Validity",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Check Validity": {
-            "main": [
-                [
-                    {
-                        "node": "Save JSON File",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Format Output",
+                        "node": "Code in Python (Native)",
                         "type": "main",
                         "index": 0
                     }
@@ -223,7 +53,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "e1279fb7-1c06-4447-8867-02b0275ad4b2",
+    "versionId": "44d7d022-defa-4ccc-b0bb-f7b0d21c4683",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
