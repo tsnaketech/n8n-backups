@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-01-08T22:22:48.872Z",
+    "updatedAt": "2026-01-09T09:18:06.898Z",
     "createdAt": "2025-06-24T21:44:08.407Z",
     "id": "Ax4f71cfD5CapcAb",
     "name": "Instagram - Get data",
@@ -274,29 +274,6 @@
         },
         {
             "parameters": {
-                "updates": [
-                    "message"
-                ],
-                "additionalFields": {}
-            },
-            "type": "n8n-nodes-base.telegramTrigger",
-            "typeVersion": 1.2,
-            "position": [
-                0,
-                112
-            ],
-            "id": "2b078371-dcb1-4e11-b809-88c8d58db97e",
-            "name": "Telegram Trigger",
-            "webhookId": "cbd9dfb8-297d-4be8-ad04-8b0cd7b0c5c0",
-            "credentials": {
-                "telegramApi": {
-                    "id": "AlCMwgvN0vx0V3z2",
-                    "name": "InstaSets"
-                }
-            }
-        },
-        {
-            "parameters": {
                 "options": {}
             },
             "type": "@n8n/n8n-nodes-langchain.chatTrigger",
@@ -401,7 +378,7 @@
         },
         {
             "parameters": {
-                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nreturn {\"reason\": \"Page introuvable\"}"
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nconst message = $input.all()[0][\"json\"][\"error\"][\"status\"] === 401 ? \"Patientez quelques minutes\" : \"Page introuvable\";\nreturn {\"reason\": message}"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
@@ -412,6 +389,51 @@
             "id": "0719cd43-8631-4887-98bb-01a86bb3a113",
             "name": "Code1",
             "alwaysOutputData": false
+        },
+        {
+            "parameters": {
+                "chatId": "1037310358",
+                "text": "={{ $json.reason }}",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                976,
+                80
+            ],
+            "id": "efcd6500-a77e-45ad-9207-02d8e8f205eb",
+            "name": "Send a text message",
+            "webhookId": "77519da9-4934-40a3-87f9-41a23b1feb95",
+            "credentials": {
+                "telegramApi": {
+                    "id": "AlCMwgvN0vx0V3z2",
+                    "name": "InstaSets"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "updates": [
+                    "message"
+                ],
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.telegramTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                112
+            ],
+            "id": "2b078371-dcb1-4e11-b809-88c8d58db97e",
+            "name": "Telegram Trigger",
+            "webhookId": "cbd9dfb8-297d-4be8-ad04-8b0cd7b0c5c0",
+            "credentials": {
+                "telegramApi": {
+                    "id": "AlCMwgvN0vx0V3z2",
+                    "name": "InstaSets"
+                }
+            }
         }
     ],
     "connections": {
@@ -460,17 +482,6 @@
                 ]
             ]
         },
-        "Telegram Trigger": {
-            "main": [
-                [
-                    {
-                        "node": "Code",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
         "When chat message received": {
             "main": [
                 [
@@ -498,6 +509,28 @@
                 ],
                 []
             ]
+        },
+        "Code1": {
+            "main": [
+                [
+                    {
+                        "node": "Send a text message",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Telegram Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Code",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
         }
     },
     "settings": {
@@ -508,8 +541,8 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "f21d900b-5d28-4698-9f1c-3f03b777b016",
-    "activeVersionId": "f21d900b-5d28-4698-9f1c-3f03b777b016",
+    "versionId": "ee2444c6-4108-4ab3-98c2-3a0473135002",
+    "activeVersionId": "ee2444c6-4108-4ab3-98c2-3a0473135002",
     "triggerCount": 2,
     "shared": [
         {
@@ -521,9 +554,9 @@
         }
     ],
     "activeVersion": {
-        "updatedAt": "2026-01-09T01:42:40.000Z",
-        "createdAt": "2026-01-08T22:22:48.872Z",
-        "versionId": "f21d900b-5d28-4698-9f1c-3f03b777b016",
+        "updatedAt": "2026-01-09T09:19:54.000Z",
+        "createdAt": "2026-01-09T09:18:06.899Z",
+        "versionId": "ee2444c6-4108-4ab3-98c2-3a0473135002",
         "workflowId": "Ax4f71cfD5CapcAb",
         "nodes": [
             {
@@ -794,29 +827,6 @@
             },
             {
                 "parameters": {
-                    "updates": [
-                        "message"
-                    ],
-                    "additionalFields": {}
-                },
-                "type": "n8n-nodes-base.telegramTrigger",
-                "typeVersion": 1.2,
-                "position": [
-                    0,
-                    112
-                ],
-                "id": "2b078371-dcb1-4e11-b809-88c8d58db97e",
-                "name": "Telegram Trigger",
-                "webhookId": "cbd9dfb8-297d-4be8-ad04-8b0cd7b0c5c0",
-                "credentials": {
-                    "telegramApi": {
-                        "id": "AlCMwgvN0vx0V3z2",
-                        "name": "InstaSets"
-                    }
-                }
-            },
-            {
-                "parameters": {
                     "options": {}
                 },
                 "type": "@n8n/n8n-nodes-langchain.chatTrigger",
@@ -921,7 +931,7 @@
             },
             {
                 "parameters": {
-                    "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\n\nreturn {\"reason\": \"Page introuvable\"}"
+                    "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nconst message = $input.all()[0][\"json\"][\"error\"][\"status\"] === 401 ? \"Patientez quelques minutes\" : \"Page introuvable\";\nreturn {\"reason\": message}"
                 },
                 "type": "n8n-nodes-base.code",
                 "typeVersion": 2,
@@ -932,6 +942,51 @@
                 "id": "0719cd43-8631-4887-98bb-01a86bb3a113",
                 "name": "Code1",
                 "alwaysOutputData": false
+            },
+            {
+                "parameters": {
+                    "chatId": "1037310358",
+                    "text": "={{ $json.reason }}",
+                    "additionalFields": {}
+                },
+                "type": "n8n-nodes-base.telegram",
+                "typeVersion": 1.2,
+                "position": [
+                    976,
+                    80
+                ],
+                "id": "efcd6500-a77e-45ad-9207-02d8e8f205eb",
+                "name": "Send a text message",
+                "webhookId": "77519da9-4934-40a3-87f9-41a23b1feb95",
+                "credentials": {
+                    "telegramApi": {
+                        "id": "AlCMwgvN0vx0V3z2",
+                        "name": "InstaSets"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "updates": [
+                        "message"
+                    ],
+                    "additionalFields": {}
+                },
+                "type": "n8n-nodes-base.telegramTrigger",
+                "typeVersion": 1.2,
+                "position": [
+                    0,
+                    112
+                ],
+                "id": "2b078371-dcb1-4e11-b809-88c8d58db97e",
+                "name": "Telegram Trigger",
+                "webhookId": "cbd9dfb8-297d-4be8-ad04-8b0cd7b0c5c0",
+                "credentials": {
+                    "telegramApi": {
+                        "id": "AlCMwgvN0vx0V3z2",
+                        "name": "InstaSets"
+                    }
+                }
             }
         ],
         "connections": {
@@ -980,17 +1035,6 @@
                     ]
                 ]
             },
-            "Telegram Trigger": {
-                "main": [
-                    [
-                        {
-                            "node": "Code",
-                            "type": "main",
-                            "index": 0
-                        }
-                    ]
-                ]
-            },
             "When chat message received": {
                 "main": [
                     [
@@ -1018,10 +1062,32 @@
                     ],
                     []
                 ]
+            },
+            "Code1": {
+                "main": [
+                    [
+                        {
+                            "node": "Send a text message",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Telegram Trigger": {
+                "main": [
+                    [
+                        {
+                            "node": "Code",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
             }
         },
         "authors": "Snake Tech",
-        "name": "Version f21d900b",
+        "name": "Version ee2444c6",
         "description": "",
         "autosaved": false
     },
