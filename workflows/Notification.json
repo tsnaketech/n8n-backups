@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2025-12-15T21:57:39.865Z",
+    "updatedAt": "2026-01-10T21:16:03.953Z",
     "createdAt": "2025-05-27T21:55:06.402Z",
     "id": "kx94Z2Th3dyVsVrw",
     "name": "Notification",
@@ -589,6 +589,20 @@
                     "name": "NocoDB Token account"
                 }
             }
+        },
+        {
+            "parameters": {
+                "language": "pythonNative",
+                "pythonCode": "# Loop over input items and add a new field called 'my_new_field' to the JSON of each one\nfor item in _items:\n  item[\"json\"][\"text\"] = item[\"json\"].get(\"body\", {}).get(\"diff\", None)\nreturn _items"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                960,
+                -176
+            ],
+            "id": "2c11ecbb-8416-4718-a48f-ee6658cc8d43",
+            "name": "Code in Python (Native)"
         }
     ],
     "connections": {
@@ -819,6 +833,16 @@
                     }
                 ]
             ]
+        },
+        "Telegram": {
+            "main": [
+                []
+            ]
+        },
+        "Code in Python (Native)": {
+            "main": [
+                []
+            ]
         }
     },
     "settings": {
@@ -833,8 +857,8 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "d53f156d-f225-4798-8562-2a01653d1bed",
-    "activeVersionId": "6471f378-285c-4047-8427-5ffb9de43fb1",
+    "versionId": "2c41e5ec-60fa-48db-a77a-e90541a3093f",
+    "activeVersionId": "2c41e5ec-60fa-48db-a77a-e90541a3093f",
     "triggerCount": 2,
     "shared": [
         {
@@ -846,9 +870,9 @@
         }
     ],
     "activeVersion": {
-        "updatedAt": "2025-12-09T13:23:58.759Z",
-        "createdAt": "2025-12-09T13:23:58.759Z",
-        "versionId": "6471f378-285c-4047-8427-5ffb9de43fb1",
+        "updatedAt": "2026-01-10T21:16:05.000Z",
+        "createdAt": "2026-01-10T21:16:03.954Z",
+        "versionId": "2c41e5ec-60fa-48db-a77a-e90541a3093f",
         "workflowId": "kx94Z2Th3dyVsVrw",
         "nodes": [
             {
@@ -935,7 +959,7 @@
             },
             {
                 "parameters": {
-                    "language": "python",
+                    "language": "pythonNative",
                     "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport json\nconvert = json.loads(_input.first().json.body.snapshot)\nreturn convert"
                 },
                 "type": "n8n-nodes-base.code",
@@ -949,7 +973,7 @@
             },
             {
                 "parameters": {
-                    "language": "python",
+                    "language": "pythonNative",
                     "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfrom datetime import datetime, timedelta\nseven_days_ago = datetime.now() - timedelta(days=7)\ngames = []\nfor item in _input.all():\n  game = {}\n  time = datetime.strptime(item.json.effectiveDate, \"%Y-%m-%dT%H:%M:%S.%fZ\")\n  if time < datetime.now() and seven_days_ago < time:\n    game[\"title\"] = item.json.title\n    game[\"effectiveDate\"] = item.json.effectiveDate\n    \n    startDate = item.json.promotions.promotionalOffers[0].promotionalOffers[0].startDate\n    endDate = item.json.promotions.promotionalOffers[0].promotionalOffers[0].endDate\n    dt_startDate = datetime.strptime(startDate, \"%Y-%m-%dT%H:%M:%S.%fZ\")\n    dt_endDate = datetime.strptime(endDate, \"%Y-%m-%dT%H:%M:%S.%fZ\")\n    game[\"startDate\"] = dt_startDate.strftime(\"%B %d at %H:%M:%S\")\n    game[\"endDate\"] = dt_endDate.strftime(\"%B %d at %H:%M:%S\")\n    \n    game[\"image\"] = item.json.keyImages[1].url\n    games.append(game)\nreturn games"
                 },
                 "type": "n8n-nodes-base.code",
@@ -1377,7 +1401,7 @@
             },
             {
                 "parameters": {
-                    "language": "python",
+                    "language": "pythonNative",
                     "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport re\nimport json\nfrom typing import List, Dict, Optional\n\ndef parse_steam_games(text: str) -> List[Dict]:\n    \"\"\"\n    Parse Steam games data from raw text format\n    \"\"\"\n    # Regex pour séparer les éléments (lookahead positif)\n    separator_pattern = r'(?=\\[https://shared\\.(?:cloudflare|akamai)\\.steamstatic\\.com/store_item_assets/steam/apps/)'\n    \n    # Séparer les éléments\n    elements = re.split(separator_pattern, text)\n    elements = [elem.strip() for elem in elements if elem.strip()]\n    \n    games = []\n    \n    for element in elements:\n        game_data = parse_single_game(element)\n        if game_data:\n            games.append(game_data)\n    \n    return games\n\ndef parse_single_game(element: str) -> Optional[Dict]:\n    \"\"\"\n    Parse a single game element\n    \"\"\"\n    lines = [line.strip() for line in element.split('\\n') if line.strip()]\n    \n    if len(lines) < 4:\n        return None\n    \n    try:\n        game = {}\n        \n        # Extract image URL et app ID\n        image_url_match = re.search(r'\\[https://shared\\.(?:cloudflare|akamai)\\.steamstatic\\.com/store_item_assets/steam/apps/(\\d+)/([^\\]]+)\\]', lines[0])\n        if image_url_match:\n            game['app_id'] = int(image_url_match.group(1))\n            game['image_url'] = lines[0].strip('[]')\n        \n        # Title (ligne après l'URL de l'image)\n        game['title'] = lines[1] if len(lines) > 1 else \"\"\n        \n        # Date (ligne après le titre)\n        game['date'] = lines[2] if len(lines) > 2 else \"\"\n        \n        # Parse discount, prices, and store URL\n        prices = []\n        discount = None\n        store_url = None\n        \n        for line in lines[3:]:\n            # Discount percentage\n            if re.match(r'-?\\d+%', line):\n                discount = line\n            # Price (format XX,XX€)\n            elif re.match(r'\\d+,\\d+€', line):\n                prices.append(line)\n            # Store URL\n            elif 'store.steampowered.com' in line:\n                store_url = line.strip('[]')\n        \n        game['discount'] = discount\n        game['original_price'] = prices[0] if len(prices) > 1 else None\n        game['current_price'] = prices[-1] if prices else None\n        game['store_url'] = store_url\n        \n        # Calculer si c'est gratuit\n        game['is_free'] = game['current_price'] == '0,00€'\n        \n        return game\n        \n    except Exception as e:\n        print(f\"Erreur lors du parsing: {e}\")\n        return None\n\n\ngames = parse_steam_games(_('Get Search Result').first().json.search_result)\n\nreturn games"
                 },
                 "type": "n8n-nodes-base.code",
@@ -1434,6 +1458,20 @@
                         "name": "NocoDB Token account"
                     }
                 }
+            },
+            {
+                "parameters": {
+                    "language": "pythonNative",
+                    "pythonCode": "# Loop over input items and add a new field called 'my_new_field' to the JSON of each one\nfor item in _items:\n  item[\"json\"][\"text\"] = item[\"json\"].get(\"body\", {}).get(\"diff\", None)\nreturn _items"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    960,
+                    -176
+                ],
+                "id": "2c11ecbb-8416-4718-a48f-ee6658cc8d43",
+                "name": "Code in Python (Native)"
             }
         ],
         "connections": {
@@ -1664,11 +1702,21 @@
                         }
                     ]
                 ]
+            },
+            "Telegram": {
+                "main": [
+                    []
+                ]
+            },
+            "Code in Python (Native)": {
+                "main": [
+                    []
+                ]
             }
         },
-        "authors": "system migration",
-        "name": null,
-        "description": null,
+        "authors": "Snake Tech",
+        "name": "Version 2c41e5ec",
+        "description": "",
         "autosaved": false
     },
     "tags": [
