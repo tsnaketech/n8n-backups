@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2025-12-15T21:56:50.640Z",
+    "updatedAt": "2026-01-10T21:02:13.245Z",
     "createdAt": "2024-09-25T21:20:52.431Z",
     "id": "c3QrzISqRohMxXPb",
     "name": "Riot - Patch Notes",
@@ -10,7 +10,7 @@
             "parameters": {
                 "mode": "runOnceForEachItem",
                 "language": "pythonNative",
-                "pythonCode": "# Add a new field called 'myNewField' to the JSON of the item\nimport re\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', _input.item.json.body.message)\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"\")\n\nreturn {\"title\": _input.item.json.body.title, \"version\": version, \"version_print\": version_print}"
+                "pythonCode": "# Add a new field called 'myNewField' to the JSON of the item\nimport re\n\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item.item.json.body.message)\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"\")\n\nreturn {\"title\": item.item.json.body.title, \"version\": version, \"version_print\": version_print}"
             },
             "id": "56d59074-e94d-44ba-bfbe-28f5baaf33f5",
             "name": "Code",
@@ -25,7 +25,7 @@
             "parameters": {
                 "mode": "runOnceForEachItem",
                 "language": "pythonNative",
-                "pythonCode": "# Add a new field called 'myNewField' to the JSON of the item\nimport re\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', _input.item.json.body.message)\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"-\")\n\nreturn {\"title\": _input.item.json.body.title, \"version\": version, \"version_print\": version_print}"
+                "pythonCode": "# Add a new field called 'myNewField' to the JSON of the item\nimport re\n\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item.item.json.body.message)\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"-\")\n\nreturn {\"title\": item.item.json.body.title, \"version\": version, \"version_print\": version_print}"
             },
             "id": "b2ef8961-f0e5-4905-8dbe-de9ab10bf90d",
             "name": "Code1",
@@ -318,8 +318,8 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "5aba5132-5b61-49dd-b45c-fa04881712c9",
-    "activeVersionId": "d12a85e1-9c4c-45aa-a5c3-23d12cfc25bf",
+    "versionId": "10eaaa03-f23f-465f-93bf-ac47a835188a",
+    "activeVersionId": "10eaaa03-f23f-465f-93bf-ac47a835188a",
     "triggerCount": 1,
     "shared": [
         {
@@ -331,39 +331,39 @@
         }
     ],
     "activeVersion": {
-        "updatedAt": "2025-12-09T13:23:58.759Z",
-        "createdAt": "2025-12-09T13:23:58.759Z",
-        "versionId": "d12a85e1-9c4c-45aa-a5c3-23d12cfc25bf",
+        "updatedAt": "2026-01-10T21:02:21.000Z",
+        "createdAt": "2026-01-10T21:02:13.245Z",
+        "versionId": "10eaaa03-f23f-465f-93bf-ac47a835188a",
         "workflowId": "c3QrzISqRohMxXPb",
         "nodes": [
             {
                 "parameters": {
                     "mode": "runOnceForEachItem",
-                    "language": "python",
-                    "pythonCode": "# Add a new field called 'myNewField' to the JSON of the item\nimport re\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', _input.item.json.body.message)\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"\")\n\nreturn {\"title\": _input.item.json.body.title, \"version\": version, \"version_print\": version_print}"
+                    "language": "pythonNative",
+                    "pythonCode": "# Add a new field called 'myNewField' to the JSON of the item\nimport re\n\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item.item.json.body.message)\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"\")\n\nreturn {\"title\": item.item.json.body.title, \"version\": version, \"version_print\": version_print}"
                 },
                 "id": "56d59074-e94d-44ba-bfbe-28f5baaf33f5",
                 "name": "Code",
                 "type": "n8n-nodes-base.code",
                 "typeVersion": 2,
                 "position": [
-                    920,
+                    928,
                     160
                 ]
             },
             {
                 "parameters": {
                     "mode": "runOnceForEachItem",
-                    "language": "python",
-                    "pythonCode": "# Add a new field called 'myNewField' to the JSON of the item\nimport re\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', _input.item.json.body.message)\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"-\")\n\nreturn {\"title\": _input.item.json.body.title, \"version\": version, \"version_print\": version_print}"
+                    "language": "pythonNative",
+                    "pythonCode": "# Add a new field called 'myNewField' to the JSON of the item\nimport re\n\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item.item.json.body.message)\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"-\")\n\nreturn {\"title\": item.item.json.body.title, \"version\": version, \"version_print\": version_print}"
                 },
                 "id": "b2ef8961-f0e5-4905-8dbe-de9ab10bf90d",
                 "name": "Code1",
                 "type": "n8n-nodes-base.code",
                 "typeVersion": 2,
                 "position": [
-                    920,
-                    500
+                    928,
+                    512
                 ]
             },
             {
@@ -445,7 +445,7 @@
                 "typeVersion": 3.2,
                 "position": [
                     720,
-                    340
+                    352
                 ]
             },
             {
@@ -462,7 +462,7 @@
                 "typeVersion": 2,
                 "position": [
                     480,
-                    340
+                    352
                 ],
                 "webhookId": "420c36a1-0fda-4026-854f-0fcb56c43b94"
             },
@@ -491,8 +491,8 @@
                 "type": "n8n-nodes-base.discord",
                 "typeVersion": 2,
                 "position": [
-                    1180,
-                    600
+                    1184,
+                    608
                 ],
                 "webhookId": "64597e50-5a2a-41ea-80d5-72e19a94a44c",
                 "credentials": {
@@ -527,7 +527,7 @@
                 "type": "n8n-nodes-base.discord",
                 "typeVersion": 2,
                 "position": [
-                    1180,
+                    1184,
                     160
                 ],
                 "webhookId": "a5c3d857-dd13-45da-bcce-75a6b372c5c2",
@@ -563,8 +563,8 @@
                 "type": "n8n-nodes-base.discord",
                 "typeVersion": 2,
                 "position": [
-                    1180,
-                    420
+                    1184,
+                    432
                 ],
                 "webhookId": "a5c3d857-dd13-45da-bcce-75a6b372c5c2",
                 "credentials": {
@@ -640,9 +640,9 @@
                 ]
             }
         },
-        "authors": "system migration",
-        "name": null,
-        "description": null,
+        "authors": "Snake Tech",
+        "name": "Version 10eaaa03",
+        "description": "",
         "autosaved": false
     },
     "tags": [
