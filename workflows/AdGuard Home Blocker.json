@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-01-13T00:50:54.580Z",
+    "updatedAt": "2026-01-14T00:14:59.689Z",
     "createdAt": "2026-01-13T00:12:36.309Z",
     "id": "9VKqoiNL2PqJ8hxa2AOJG",
     "name": "AdGuard Home Blocker",
@@ -80,7 +80,8 @@
                 "triggerTimes": {
                     "item": [
                         {
-                            "hour": 10
+                            "mode": "custom",
+                            "cronExpression": "* * 10 * * *"
                         }
                     ]
                 }
@@ -99,7 +100,8 @@
                 "triggerTimes": {
                     "item": [
                         {
-                            "hour": 1
+                            "mode": "custom",
+                            "cronExpression": "* * 1 * * *"
                         }
                     ]
                 }
@@ -167,8 +169,8 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "1d365646-e7e0-4b32-a631-86ed4ca61aa4",
-    "activeVersionId": "1d365646-e7e0-4b32-a631-86ed4ca61aa4",
+    "versionId": "39468370-7fb7-4b41-b8f6-6e9b8f5c2ece",
+    "activeVersionId": "39468370-7fb7-4b41-b8f6-6e9b8f5c2ece",
     "triggerCount": 2,
     "shared": [
         {
@@ -180,9 +182,9 @@
         }
     ],
     "activeVersion": {
-        "updatedAt": "2026-01-13T00:50:57.000Z",
-        "createdAt": "2026-01-13T00:50:45.013Z",
-        "versionId": "1d365646-e7e0-4b32-a631-86ed4ca61aa4",
+        "updatedAt": "2026-01-14T00:15:01.000Z",
+        "createdAt": "2026-01-14T00:14:59.690Z",
+        "versionId": "39468370-7fb7-4b41-b8f6-6e9b8f5c2ece",
         "workflowId": "9VKqoiNL2PqJ8hxa2AOJG",
         "nodes": [
             {
@@ -259,7 +261,8 @@
                     "triggerTimes": {
                         "item": [
                             {
-                                "hour": 10
+                                "mode": "custom",
+                                "cronExpression": "* * 10 * * *"
                             }
                         ]
                     }
@@ -278,7 +281,8 @@
                     "triggerTimes": {
                         "item": [
                             {
-                                "hour": 1
+                                "mode": "custom",
+                                "cronExpression": "* * 1 * * *"
                             }
                         ]
                     }
@@ -338,7 +342,7 @@
             }
         },
         "authors": "Snake Tech",
-        "name": "Version 1d365646",
+        "name": "Version 39468370",
         "description": "",
         "autosaved": false
     },
