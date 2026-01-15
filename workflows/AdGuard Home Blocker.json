@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-01-14T00:14:59.689Z",
+    "updatedAt": "2026-01-15T00:21:37.957Z",
     "createdAt": "2026-01-13T00:12:36.309Z",
     "id": "9VKqoiNL2PqJ8hxa2AOJG",
     "name": "AdGuard Home Blocker",
@@ -81,7 +81,7 @@
                     "item": [
                         {
                             "mode": "custom",
-                            "cronExpression": "* * 10 * * *"
+                            "cronExpression": "0 25 10-12/1 * * *"
                         }
                     ]
                 }
@@ -101,7 +101,7 @@
                     "item": [
                         {
                             "mode": "custom",
-                            "cronExpression": "* * 1 * * *"
+                            "cronExpression": "0 25 1-5/1 * * *"
                         }
                     ]
                 }
@@ -117,18 +117,79 @@
         },
         {
             "parameters": {
-                "content": "## Doc\nhttps://github.com/AdguardTeam/AdGuardHome/blob/master/openapi/openapi.yaml",
-                "height": 112,
-                "width": 640
+                "content": "## Doc\nhttps://github.com/AdguardTeam/AdGuardHome/blob/master/openapi/openapi.yaml\n\n## Service\nhttp://adguard.local/",
+                "height": 192,
+                "width": 656
             },
             "type": "n8n-nodes-base.stickyNote",
             "position": [
-                528,
-                -160
+                544,
+                -192
             ],
             "typeVersion": 1,
             "id": "3adca2db-e080-496a-87e5-402d4053b29d",
             "name": "Sticky Note"
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 3
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $now.hour }}",
+                                        "rightValue": 10,
+                                        "operator": {
+                                            "type": "number",
+                                            "operation": "gte"
+                                        },
+                                        "id": "256c40bb-5e3e-48aa-a396-99bb0bc980d1"
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 3
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "533782c6-c153-4d83-bf33-7983835beae6",
+                                        "leftValue": "={{ $now.hour }}",
+                                        "rightValue": 1,
+                                        "operator": {
+                                            "type": "number",
+                                            "operation": "gte"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 3.4,
+            "position": [
+                80,
+                96
+            ],
+            "id": "b0186699-8122-423f-98e1-e83906c56d1c",
+            "name": "Switch"
         }
     ],
     "connections": {
@@ -158,19 +219,39 @@
                     }
                 ]
             ]
+        },
+        "Switch": {
+            "main": [
+                [
+                    {
+                        "node": "Débloquer Services",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Bloquer Services",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
         }
     },
     "settings": {
         "executionOrder": "v1",
-        "availableInMCP": false
+        "availableInMCP": false,
+        "timeSavedMode": "fixed",
+        "callerPolicy": "workflowsFromSameOwner"
     },
     "staticData": null,
     "meta": {
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "39468370-7fb7-4b41-b8f6-6e9b8f5c2ece",
-    "activeVersionId": "39468370-7fb7-4b41-b8f6-6e9b8f5c2ece",
+    "versionId": "61c130e9-b264-4108-91d1-6a11afd246cc",
+    "activeVersionId": "61c130e9-b264-4108-91d1-6a11afd246cc",
     "triggerCount": 2,
     "shared": [
         {
@@ -182,9 +263,9 @@
         }
     ],
     "activeVersion": {
-        "updatedAt": "2026-01-14T00:15:01.000Z",
-        "createdAt": "2026-01-14T00:14:59.690Z",
-        "versionId": "39468370-7fb7-4b41-b8f6-6e9b8f5c2ece",
+        "updatedAt": "2026-01-15T00:22:16.000Z",
+        "createdAt": "2026-01-15T00:21:37.958Z",
+        "versionId": "61c130e9-b264-4108-91d1-6a11afd246cc",
         "workflowId": "9VKqoiNL2PqJ8hxa2AOJG",
         "nodes": [
             {
@@ -262,7 +343,7 @@
                         "item": [
                             {
                                 "mode": "custom",
-                                "cronExpression": "* * 10 * * *"
+                                "cronExpression": "0 25 10-12/1 * * *"
                             }
                         ]
                     }
@@ -282,7 +363,7 @@
                         "item": [
                             {
                                 "mode": "custom",
-                                "cronExpression": "* * 1 * * *"
+                                "cronExpression": "0 25 1-5/1 * * *"
                             }
                         ]
                     }
@@ -298,18 +379,79 @@
             },
             {
                 "parameters": {
-                    "content": "## Doc\nhttps://github.com/AdguardTeam/AdGuardHome/blob/master/openapi/openapi.yaml",
-                    "height": 112,
-                    "width": 640
+                    "content": "## Doc\nhttps://github.com/AdguardTeam/AdGuardHome/blob/master/openapi/openapi.yaml\n\n## Service\nhttp://adguard.local/",
+                    "height": 192,
+                    "width": 656
                 },
                 "type": "n8n-nodes-base.stickyNote",
                 "position": [
-                    528,
-                    -160
+                    544,
+                    -192
                 ],
                 "typeVersion": 1,
                 "id": "3adca2db-e080-496a-87e5-402d4053b29d",
                 "name": "Sticky Note"
+            },
+            {
+                "parameters": {
+                    "rules": {
+                        "values": [
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 3
+                                    },
+                                    "conditions": [
+                                        {
+                                            "leftValue": "={{ $now.hour }}",
+                                            "rightValue": 10,
+                                            "operator": {
+                                                "type": "number",
+                                                "operation": "gte"
+                                            },
+                                            "id": "256c40bb-5e3e-48aa-a396-99bb0bc980d1"
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                }
+                            },
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 3
+                                    },
+                                    "conditions": [
+                                        {
+                                            "id": "533782c6-c153-4d83-bf33-7983835beae6",
+                                            "leftValue": "={{ $now.hour }}",
+                                            "rightValue": 1,
+                                            "operator": {
+                                                "type": "number",
+                                                "operation": "gte"
+                                            }
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                }
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.switch",
+                "typeVersion": 3.4,
+                "position": [
+                    80,
+                    96
+                ],
+                "id": "b0186699-8122-423f-98e1-e83906c56d1c",
+                "name": "Switch"
             }
         ],
         "connections": {
@@ -339,10 +481,28 @@
                         }
                     ]
                 ]
+            },
+            "Switch": {
+                "main": [
+                    [
+                        {
+                            "node": "Débloquer Services",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    [
+                        {
+                            "node": "Bloquer Services",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
             }
         },
         "authors": "Snake Tech",
-        "name": "Version 39468370",
+        "name": "Version 61c130e9",
         "description": "",
         "autosaved": false
     },
