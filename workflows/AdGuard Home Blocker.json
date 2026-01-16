@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-01-15T00:21:37.957Z",
+    "updatedAt": "2026-01-15T09:18:04.090Z",
     "createdAt": "2026-01-13T00:12:36.309Z",
     "id": "9VKqoiNL2PqJ8hxa2AOJG",
     "name": "AdGuard Home Blocker",
@@ -81,7 +81,7 @@
                     "item": [
                         {
                             "mode": "custom",
-                            "cronExpression": "0 25 10-12/1 * * *"
+                            "cronExpression": "0 0 12-15/1 * * *"
                         }
                     ]
                 }
@@ -101,7 +101,7 @@
                     "item": [
                         {
                             "mode": "custom",
-                            "cronExpression": "0 25 1-5/1 * * *"
+                            "cronExpression": "0 0 1-5/1 * * *"
                         }
                     ]
                 }
@@ -250,8 +250,8 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "61c130e9-b264-4108-91d1-6a11afd246cc",
-    "activeVersionId": "61c130e9-b264-4108-91d1-6a11afd246cc",
+    "versionId": "b9a56789-8948-4a2f-b433-f9461642b7f8",
+    "activeVersionId": "b9a56789-8948-4a2f-b433-f9461642b7f8",
     "triggerCount": 2,
     "shared": [
         {
@@ -263,9 +263,9 @@
         }
     ],
     "activeVersion": {
-        "updatedAt": "2026-01-15T00:22:16.000Z",
-        "createdAt": "2026-01-15T00:21:37.958Z",
-        "versionId": "61c130e9-b264-4108-91d1-6a11afd246cc",
+        "updatedAt": "2026-01-15T09:18:05.000Z",
+        "createdAt": "2026-01-15T09:18:04.090Z",
+        "versionId": "b9a56789-8948-4a2f-b433-f9461642b7f8",
         "workflowId": "9VKqoiNL2PqJ8hxa2AOJG",
         "nodes": [
             {
@@ -343,7 +343,7 @@
                         "item": [
                             {
                                 "mode": "custom",
-                                "cronExpression": "0 25 10-12/1 * * *"
+                                "cronExpression": "0 0 12-15/1 * * *"
                             }
                         ]
                     }
@@ -363,7 +363,7 @@
                         "item": [
                             {
                                 "mode": "custom",
-                                "cronExpression": "0 25 1-5/1 * * *"
+                                "cronExpression": "0 0 1-5/1 * * *"
                             }
                         ]
                     }
@@ -502,7 +502,7 @@
             }
         },
         "authors": "Snake Tech",
-        "name": "Version 61c130e9",
+        "name": "Version b9a56789",
         "description": "",
         "autosaved": false
     },
