@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-01-10T21:02:13.245Z",
+    "updatedAt": "2026-01-21T20:45:07.071Z",
     "createdAt": "2024-09-25T21:20:52.431Z",
     "id": "c3QrzISqRohMxXPb",
     "name": "Riot - Patch Notes",
@@ -18,7 +18,7 @@
             "typeVersion": 2,
             "position": [
                 928,
-                160
+                288
             ]
         },
         {
@@ -33,7 +33,7 @@
             "typeVersion": 2,
             "position": [
                 928,
-                512
+                448
             ]
         },
         {
@@ -131,8 +131,8 @@
             "type": "n8n-nodes-base.webhook",
             "typeVersion": 2,
             "position": [
-                480,
-                352
+                512,
+                368
             ],
             "webhookId": "420c36a1-0fda-4026-854f-0fcb56c43b94"
         },
@@ -162,7 +162,7 @@
             "typeVersion": 2,
             "position": [
                 1184,
-                608
+                544
             ],
             "webhookId": "64597e50-5a2a-41ea-80d5-72e19a94a44c",
             "credentials": {
@@ -198,7 +198,7 @@
             "typeVersion": 2,
             "position": [
                 1184,
-                160
+                192
             ],
             "webhookId": "a5c3d857-dd13-45da-bcce-75a6b372c5c2",
             "credentials": {
@@ -234,7 +234,7 @@
             "typeVersion": 2,
             "position": [
                 1184,
-                432
+                368
             ],
             "webhookId": "a5c3d857-dd13-45da-bcce-75a6b372c5c2",
             "credentials": {
@@ -318,7 +318,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "10eaaa03-f23f-465f-93bf-ac47a835188a",
+    "versionId": "28eb53bf-2d92-489f-a5e3-6361b1c5fa5c",
     "activeVersionId": "10eaaa03-f23f-465f-93bf-ac47a835188a",
     "triggerCount": 1,
     "shared": [
