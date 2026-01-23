@@ -1,41 +1,11 @@
 {
-    "updatedAt": "2026-01-21T20:45:07.071Z",
+    "updatedAt": "2026-01-22T09:07:45.530Z",
     "createdAt": "2024-09-25T21:20:52.431Z",
     "id": "c3QrzISqRohMxXPb",
     "name": "Riot - Patch Notes",
     "active": true,
     "isArchived": false,
     "nodes": [
-        {
-            "parameters": {
-                "mode": "runOnceForEachItem",
-                "language": "pythonNative",
-                "pythonCode": "# Add a new field called 'myNewField' to the JSON of the item\nimport re\n\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item.item.json.body.message)\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"\")\n\nreturn {\"title\": item.item.json.body.title, \"version\": version, \"version_print\": version_print}"
-            },
-            "id": "56d59074-e94d-44ba-bfbe-28f5baaf33f5",
-            "name": "Code",
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                928,
-                288
-            ]
-        },
-        {
-            "parameters": {
-                "mode": "runOnceForEachItem",
-                "language": "pythonNative",
-                "pythonCode": "# Add a new field called 'myNewField' to the JSON of the item\nimport re\n\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item.item.json.body.message)\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"-\")\n\nreturn {\"title\": item.item.json.body.title, \"version\": version, \"version_print\": version_print}"
-            },
-            "id": "b2ef8961-f0e5-4905-8dbe-de9ab10bf90d",
-            "name": "Code1",
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                928,
-                448
-            ]
-        },
         {
             "parameters": {
                 "rules": {
@@ -243,55 +213,56 @@
                     "name": "Discord Bot account"
                 }
             }
+        },
+        {
+            "parameters": {
+                "language": "pythonNative",
+                "pythonCode": "# Loop over input items and add a new field called 'my_new_field' to the JSON of each one\nimport re\n\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item[\"body\"][\"message\"])\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"\")\n\nreturn {\"title\": item[\"body\"][\"title\"], \"version\": version, \"version_print\": version_print}"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                928,
+                304
+            ],
+            "id": "b9f89f24-333c-4f55-9e6b-57ff6eed3d44",
+            "name": "Code for Valorant"
+        },
+        {
+            "parameters": {
+                "language": "pythonNative",
+                "pythonCode": "# Loop over input items and add a new field called 'my_new_field' to the JSON of each one\nimport re\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item[\"body\"][\"message\"])\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"-\")\n\nreturn {\"title\": item[\"body\"][\"title\"], \"version\": version, \"version_print\": version_print}"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                928,
+                448
+            ],
+            "id": "c6e8b81d-f3a3-4545-8016-9f20f09ee6a4",
+            "name": "Code for LOL and TFT"
         }
     ],
     "connections": {
-        "Code": {
-            "main": [
-                [
-                    {
-                        "node": "TiSnake1",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Code1": {
-            "main": [
-                [
-                    {
-                        "node": "Wada Corp",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "TiSnake2",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
         "Switch": {
             "main": [
                 [
                     {
-                        "node": "Code",
+                        "node": "Code for Valorant",
                         "type": "main",
                         "index": 0
                     }
                 ],
                 [
                     {
-                        "node": "Code1",
+                        "node": "Code for LOL and TFT",
                         "type": "main",
                         "index": 0
                     }
                 ],
                 [
                     {
-                        "node": "Code1",
+                        "node": "Code for LOL and TFT",
                         "type": "main",
                         "index": 0
                     }
@@ -308,6 +279,33 @@
                     }
                 ]
             ]
+        },
+        "Code for Valorant": {
+            "main": [
+                [
+                    {
+                        "node": "TiSnake1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code for LOL and TFT": {
+            "main": [
+                [
+                    {
+                        "node": "TiSnake2",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Wada Corp",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
         }
     },
     "settings": {
@@ -318,8 +316,8 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "28eb53bf-2d92-489f-a5e3-6361b1c5fa5c",
-    "activeVersionId": "10eaaa03-f23f-465f-93bf-ac47a835188a",
+    "versionId": "478e7ccf-bd88-4d6d-9419-da86448ff395",
+    "activeVersionId": "478e7ccf-bd88-4d6d-9419-da86448ff395",
     "triggerCount": 1,
     "shared": [
         {
@@ -331,41 +329,11 @@
         }
     ],
     "activeVersion": {
-        "updatedAt": "2026-01-10T21:02:21.000Z",
-        "createdAt": "2026-01-10T21:02:13.245Z",
-        "versionId": "10eaaa03-f23f-465f-93bf-ac47a835188a",
+        "updatedAt": "2026-01-22T09:07:56.000Z",
+        "createdAt": "2026-01-22T09:07:45.531Z",
+        "versionId": "478e7ccf-bd88-4d6d-9419-da86448ff395",
         "workflowId": "c3QrzISqRohMxXPb",
         "nodes": [
-            {
-                "parameters": {
-                    "mode": "runOnceForEachItem",
-                    "language": "pythonNative",
-                    "pythonCode": "# Add a new field called 'myNewField' to the JSON of the item\nimport re\n\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item.item.json.body.message)\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"\")\n\nreturn {\"title\": item.item.json.body.title, \"version\": version, \"version_print\": version_print}"
-                },
-                "id": "56d59074-e94d-44ba-bfbe-28f5baaf33f5",
-                "name": "Code",
-                "type": "n8n-nodes-base.code",
-                "typeVersion": 2,
-                "position": [
-                    928,
-                    160
-                ]
-            },
-            {
-                "parameters": {
-                    "mode": "runOnceForEachItem",
-                    "language": "pythonNative",
-                    "pythonCode": "# Add a new field called 'myNewField' to the JSON of the item\nimport re\n\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item.item.json.body.message)\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"-\")\n\nreturn {\"title\": item.item.json.body.title, \"version\": version, \"version_print\": version_print}"
-                },
-                "id": "b2ef8961-f0e5-4905-8dbe-de9ab10bf90d",
-                "name": "Code1",
-                "type": "n8n-nodes-base.code",
-                "typeVersion": 2,
-                "position": [
-                    928,
-                    512
-                ]
-            },
             {
                 "parameters": {
                     "rules": {
@@ -461,8 +429,8 @@
                 "type": "n8n-nodes-base.webhook",
                 "typeVersion": 2,
                 "position": [
-                    480,
-                    352
+                    512,
+                    368
                 ],
                 "webhookId": "420c36a1-0fda-4026-854f-0fcb56c43b94"
             },
@@ -492,7 +460,7 @@
                 "typeVersion": 2,
                 "position": [
                     1184,
-                    608
+                    544
                 ],
                 "webhookId": "64597e50-5a2a-41ea-80d5-72e19a94a44c",
                 "credentials": {
@@ -528,7 +496,7 @@
                 "typeVersion": 2,
                 "position": [
                     1184,
-                    160
+                    192
                 ],
                 "webhookId": "a5c3d857-dd13-45da-bcce-75a6b372c5c2",
                 "credentials": {
@@ -564,7 +532,7 @@
                 "typeVersion": 2,
                 "position": [
                     1184,
-                    432
+                    368
                 ],
                 "webhookId": "a5c3d857-dd13-45da-bcce-75a6b372c5c2",
                 "credentials": {
@@ -573,55 +541,56 @@
                         "name": "Discord Bot account"
                     }
                 }
+            },
+            {
+                "parameters": {
+                    "language": "pythonNative",
+                    "pythonCode": "# Loop over input items and add a new field called 'my_new_field' to the JSON of each one\nimport re\n\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item[\"body\"][\"message\"])\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"\")\n\nreturn {\"title\": item[\"body\"][\"title\"], \"version\": version, \"version_print\": version_print}"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    928,
+                    304
+                ],
+                "id": "b9f89f24-333c-4f55-9e6b-57ff6eed3d44",
+                "name": "Code for Valorant"
+            },
+            {
+                "parameters": {
+                    "language": "pythonNative",
+                    "pythonCode": "# Loop over input items and add a new field called 'my_new_field' to the JSON of each one\nimport re\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item[\"body\"][\"message\"])\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"-\")\n\nreturn {\"title\": item[\"body\"][\"title\"], \"version\": version, \"version_print\": version_print}"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    928,
+                    448
+                ],
+                "id": "c6e8b81d-f3a3-4545-8016-9f20f09ee6a4",
+                "name": "Code for LOL and TFT"
             }
         ],
         "connections": {
-            "Code": {
-                "main": [
-                    [
-                        {
-                            "node": "TiSnake1",
-                            "type": "main",
-                            "index": 0
-                        }
-                    ]
-                ]
-            },
-            "Code1": {
-                "main": [
-                    [
-                        {
-                            "node": "Wada Corp",
-                            "type": "main",
-                            "index": 0
-                        },
-                        {
-                            "node": "TiSnake2",
-                            "type": "main",
-                            "index": 0
-                        }
-                    ]
-                ]
-            },
             "Switch": {
                 "main": [
                     [
                         {
-                            "node": "Code",
+                            "node": "Code for Valorant",
                             "type": "main",
                             "index": 0
                         }
                     ],
                     [
                         {
-                            "node": "Code1",
+                            "node": "Code for LOL and TFT",
                             "type": "main",
                             "index": 0
                         }
                     ],
                     [
                         {
-                            "node": "Code1",
+                            "node": "Code for LOL and TFT",
                             "type": "main",
                             "index": 0
                         }
@@ -638,10 +607,37 @@
                         }
                     ]
                 ]
+            },
+            "Code for Valorant": {
+                "main": [
+                    [
+                        {
+                            "node": "TiSnake1",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Code for LOL and TFT": {
+                "main": [
+                    [
+                        {
+                            "node": "TiSnake2",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "Wada Corp",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
             }
         },
         "authors": "Snake Tech",
-        "name": "Version 10eaaa03",
+        "name": "Version 478e7ccf",
         "description": "",
         "autosaved": false
     },
