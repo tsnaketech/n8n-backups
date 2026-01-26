@@ -1,0 +1,72 @@
+{
+    "updatedAt": "2026-01-25T23:54:06.009Z",
+    "createdAt": "2025-09-30T22:49:04.972Z",
+    "id": "xSDubEFDRAzuh5M0",
+    "name": "ClaudeCode",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+            "typeVersion": 1.4,
+            "position": [
+                0,
+                0
+            ],
+            "id": "baabc3c5-1452-4fdf-a327-838511b40d87",
+            "name": "When chat message received",
+            "webhookId": "a75c43f8-c6ea-4c34-8b97-103b9c9c6609"
+        }
+    ],
+    "connections": {},
+    "settings": {
+        "executionOrder": "v1",
+        "availableInMCP": true
+    },
+    "staticData": null,
+    "meta": null,
+    "pinData": {},
+    "versionId": "a0099bb3-4775-4691-b6b9-a7d40b0f1cb0",
+    "activeVersionId": "a0099bb3-4775-4691-b6b9-a7d40b0f1cb0",
+    "triggerCount": 1,
+    "shared": [
+        {
+            "updatedAt": "2025-09-30T22:49:04.974Z",
+            "createdAt": "2025-09-30T22:49:04.974Z",
+            "role": "workflow:owner",
+            "workflowId": "xSDubEFDRAzuh5M0",
+            "projectId": "lnYpJLFYV8VS8Mcd"
+        }
+    ],
+    "activeVersion": {
+        "updatedAt": "2026-01-25T23:53:57.000Z",
+        "createdAt": "2026-01-25T23:53:55.625Z",
+        "versionId": "a0099bb3-4775-4691-b6b9-a7d40b0f1cb0",
+        "workflowId": "xSDubEFDRAzuh5M0",
+        "nodes": [
+            {
+                "parameters": {
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.chatTrigger",
+                "typeVersion": 1.4,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "baabc3c5-1452-4fdf-a327-838511b40d87",
+                "name": "When chat message received",
+                "webhookId": "a75c43f8-c6ea-4c34-8b97-103b9c9c6609"
+            }
+        ],
+        "connections": {},
+        "authors": "Snake Tech",
+        "name": "Version a0099bb3",
+        "description": "",
+        "autosaved": false
+    },
+    "tags": []
+}
