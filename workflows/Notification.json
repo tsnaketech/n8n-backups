@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-01-28T23:03:02.171Z",
+    "updatedAt": "2026-01-30T21:15:36.311Z",
     "createdAt": "2025-05-27T21:55:06.402Z",
     "id": "kx94Z2Th3dyVsVrw",
     "name": "Notification",
@@ -675,7 +675,7 @@
                     "cachedResultName": "bonplan",
                     "cachedResultUrl": "https://discord.com/channels/1459893997181997068/1466184724551569626"
                 },
-                "content": "=EpicGames FreeGames - From {{ $json.startDate }} to {{ $json.endDate }}\n\n**{{ $json.title }}**\n",
+                "content": "=SteamGames FreeGames - {{ $json.current_price }}\n\n**{{ $json.title }}**\n\nhttps://steamdb.info/app/{{ $json.app_id }}/\n\n{{ $json.store_url }}\n",
                 "options": {},
                 "files": {
                     "values": [
@@ -967,8 +967,8 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "3f9017b1-e07f-47eb-bf1d-265ee13984cf",
-    "activeVersionId": "3f9017b1-e07f-47eb-bf1d-265ee13984cf",
+    "versionId": "5063ae0e-af53-49ed-bacf-ee64036c3076",
+    "activeVersionId": "5063ae0e-af53-49ed-bacf-ee64036c3076",
     "triggerCount": 2,
     "shared": [
         {
@@ -980,9 +980,9 @@
         }
     ],
     "activeVersion": {
-        "updatedAt": "2026-01-28T23:03:03.000Z",
-        "createdAt": "2026-01-28T23:03:02.172Z",
-        "versionId": "3f9017b1-e07f-47eb-bf1d-265ee13984cf",
+        "updatedAt": "2026-01-30T21:15:37.000Z",
+        "createdAt": "2026-01-30T21:15:36.312Z",
+        "versionId": "5063ae0e-af53-49ed-bacf-ee64036c3076",
         "workflowId": "kx94Z2Th3dyVsVrw",
         "nodes": [
             {
@@ -1654,7 +1654,7 @@
                         "cachedResultName": "bonplan",
                         "cachedResultUrl": "https://discord.com/channels/1459893997181997068/1466184724551569626"
                     },
-                    "content": "=EpicGames FreeGames - From {{ $json.startDate }} to {{ $json.endDate }}\n\n**{{ $json.title }}**\n",
+                    "content": "=SteamGames FreeGames - {{ $json.current_price }}\n\n**{{ $json.title }}**\n\nhttps://steamdb.info/app/{{ $json.app_id }}/\n\n{{ $json.store_url }}\n",
                     "options": {},
                     "files": {
                         "values": [
@@ -1935,7 +1935,7 @@
             }
         },
         "authors": "Snake Tech",
-        "name": "Version 3f9017b1",
+        "name": "Version 5063ae0e",
         "description": "",
         "autosaved": false
     },
