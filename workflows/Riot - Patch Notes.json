@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-01-22T09:07:45.530Z",
+    "updatedAt": "2026-02-01T00:01:38.577Z",
     "createdAt": "2024-09-25T21:20:52.431Z",
     "id": "c3QrzISqRohMxXPb",
     "name": "Riot - Patch Notes",
@@ -131,8 +131,8 @@
             "type": "n8n-nodes-base.discord",
             "typeVersion": 2,
             "position": [
-                1184,
-                544
+                1216,
+                528
             ],
             "webhookId": "64597e50-5a2a-41ea-80d5-72e19a94a44c",
             "credentials": {
@@ -167,8 +167,8 @@
             "type": "n8n-nodes-base.discord",
             "typeVersion": 2,
             "position": [
-                1184,
-                192
+                1216,
+                224
             ],
             "webhookId": "a5c3d857-dd13-45da-bcce-75a6b372c5c2",
             "credentials": {
@@ -195,7 +195,7 @@
                     "cachedResultName": "wadabot",
                     "cachedResultUrl": "https://discord.com/channels/702577437850206298/711584353703952435"
                 },
-                "content": "=Nouveau {{ $json.title }} - {{ $json[\"version_print\"] }} \nhttps://www.leagueoflegends.com/fr-fr/news/game-updates/patch-{{ $json[\"version\"]  }}-notes/",
+                "content": "=Nouveau {{ $json.title }} - {{ $json[\"version_print\"] }} \n{{ $json[\"url\"] }} ",
                 "options": {}
             },
             "id": "3015bd49-acfc-49c3-a64f-e073dda14120",
@@ -203,7 +203,7 @@
             "type": "n8n-nodes-base.discord",
             "typeVersion": 2,
             "position": [
-                1184,
+                1216,
                 368
             ],
             "webhookId": "a5c3d857-dd13-45da-bcce-75a6b372c5c2",
@@ -223,7 +223,7 @@
             "typeVersion": 2,
             "position": [
                 928,
-                304
+                224
             ],
             "id": "b9f89f24-333c-4f55-9e6b-57ff6eed3d44",
             "name": "Code for Valorant"
@@ -231,16 +231,30 @@
         {
             "parameters": {
                 "language": "pythonNative",
-                "pythonCode": "# Loop over input items and add a new field called 'my_new_field' to the JSON of each one\nimport re\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item[\"body\"][\"message\"])\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"-\")\n\nreturn {\"title\": item[\"body\"][\"title\"], \"version\": version, \"version_print\": version_print}"
+                "pythonCode": "# Loop over input items and add a new field called 'my_new_field' to the JSON of each one\nimport re\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item[\"body\"][\"message\"])\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"-\")\n\nurl = f\"https://www.leagueoflegends.com/fr-fr/news/game-updates/patch-{version}-notes/\"\n\nreturn {\n  \"title\": item[\"body\"][\"title\"], \n  \"version\": version, \n  \"version_print\": version_print,\n  \"url\": url\n}"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
                 928,
-                448
+                368
             ],
             "id": "c6e8b81d-f3a3-4545-8016-9f20f09ee6a4",
-            "name": "Code for LOL and TFT"
+            "name": "Code for LOL"
+        },
+        {
+            "parameters": {
+                "language": "pythonNative",
+                "pythonCode": "# Loop over input items and add a new field called 'my_new_field' to the JSON of each one\nimport re\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item[\"body\"][\"message\"])\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"-\")\n\nurl = f\"https://teamfighttactics.leagueoflegends.com/fr-fr/news/game-updates/teamfight-tactics-patch-{version}/\"\n\nreturn {\n  \"title\": item[\"body\"][\"title\"], \n  \"version\": version, \n  \"version_print\": version_print,\n  \"url\": url\n}"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                928,
+                528
+            ],
+            "id": "1751b89c-877a-4fc0-9734-696e03f7d8da",
+            "name": "Code for TFT"
         }
     ],
     "connections": {
@@ -255,14 +269,14 @@
                 ],
                 [
                     {
-                        "node": "Code for LOL and TFT",
+                        "node": "Code for LOL",
                         "type": "main",
                         "index": 0
                     }
                 ],
                 [
                     {
-                        "node": "Code for LOL and TFT",
+                        "node": "Code for TFT",
                         "type": "main",
                         "index": 0
                     }
@@ -291,7 +305,7 @@
                 ]
             ]
         },
-        "Code for LOL and TFT": {
+        "Code for LOL": {
             "main": [
                 [
                     {
@@ -301,6 +315,22 @@
                     },
                     {
                         "node": "Wada Corp",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Code for TFT": {
+            "main": [
+                [
+                    {
+                        "node": "Wada Corp",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "TiSnake2",
                         "type": "main",
                         "index": 0
                     }
@@ -316,8 +346,8 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "478e7ccf-bd88-4d6d-9419-da86448ff395",
-    "activeVersionId": "478e7ccf-bd88-4d6d-9419-da86448ff395",
+    "versionId": "93b28344-83f5-4cf6-82fb-2dde4aacdc6b",
+    "activeVersionId": "93b28344-83f5-4cf6-82fb-2dde4aacdc6b",
     "triggerCount": 1,
     "shared": [
         {
@@ -329,9 +359,9 @@
         }
     ],
     "activeVersion": {
-        "updatedAt": "2026-01-22T09:07:56.000Z",
-        "createdAt": "2026-01-22T09:07:45.531Z",
-        "versionId": "478e7ccf-bd88-4d6d-9419-da86448ff395",
+        "updatedAt": "2026-02-01T00:01:39.000Z",
+        "createdAt": "2026-02-01T00:01:38.577Z",
+        "versionId": "93b28344-83f5-4cf6-82fb-2dde4aacdc6b",
         "workflowId": "c3QrzISqRohMxXPb",
         "nodes": [
             {
@@ -459,8 +489,8 @@
                 "type": "n8n-nodes-base.discord",
                 "typeVersion": 2,
                 "position": [
-                    1184,
-                    544
+                    1216,
+                    528
                 ],
                 "webhookId": "64597e50-5a2a-41ea-80d5-72e19a94a44c",
                 "credentials": {
@@ -495,8 +525,8 @@
                 "type": "n8n-nodes-base.discord",
                 "typeVersion": 2,
                 "position": [
-                    1184,
-                    192
+                    1216,
+                    224
                 ],
                 "webhookId": "a5c3d857-dd13-45da-bcce-75a6b372c5c2",
                 "credentials": {
@@ -523,7 +553,7 @@
                         "cachedResultName": "wadabot",
                         "cachedResultUrl": "https://discord.com/channels/702577437850206298/711584353703952435"
                     },
-                    "content": "=Nouveau {{ $json.title }} - {{ $json[\"version_print\"] }} \nhttps://www.leagueoflegends.com/fr-fr/news/game-updates/patch-{{ $json[\"version\"]  }}-notes/",
+                    "content": "=Nouveau {{ $json.title }} - {{ $json[\"version_print\"] }} \n{{ $json[\"url\"] }} ",
                     "options": {}
                 },
                 "id": "3015bd49-acfc-49c3-a64f-e073dda14120",
@@ -531,7 +561,7 @@
                 "type": "n8n-nodes-base.discord",
                 "typeVersion": 2,
                 "position": [
-                    1184,
+                    1216,
                     368
                 ],
                 "webhookId": "a5c3d857-dd13-45da-bcce-75a6b372c5c2",
@@ -551,7 +581,7 @@
                 "typeVersion": 2,
                 "position": [
                     928,
-                    304
+                    224
                 ],
                 "id": "b9f89f24-333c-4f55-9e6b-57ff6eed3d44",
                 "name": "Code for Valorant"
@@ -559,16 +589,30 @@
             {
                 "parameters": {
                     "language": "pythonNative",
-                    "pythonCode": "# Loop over input items and add a new field called 'my_new_field' to the JSON of each one\nimport re\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item[\"body\"][\"message\"])\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"-\")\n\nreturn {\"title\": item[\"body\"][\"title\"], \"version\": version, \"version_print\": version_print}"
+                    "pythonCode": "# Loop over input items and add a new field called 'my_new_field' to the JSON of each one\nimport re\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item[\"body\"][\"message\"])\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"-\")\n\nurl = f\"https://www.leagueoflegends.com/fr-fr/news/game-updates/patch-{version}-notes/\"\n\nreturn {\n  \"title\": item[\"body\"][\"title\"], \n  \"version\": version, \n  \"version_print\": version_print,\n  \"url\": url\n}"
                 },
                 "type": "n8n-nodes-base.code",
                 "typeVersion": 2,
                 "position": [
                     928,
-                    448
+                    368
                 ],
                 "id": "c6e8b81d-f3a3-4545-8016-9f20f09ee6a4",
-                "name": "Code for LOL and TFT"
+                "name": "Code for LOL"
+            },
+            {
+                "parameters": {
+                    "language": "pythonNative",
+                    "pythonCode": "# Loop over input items and add a new field called 'my_new_field' to the JSON of each one\nimport re\nitem = _items[0][\"json\"]\n\nversion = re.search(r'Notes de patch (\\d+\\.\\d+)', item[\"body\"][\"message\"])\n\nif version is not None:\n  version_print = version.group(1)\n  version = version.group(1).replace(\".\", \"-\")\n\nurl = f\"https://teamfighttactics.leagueoflegends.com/fr-fr/news/game-updates/teamfight-tactics-patch-{version}/\"\n\nreturn {\n  \"title\": item[\"body\"][\"title\"], \n  \"version\": version, \n  \"version_print\": version_print,\n  \"url\": url\n}"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    928,
+                    528
+                ],
+                "id": "1751b89c-877a-4fc0-9734-696e03f7d8da",
+                "name": "Code for TFT"
             }
         ],
         "connections": {
@@ -583,14 +627,14 @@
                     ],
                     [
                         {
-                            "node": "Code for LOL and TFT",
+                            "node": "Code for LOL",
                             "type": "main",
                             "index": 0
                         }
                     ],
                     [
                         {
-                            "node": "Code for LOL and TFT",
+                            "node": "Code for TFT",
                             "type": "main",
                             "index": 0
                         }
@@ -619,7 +663,7 @@
                     ]
                 ]
             },
-            "Code for LOL and TFT": {
+            "Code for LOL": {
                 "main": [
                     [
                         {
@@ -634,10 +678,26 @@
                         }
                     ]
                 ]
+            },
+            "Code for TFT": {
+                "main": [
+                    [
+                        {
+                            "node": "Wada Corp",
+                            "type": "main",
+                            "index": 0
+                        },
+                        {
+                            "node": "TiSnake2",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
             }
         },
         "authors": "Snake Tech",
-        "name": "Version 478e7ccf",
+        "name": "Version 93b28344",
         "description": "",
         "autosaved": false
     },
