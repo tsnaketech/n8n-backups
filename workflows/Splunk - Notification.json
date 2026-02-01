@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2025-08-08T07:41:50.000Z",
+    "updatedAt": "2026-02-01T00:05:06.217Z",
     "createdAt": "2024-09-28T09:11:06.127Z",
     "id": "gTBkibbRHEFPmn1l",
     "name": "Splunk - Notification",
@@ -18,7 +18,7 @@
             "typeVersion": 1.2,
             "position": [
                 432,
-                48
+                32
             ],
             "id": "2f0c6b21-f92e-4e3a-807a-0db2420c9998",
             "name": "Telegram",
@@ -73,14 +73,14 @@
             "typeVersion": 1.5,
             "position": [
                 112,
-                -16
+                -32
             ],
             "id": "cbf43d69-d629-4d5c-87a4-0c457d142c2b",
             "name": "Basic LLM Chain"
         },
         {
             "parameters": {
-                "model": "deepseek/deepseek-r1-distill-llama-70b:free",
+                "model": "deepseek/deepseek-r1-0528:free",
                 "options": {}
             },
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
@@ -107,7 +107,7 @@
             "typeVersion": 1.5,
             "position": [
                 112,
-                112
+                96
             ],
             "id": "fdabfb1c-34c8-4af2-9619-c2d9bb3080f9",
             "name": "Basic LLM Chain1"
@@ -149,7 +149,7 @@
                                 "conditions": [
                                     {
                                         "id": "172366e4-fc17-4c6d-b3b0-a45d654b307e",
-                                        "leftValue": "{{ $json.webhookUrl }}",
+                                        "leftValue": "={{ $json.webhookUrl }}",
                                         "rightValue": "splunk-issues",
                                         "operator": {
                                             "type": "string",
@@ -168,7 +168,7 @@
             "typeVersion": 3.2,
             "position": [
                 -80,
-                48
+                32
             ],
             "id": "0e279135-95c5-4976-b6a1-452167a4dc26",
             "name": "Switch"
@@ -218,7 +218,7 @@
             "typeVersion": 1.2,
             "position": [
                 -304,
-                224
+                208
             ],
             "id": "5506dd2f-01c0-40ac-bc90-058cd2f8fdf1",
             "name": "Telegram1",
@@ -336,8 +336,8 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "f389350e-85bf-4f4d-94d6-0024ac536758",
-    "activeVersionId": "f389350e-85bf-4f4d-94d6-0024ac536758",
+    "versionId": "7ea6c518-93b4-48aa-bcea-f98ee1b641f1",
+    "activeVersionId": "7ea6c518-93b4-48aa-bcea-f98ee1b641f1",
     "triggerCount": 2,
     "shared": [
         {
@@ -349,9 +349,9 @@
         }
     ],
     "activeVersion": {
-        "updatedAt": "2025-12-09T13:23:58.759Z",
-        "createdAt": "2025-12-09T13:23:58.759Z",
-        "versionId": "f389350e-85bf-4f4d-94d6-0024ac536758",
+        "updatedAt": "2026-02-01T00:05:07.000Z",
+        "createdAt": "2026-02-01T00:05:06.217Z",
+        "versionId": "7ea6c518-93b4-48aa-bcea-f98ee1b641f1",
         "workflowId": "gTBkibbRHEFPmn1l",
         "nodes": [
             {
@@ -366,7 +366,7 @@
                 "typeVersion": 1.2,
                 "position": [
                     432,
-                    48
+                    32
                 ],
                 "id": "2f0c6b21-f92e-4e3a-807a-0db2420c9998",
                 "name": "Telegram",
@@ -421,14 +421,14 @@
                 "typeVersion": 1.5,
                 "position": [
                     112,
-                    -16
+                    -32
                 ],
                 "id": "cbf43d69-d629-4d5c-87a4-0c457d142c2b",
                 "name": "Basic LLM Chain"
             },
             {
                 "parameters": {
-                    "model": "deepseek/deepseek-r1-distill-llama-70b:free",
+                    "model": "deepseek/deepseek-r1-0528:free",
                     "options": {}
                 },
                 "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
@@ -455,7 +455,7 @@
                 "typeVersion": 1.5,
                 "position": [
                     112,
-                    112
+                    96
                 ],
                 "id": "fdabfb1c-34c8-4af2-9619-c2d9bb3080f9",
                 "name": "Basic LLM Chain1"
@@ -497,7 +497,7 @@
                                     "conditions": [
                                         {
                                             "id": "172366e4-fc17-4c6d-b3b0-a45d654b307e",
-                                            "leftValue": "{{ $json.webhookUrl }}",
+                                            "leftValue": "={{ $json.webhookUrl }}",
                                             "rightValue": "splunk-issues",
                                             "operator": {
                                                 "type": "string",
@@ -516,7 +516,7 @@
                 "typeVersion": 3.2,
                 "position": [
                     -80,
-                    48
+                    32
                 ],
                 "id": "0e279135-95c5-4976-b6a1-452167a4dc26",
                 "name": "Switch"
@@ -566,7 +566,7 @@
                 "typeVersion": 1.2,
                 "position": [
                     -304,
-                    224
+                    208
                 ],
                 "id": "5506dd2f-01c0-40ac-bc90-058cd2f8fdf1",
                 "name": "Telegram1",
@@ -676,9 +676,9 @@
                 ]
             }
         },
-        "authors": "system migration",
-        "name": null,
-        "description": null,
+        "authors": "Snake Tech",
+        "name": "Version 7ea6c518",
+        "description": "",
         "autosaved": false
     },
     "tags": [
