@@ -1,0 +1,564 @@
+{
+    "updatedAt": "2026-02-01T15:30:06.578Z",
+    "createdAt": "2024-09-19T23:34:38.621Z",
+    "id": "jTrTbAb3Q41qyoaM",
+    "name": "AI Music Generation & Multi-Platform Distribution",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "music-generation",
+                "authentication": "headerAuth",
+                "options": {}
+            },
+            "id": "75acb23e-1993-4aad-8999-b111f6c9e350",
+            "name": "Webhook Trigger",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1.1,
+            "position": [
+                -960,
+                0
+            ],
+            "webhookId": "music-generation-webhook",
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "3sytPF58vLXwSQtC",
+                    "name": "NocoDB"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "cronExpression",
+                            "expression": "0 9 * * *"
+                        }
+                    ]
+                }
+            },
+            "id": "abb227df-00ac-48e6-b5f6-12404e18bc83",
+            "name": "Schedule Trigger",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                -960,
+                160
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Génération intelligente des paramètres musicaux\nconst genres = ['Electronic', 'Ambient', 'Lo-Fi', 'Synthwave', 'Chillout', 'House', 'Techno', 'Downtempo', 'Trip-Hop', 'Chill House'];\nconst keys = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];\nconst scales = ['major', 'minor', 'dorian', 'mixolydian'];\nconst tempos = [80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140];\nconst moods = ['uplifting', 'relaxing', 'energetic', 'mysterious', 'dreamy', 'powerful', 'melancholic', 'euphoric'];\nconst instruments = ['synthesizer', 'piano', 'guitar', 'strings', 'pads', 'bass'];\n\nconst timestamp = new Date().toISOString();\nconst trackId = `track_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;\n\nconst musicParams = {\n  genre: genres[Math.floor(Math.random() * genres.length)],\n  key: keys[Math.floor(Math.random() * keys.length)],\n  scale: scales[Math.floor(Math.random() * scales.length)],\n  tempo: tempos[Math.floor(Math.random() * tempos.length)],\n  mood: moods[Math.floor(Math.random() * moods.length)],\n  instrument: instruments[Math.floor(Math.random() * instruments.length)],\n  duration: 180,\n  timestamp: timestamp,\n  trackName: `AI_Music_${trackId}`,\n  trackId: trackId,\n  metadata: {\n    generatedBy: 'n8n-ai-workflow',\n    version: '2.0'\n  }\n};\n\nmusicParams.prompt = `Create a professional ${musicParams.mood} ${musicParams.genre} instrumental track in ${musicParams.key} ${musicParams.scale} at ${musicParams.tempo} BPM`;\n\nreturn { json: { musicParams, startTime: Date.now() } };"
+            },
+            "id": "d6f9047d-7da9-4b8f-8b93-c69dc672bcb7",
+            "name": "Generate Music Parameters",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -736,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://api.suno.ai/v1/generate",
+                "authentication": "predefinedCredentialType",
+                "nodeCredentialType": "httpHeaderAuth",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "=Bearer {{$env.SUNO_API_KEY}}"
+                        },
+                        {
+                            "name": "Content-Type",
+                            "value": "application/json"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"prompt\": \"{{ $json.musicParams.prompt }}\",\n  \"duration\": {{ $json.musicParams.duration }},\n  \"format\": \"wav\",\n  \"instrumental\": true\n}",
+                "options": {
+                    "timeout": 180000
+                }
+            },
+            "id": "ed0224f1-403e-44d9-b22e-f5c1c54bcde9",
+            "name": "AI Music Generation",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                -528,
+                0
+            ],
+            "credentials": {
+                "httpHeaderAuth": {
+                    "id": "3sytPF58vLXwSQtC",
+                    "name": "NocoDB"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsCode": "const data = $input.item.json;\nif (data.status === 'completed' || data.audio_url) {\n  return { json: { ...data, complete: true } };\n}\nreturn { json: { ...data, complete: false, shouldPoll: true } };"
+            },
+            "id": "53360973-1981-4d4b-a8f7-b73480dc13b8",
+            "name": "Check Generation Status",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                -304,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "boolean": [
+                        {
+                            "value1": "={{$json.complete}}",
+                            "value2": true
+                        }
+                    ]
+                }
+            },
+            "id": "0fc826af-3a13-4385-a5b4-b3932eea7ccd",
+            "name": "Is Complete?",
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 1,
+            "position": [
+                -80,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "amount": 10,
+                "unit": "seconds"
+            },
+            "id": "aaefd7d6-a1fe-48ee-b6a2-0cd817a17e78",
+            "name": "Wait for Polling",
+            "type": "n8n-nodes-base.wait",
+            "typeVersion": 1,
+            "position": [
+                -80,
+                208
+            ],
+            "webhookId": "b68a1167-6197-4d97-ac47-48ef55336914"
+        },
+        {
+            "parameters": {
+                "url": "={{$json.audio_url}}",
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "file"
+                        }
+                    }
+                }
+            },
+            "id": "29c68c33-3854-4b86-8114-b5999b8cf1c8",
+            "name": "Download Audio",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                144,
+                -112
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const params = $('Generate Music Parameters').first().json.musicParams;\nreturn {\n  json: {\n    fileName: `${params.trackName}.wav`,\n    metadata: {\n      title: params.trackName,\n      artist: 'AI Music Studio',\n      album: `Generated ${params.genre}`,\n      genre: params.genre,\n      year: new Date().getFullYear()\n    }\n  },\n  binary: $input.item.binary\n};"
+            },
+            "id": "4c59fcd9-dd90-4ecd-ba61-70809647606d",
+            "name": "Add Metadata",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                368,
+                -112
+            ]
+        },
+        {
+            "parameters": {
+                "name": "={{$json.fileName}}",
+                "driveId": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "My Drive"
+                },
+                "folderId": {
+                    "__rl": true,
+                    "mode": "list",
+                    "value": "root",
+                    "cachedResultName": "/ (Root folder)"
+                },
+                "options": {}
+            },
+            "id": "13d8f49d-8c53-42f6-ae98-f90038d8d7d4",
+            "name": "Google Drive Upload",
+            "type": "n8n-nodes-base.googleDrive",
+            "typeVersion": 3,
+            "position": [
+                592,
+                -112
+            ],
+            "credentials": {
+                "googleDriveOAuth2Api": {
+                    "id": "Y4E7vsz7eUO3sV7g",
+                    "name": "Google Drive snaketech account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "https://api.distrokid.com/v1/upload",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "=Bearer {{$env.DISTROKID_API_KEY}}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "contentType": "multipart-form-data",
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "audio_file"
+                        },
+                        {
+                            "name": "title",
+                            "value": "={{$json.metadata.title}}"
+                        },
+                        {
+                            "name": "artist",
+                            "value": "={{$json.metadata.artist}}"
+                        },
+                        {
+                            "name": "genre",
+                            "value": "={{$json.metadata.genre}}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "ba2446d1-64c9-45ae-a1f2-cd857c0b0dd9",
+            "name": "Spotify Upload",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                800,
+                -272
+            ],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "url": "https://api.soundcloud.com/tracks",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "Authorization",
+                            "value": "=OAuth {{$env.SOUNDCLOUD_TOKEN}}"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "contentType": "multipart-form-data",
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "track[asset_data]"
+                        },
+                        {
+                            "name": "track[title]",
+                            "value": "={{$json.metadata.title}}"
+                        },
+                        {
+                            "name": "track[sharing]",
+                            "value": "public"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "5b8a2b4f-3cd2-4a7f-b78b-6d8656f86004",
+            "name": "SoundCloud Upload",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                800,
+                -112
+            ],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "url": "https://www.googleapis.com/upload/youtube/v3/videos",
+                "sendQuery": true,
+                "queryParameters": {
+                    "parameters": [
+                        {
+                            "name": "part",
+                            "value": "snippet,status"
+                        }
+                    ]
+                },
+                "sendBody": true,
+                "contentType": "multipart-form-data",
+                "bodyParameters": {
+                    "parameters": [
+                        {}
+                    ]
+                },
+                "options": {}
+            },
+            "id": "d2e67f47-09cd-4883-a02f-d8eda7394a13",
+            "name": "YouTube Upload",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.2,
+            "position": [
+                800,
+                0
+            ],
+            "continueOnFail": true
+        },
+        {
+            "parameters": {
+                "jsCode": "const spotify = $('Spotify Upload').first()?.json;\nconst soundcloud = $('SoundCloud Upload').first()?.json;\nconst youtube = $('YouTube Upload').first()?.json;\n\nconst results = [\n  { platform: 'spotify', success: spotify && !spotify.error },\n  { platform: 'soundcloud', success: soundcloud && !soundcloud.error },\n  { platform: 'youtube', success: youtube && !youtube.error }\n];\n\nconst successCount = results.filter(r => r.success).length;\n\nreturn {\n  json: {\n    results: results,\n    successCount: successCount,\n    totalPlatforms: 3,\n    successRate: (successCount / 3 * 100).toFixed(2)\n  }\n};"
+            },
+            "id": "63b8e038-b78f-449c-93b6-8ad3f9e7bd38",
+            "name": "Consolidate Results",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1024,
+                -112
+            ]
+        },
+        {
+            "parameters": {
+                "select": "channel",
+                "channelId": {
+                    "__rl": true,
+                    "value": "music-automation",
+                    "mode": "name"
+                },
+                "text": "=🎵 New track generated!\nSuccess: {{$json.successCount}}/{{$json.totalPlatforms}}\nRate: {{$json.successRate}}%",
+                "otherOptions": {}
+            },
+            "id": "497b961f-a1dc-4c81-8fe8-d61c15bc0f30",
+            "name": "Slack Notification",
+            "type": "n8n-nodes-base.slack",
+            "typeVersion": 2.2,
+            "position": [
+                1248,
+                -112
+            ],
+            "webhookId": "1d3bbb1a-d367-4575-876d-bb84cdce4c6b"
+        }
+    ],
+    "connections": {
+        "Webhook Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Music Parameters",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schedule Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Music Parameters",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Music Parameters": {
+            "main": [
+                [
+                    {
+                        "node": "AI Music Generation",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "AI Music Generation": {
+            "main": [
+                [
+                    {
+                        "node": "Check Generation Status",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Check Generation Status": {
+            "main": [
+                [
+                    {
+                        "node": "Is Complete?",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Is Complete?": {
+            "main": [
+                [
+                    {
+                        "node": "Download Audio",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Wait for Polling",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Wait for Polling": {
+            "main": [
+                [
+                    {
+                        "node": "AI Music Generation",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Download Audio": {
+            "main": [
+                [
+                    {
+                        "node": "Add Metadata",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add Metadata": {
+            "main": [
+                [
+                    {
+                        "node": "Google Drive Upload",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Google Drive Upload": {
+            "main": [
+                [
+                    {
+                        "node": "Spotify Upload",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "SoundCloud Upload",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "YouTube Upload",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Spotify Upload": {
+            "main": [
+                [
+                    {
+                        "node": "Consolidate Results",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "SoundCloud Upload": {
+            "main": [
+                [
+                    {
+                        "node": "Consolidate Results",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "YouTube Upload": {
+            "main": [
+                [
+                    {
+                        "node": "Consolidate Results",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Consolidate Results": {
+            "main": [
+                [
+                    {
+                        "node": "Slack Notification",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "aa65f3df-3eec-49b4-9909-725e0812cfa4",
+    "activeVersionId": null,
+    "triggerCount": 0,
+    "shared": [
+        {
+            "updatedAt": "2024-09-19T23:34:38.626Z",
+            "createdAt": "2024-09-19T23:34:38.626Z",
+            "role": "workflow:owner",
+            "workflowId": "jTrTbAb3Q41qyoaM",
+            "projectId": "lnYpJLFYV8VS8Mcd"
+        }
+    ],
+    "activeVersion": null,
+    "tags": []
+}
