@@ -1,35 +1,11 @@
 {
-    "updatedAt": "2026-02-01T00:05:06.217Z",
+    "updatedAt": "2026-02-01T14:13:09.629Z",
     "createdAt": "2024-09-28T09:11:06.127Z",
     "id": "gTBkibbRHEFPmn1l",
     "name": "Splunk - Notification",
     "active": true,
     "isArchived": false,
     "nodes": [
-        {
-            "parameters": {
-                "chatId": "1037310358",
-                "text": "={{ $json.text }}",
-                "additionalFields": {
-                    "appendAttribution": false
-                }
-            },
-            "type": "n8n-nodes-base.telegram",
-            "typeVersion": 1.2,
-            "position": [
-                432,
-                32
-            ],
-            "id": "2f0c6b21-f92e-4e3a-807a-0db2420c9998",
-            "name": "Telegram",
-            "webhookId": "296977e5-bbd6-4418-81bf-c7f34baf7471",
-            "credentials": {
-                "telegramApi": {
-                    "id": "t5jP1rX1Q7rEmgPc",
-                    "name": "Telegram account"
-                }
-            }
-        },
         {
             "parameters": {
                 "conditions": {
@@ -67,27 +43,27 @@
         {
             "parameters": {
                 "promptType": "define",
-                "text": "=Transformez la notification de changement de ChangeDetection au format suivant:\n\nLa notification est au format:\n(changed) [nom_produit],[nom_fichier],[ancienne_version],[version_précédente],[date_heure]\n(into) [nom_produit],[nom_fichier],[nouvelle_version],[nouvelle_version_précédente],[date_heure]\n\nTransformer en format Telegram avec des émojis uniquement:\n\n🔄 MISE À JOUR 🔄\n\n📦 Produit : [nom_produit]\n\n➡️ Version : [ancienne_version] → [nouvelle_version]\n⬅️ Version précédente : [version_précédente] → [nouvelle_version_précédente]\n\n⏱️ Date : [date_heure]\n\n🔗 Fichier : [nom_fichier]\n\nN'utilisez pas de formatage spécial comme les étoiles ou les balises HTML. Respect les espaces. Seul les élements demandés sont nécessaires. Rajoute \"---\" entre les éléments, s'il y a plusieurs produits.\n\nLa notification est la suivante :\n{{ $json.body.diff }}"
+                "text": "=Transformez la notification de changement de ChangeDetection au format suivant:\n\nLa notification est au format:\n(changed) [nom_produit],[nom_fichier],[ancienne_version],[version_précédente],[date_heure]\n(into) [nom_produit],[nom_fichier],[nouvelle_version],[nouvelle_version_précédente],[date_heure]\n\nTransformer en format Telegram avec des émojis uniquement:\n\n🔄 MISE À JOUR 🔄\n\n📦 Produit : [nom_produit]\n\n➡️ Version : [ancienne_version] → [nouvelle_version]\n⬅️ Version précédente : [version_précédente] → [nouvelle_version_précédente]\n\n⏱️ Date : [date_heure]\n\n🔗 Fichier : [nom_fichier]\n\nN'utilisez pas de formatage spécial comme les étoiles ou les balises HTML. Respect les espaces.\n\nPour chaque produit dans la notification suivante, génère un json ayant comme clé \"text\".\n\nLa notification est la suivante :\n{{ $json.body.diff }}"
             },
             "type": "@n8n/n8n-nodes-langchain.chainLlm",
             "typeVersion": 1.5,
             "position": [
                 112,
-                -32
+                16
             ],
             "id": "cbf43d69-d629-4d5c-87a4-0c457d142c2b",
             "name": "Basic LLM Chain"
         },
         {
             "parameters": {
-                "model": "deepseek/deepseek-r1-0528:free",
+                "model": "google/gemma-3-12b-it:free",
                 "options": {}
             },
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
             "typeVersion": 1,
             "position": [
-                32,
-                224
+                112,
+                208
             ],
             "id": "073ae533-c155-4b53-a97c-8ebadcb4aebf",
             "name": "OpenRouter Chat Model",
@@ -97,20 +73,6 @@
                     "name": "OpenRouter account"
                 }
             }
-        },
-        {
-            "parameters": {
-                "promptType": "define",
-                "text": "=Formatez les informations sur les problèmes de mise à niveau de Splunk Enterprise pour Telegram selon les règles suivantes :\n\n1. Commencez par un titre général avec l'emoji 🔧.\n\n2. Pour chaque problème :\n   a. Numérotez avec des emojis (1️⃣, 2️⃣, 3️⃣, 4️⃣).\n   b. Mettez le titre du problème en gras.\n   c. Indentez les informations suivantes :\n      - Date (📅)\n      - Numéro d'issue (🔢)\n      - Description (📝)\n      - Solution de contournement (⚠️)\n\n3. Pour les listes de Workaround :\n   a. Commencez chaque élément par \"- \" suivi d'un indicateur de couleur.\n   b. Utilisez ces indicateurs au début de la ligne si les mots correspondants sont présents :\n      🟢 remplace \"(added)\"\n      🔴 remplace \"(removed)\"\n      🟠 remplace \"(changed)\"\n      🟡 remplace \"(into)\"\n\n4. Pour les autres éléments (comme le numéro d'issue) :\n   a. Gardez l'icône de base (par exemple, 🔢).\n   b. Ajoutez l'indicateur de couleur juste après si nécessaire.\n\n5. Mettez les stanzas de configuration sur une nouvelle ligne et indentez-les.\n\n6. Encadrez le tout dans des backticks (```) pour le rendre copiable.\n\nExemple de format pour un problème :\n\n1️⃣ Titre du problème\n    📅 Date filed: YYYY-MM-DD\n    🔢🟢 XXX-XXXXX\n    📝 Description: Description du problème\n    ⚠️ Workaround: \n    - 🟢 Étape ajoutée\n    - 🔴 Étape supprimée\n    - 🟠 Étape modifiée\n    - 🟡 Résultat de la modification\n\nLes informations sont les suivantes :\n{{ $json.body.diff }}"
-            },
-            "type": "@n8n/n8n-nodes-langchain.chainLlm",
-            "typeVersion": 1.5,
-            "position": [
-                112,
-                96
-            ],
-            "id": "fdabfb1c-34c8-4af2-9619-c2d9bb3080f9",
-            "name": "Basic LLM Chain1"
         },
         {
             "parameters": {
@@ -183,7 +145,7 @@
             "typeVersion": 2,
             "position": [
                 -544,
-                -48
+                48
             ],
             "id": "b37f12a4-232d-49e6-bfb4-c80acbb3987d",
             "name": "Appinfo",
@@ -191,25 +153,21 @@
         },
         {
             "parameters": {
-                "httpMethod": "POST",
-                "path": "splunk-issues",
-                "options": {}
+                "jsCode": "// Récupérer le texte du LLM\nconst llmOutput = $input.first().json.text || $input.first().json.output;\n\n// Parser le JSON (en nettoyant les backticks si présents)\nlet cleanedText = llmOutput.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n\ntry {\n  const jsonData = JSON.parse(cleanedText);\n  console.log(jsonData)\n  //return { content: jsonData };\n  if (Array.isArray(jsonData)) {\n    return jsonData.map(item => {\n      return {\n        json: {\n          text: item.text\n        }\n      };\n    });\n  }\n} catch (error) {\n  // Si le parsing échoue, retourner l'erreur\n  return { \n    json: { \n      error: \"Failed to parse JSON\", \n      raw_text: llmOutput,\n      error_message: error.message \n    } \n  };\n}"
             },
-            "id": "eb4462f5-d032-4a94-bda2-aaa727e06a5b",
-            "name": "Known issues",
-            "type": "n8n-nodes-base.webhook",
+            "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                -544,
-                128
+                448,
+                16
             ],
-            "webhookId": "f274fdf3-1562-4ab9-8619-a9875fcedc35",
-            "notes": "ChangeDetection Input"
+            "id": "807ef64e-2915-49d8-9c0d-e2ec4485f97f",
+            "name": "Clear data"
         },
         {
             "parameters": {
                 "chatId": "1037310358",
-                "text": "={{ $json.body.diff }}",
+                "text": "={{ $json.text }}",
                 "additionalFields": {
                     "appendAttribution": false
                 }
@@ -217,19 +175,18 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                -304,
-                208
+                672,
+                16
             ],
-            "id": "5506dd2f-01c0-40ac-bc90-058cd2f8fdf1",
-            "name": "Telegram1",
-            "webhookId": "296977e5-bbd6-4418-81bf-c7f34baf7471",
+            "id": "1ecee336-cf32-4d55-957f-242f235821c7",
+            "name": "Send a text message",
+            "webhookId": "a836d504-bdbd-4146-9135-7a33949596f1",
             "credentials": {
                 "telegramApi": {
                     "id": "t5jP1rX1Q7rEmgPc",
                     "name": "Telegram account"
                 }
-            },
-            "onError": "continueRegularOutput"
+            }
         }
     ],
     "connections": {
@@ -248,7 +205,7 @@
             "main": [
                 [
                     {
-                        "node": "Telegram",
+                        "node": "Clear data",
                         "type": "main",
                         "index": 0
                     }
@@ -261,22 +218,6 @@
                     {
                         "node": "Basic LLM Chain",
                         "type": "ai_languageModel",
-                        "index": 0
-                    },
-                    {
-                        "node": "Basic LLM Chain1",
-                        "type": "ai_languageModel",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Basic LLM Chain1": {
-            "main": [
-                [
-                    {
-                        "node": "Telegram",
-                        "type": "main",
                         "index": 0
                     }
                 ]
@@ -291,13 +232,7 @@
                         "index": 0
                     }
                 ],
-                [
-                    {
-                        "node": "Basic LLM Chain1",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
+                []
             ]
         },
         "Appinfo": {
@@ -311,16 +246,11 @@
                 ]
             ]
         },
-        "Known issues": {
+        "Clear data": {
             "main": [
                 [
                     {
-                        "node": "Telegram1",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "If",
+                        "node": "Send a text message",
                         "type": "main",
                         "index": 0
                     }
@@ -329,16 +259,17 @@
         }
     },
     "settings": {
-        "executionOrder": "v1"
+        "executionOrder": "v1",
+        "availableInMCP": true
     },
     "staticData": null,
     "meta": {
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "7ea6c518-93b4-48aa-bcea-f98ee1b641f1",
-    "activeVersionId": "7ea6c518-93b4-48aa-bcea-f98ee1b641f1",
-    "triggerCount": 2,
+    "versionId": "624bd24a-d96e-4a26-b1a4-4772523d4bbe",
+    "activeVersionId": "624bd24a-d96e-4a26-b1a4-4772523d4bbe",
+    "triggerCount": 1,
     "shared": [
         {
             "updatedAt": "2024-09-28T09:11:06.131Z",
@@ -349,35 +280,11 @@
         }
     ],
     "activeVersion": {
-        "updatedAt": "2026-02-01T00:05:07.000Z",
-        "createdAt": "2026-02-01T00:05:06.217Z",
-        "versionId": "7ea6c518-93b4-48aa-bcea-f98ee1b641f1",
+        "updatedAt": "2026-02-01T14:13:11.000Z",
+        "createdAt": "2026-02-01T14:13:09.629Z",
+        "versionId": "624bd24a-d96e-4a26-b1a4-4772523d4bbe",
         "workflowId": "gTBkibbRHEFPmn1l",
         "nodes": [
-            {
-                "parameters": {
-                    "chatId": "1037310358",
-                    "text": "={{ $json.text }}",
-                    "additionalFields": {
-                        "appendAttribution": false
-                    }
-                },
-                "type": "n8n-nodes-base.telegram",
-                "typeVersion": 1.2,
-                "position": [
-                    432,
-                    32
-                ],
-                "id": "2f0c6b21-f92e-4e3a-807a-0db2420c9998",
-                "name": "Telegram",
-                "webhookId": "296977e5-bbd6-4418-81bf-c7f34baf7471",
-                "credentials": {
-                    "telegramApi": {
-                        "id": "t5jP1rX1Q7rEmgPc",
-                        "name": "Telegram account"
-                    }
-                }
-            },
             {
                 "parameters": {
                     "conditions": {
@@ -415,27 +322,27 @@
             {
                 "parameters": {
                     "promptType": "define",
-                    "text": "=Transformez la notification de changement de ChangeDetection au format suivant:\n\nLa notification est au format:\n(changed) [nom_produit],[nom_fichier],[ancienne_version],[version_précédente],[date_heure]\n(into) [nom_produit],[nom_fichier],[nouvelle_version],[nouvelle_version_précédente],[date_heure]\n\nTransformer en format Telegram avec des émojis uniquement:\n\n🔄 MISE À JOUR 🔄\n\n📦 Produit : [nom_produit]\n\n➡️ Version : [ancienne_version] → [nouvelle_version]\n⬅️ Version précédente : [version_précédente] → [nouvelle_version_précédente]\n\n⏱️ Date : [date_heure]\n\n🔗 Fichier : [nom_fichier]\n\nN'utilisez pas de formatage spécial comme les étoiles ou les balises HTML. Respect les espaces. Seul les élements demandés sont nécessaires. Rajoute \"---\" entre les éléments, s'il y a plusieurs produits.\n\nLa notification est la suivante :\n{{ $json.body.diff }}"
+                    "text": "=Transformez la notification de changement de ChangeDetection au format suivant:\n\nLa notification est au format:\n(changed) [nom_produit],[nom_fichier],[ancienne_version],[version_précédente],[date_heure]\n(into) [nom_produit],[nom_fichier],[nouvelle_version],[nouvelle_version_précédente],[date_heure]\n\nTransformer en format Telegram avec des émojis uniquement:\n\n🔄 MISE À JOUR 🔄\n\n📦 Produit : [nom_produit]\n\n➡️ Version : [ancienne_version] → [nouvelle_version]\n⬅️ Version précédente : [version_précédente] → [nouvelle_version_précédente]\n\n⏱️ Date : [date_heure]\n\n🔗 Fichier : [nom_fichier]\n\nN'utilisez pas de formatage spécial comme les étoiles ou les balises HTML. Respect les espaces.\n\nPour chaque produit dans la notification suivante, génère un json ayant comme clé \"text\".\n\nLa notification est la suivante :\n{{ $json.body.diff }}"
                 },
                 "type": "@n8n/n8n-nodes-langchain.chainLlm",
                 "typeVersion": 1.5,
                 "position": [
                     112,
-                    -32
+                    16
                 ],
                 "id": "cbf43d69-d629-4d5c-87a4-0c457d142c2b",
                 "name": "Basic LLM Chain"
             },
             {
                 "parameters": {
-                    "model": "deepseek/deepseek-r1-0528:free",
+                    "model": "google/gemma-3-12b-it:free",
                     "options": {}
                 },
                 "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
                 "typeVersion": 1,
                 "position": [
-                    32,
-                    224
+                    112,
+                    208
                 ],
                 "id": "073ae533-c155-4b53-a97c-8ebadcb4aebf",
                 "name": "OpenRouter Chat Model",
@@ -445,20 +352,6 @@
                         "name": "OpenRouter account"
                     }
                 }
-            },
-            {
-                "parameters": {
-                    "promptType": "define",
-                    "text": "=Formatez les informations sur les problèmes de mise à niveau de Splunk Enterprise pour Telegram selon les règles suivantes :\n\n1. Commencez par un titre général avec l'emoji 🔧.\n\n2. Pour chaque problème :\n   a. Numérotez avec des emojis (1️⃣, 2️⃣, 3️⃣, 4️⃣).\n   b. Mettez le titre du problème en gras.\n   c. Indentez les informations suivantes :\n      - Date (📅)\n      - Numéro d'issue (🔢)\n      - Description (📝)\n      - Solution de contournement (⚠️)\n\n3. Pour les listes de Workaround :\n   a. Commencez chaque élément par \"- \" suivi d'un indicateur de couleur.\n   b. Utilisez ces indicateurs au début de la ligne si les mots correspondants sont présents :\n      🟢 remplace \"(added)\"\n      🔴 remplace \"(removed)\"\n      🟠 remplace \"(changed)\"\n      🟡 remplace \"(into)\"\n\n4. Pour les autres éléments (comme le numéro d'issue) :\n   a. Gardez l'icône de base (par exemple, 🔢).\n   b. Ajoutez l'indicateur de couleur juste après si nécessaire.\n\n5. Mettez les stanzas de configuration sur une nouvelle ligne et indentez-les.\n\n6. Encadrez le tout dans des backticks (```) pour le rendre copiable.\n\nExemple de format pour un problème :\n\n1️⃣ Titre du problème\n    📅 Date filed: YYYY-MM-DD\n    🔢🟢 XXX-XXXXX\n    📝 Description: Description du problème\n    ⚠️ Workaround: \n    - 🟢 Étape ajoutée\n    - 🔴 Étape supprimée\n    - 🟠 Étape modifiée\n    - 🟡 Résultat de la modification\n\nLes informations sont les suivantes :\n{{ $json.body.diff }}"
-                },
-                "type": "@n8n/n8n-nodes-langchain.chainLlm",
-                "typeVersion": 1.5,
-                "position": [
-                    112,
-                    96
-                ],
-                "id": "fdabfb1c-34c8-4af2-9619-c2d9bb3080f9",
-                "name": "Basic LLM Chain1"
             },
             {
                 "parameters": {
@@ -531,7 +424,7 @@
                 "typeVersion": 2,
                 "position": [
                     -544,
-                    -48
+                    48
                 ],
                 "id": "b37f12a4-232d-49e6-bfb4-c80acbb3987d",
                 "name": "Appinfo",
@@ -539,25 +432,21 @@
             },
             {
                 "parameters": {
-                    "httpMethod": "POST",
-                    "path": "splunk-issues",
-                    "options": {}
+                    "jsCode": "// Récupérer le texte du LLM\nconst llmOutput = $input.first().json.text || $input.first().json.output;\n\n// Parser le JSON (en nettoyant les backticks si présents)\nlet cleanedText = llmOutput.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n\ntry {\n  const jsonData = JSON.parse(cleanedText);\n  console.log(jsonData)\n  //return { content: jsonData };\n  if (Array.isArray(jsonData)) {\n    return jsonData.map(item => {\n      return {\n        json: {\n          text: item.text\n        }\n      };\n    });\n  }\n} catch (error) {\n  // Si le parsing échoue, retourner l'erreur\n  return { \n    json: { \n      error: \"Failed to parse JSON\", \n      raw_text: llmOutput,\n      error_message: error.message \n    } \n  };\n}"
                 },
-                "id": "eb4462f5-d032-4a94-bda2-aaa727e06a5b",
-                "name": "Known issues",
-                "type": "n8n-nodes-base.webhook",
+                "type": "n8n-nodes-base.code",
                 "typeVersion": 2,
                 "position": [
-                    -544,
-                    128
+                    448,
+                    16
                 ],
-                "webhookId": "f274fdf3-1562-4ab9-8619-a9875fcedc35",
-                "notes": "ChangeDetection Input"
+                "id": "807ef64e-2915-49d8-9c0d-e2ec4485f97f",
+                "name": "Clear data"
             },
             {
                 "parameters": {
                     "chatId": "1037310358",
-                    "text": "={{ $json.body.diff }}",
+                    "text": "={{ $json.text }}",
                     "additionalFields": {
                         "appendAttribution": false
                     }
@@ -565,19 +454,18 @@
                 "type": "n8n-nodes-base.telegram",
                 "typeVersion": 1.2,
                 "position": [
-                    -304,
-                    208
+                    672,
+                    16
                 ],
-                "id": "5506dd2f-01c0-40ac-bc90-058cd2f8fdf1",
-                "name": "Telegram1",
-                "webhookId": "296977e5-bbd6-4418-81bf-c7f34baf7471",
+                "id": "1ecee336-cf32-4d55-957f-242f235821c7",
+                "name": "Send a text message",
+                "webhookId": "a836d504-bdbd-4146-9135-7a33949596f1",
                 "credentials": {
                     "telegramApi": {
                         "id": "t5jP1rX1Q7rEmgPc",
                         "name": "Telegram account"
                     }
-                },
-                "onError": "continueRegularOutput"
+                }
             }
         ],
         "connections": {
@@ -596,7 +484,7 @@
                 "main": [
                     [
                         {
-                            "node": "Telegram",
+                            "node": "Clear data",
                             "type": "main",
                             "index": 0
                         }
@@ -609,22 +497,6 @@
                         {
                             "node": "Basic LLM Chain",
                             "type": "ai_languageModel",
-                            "index": 0
-                        },
-                        {
-                            "node": "Basic LLM Chain1",
-                            "type": "ai_languageModel",
-                            "index": 0
-                        }
-                    ]
-                ]
-            },
-            "Basic LLM Chain1": {
-                "main": [
-                    [
-                        {
-                            "node": "Telegram",
-                            "type": "main",
                             "index": 0
                         }
                     ]
@@ -639,13 +511,7 @@
                             "index": 0
                         }
                     ],
-                    [
-                        {
-                            "node": "Basic LLM Chain1",
-                            "type": "main",
-                            "index": 0
-                        }
-                    ]
+                    []
                 ]
             },
             "Appinfo": {
@@ -659,16 +525,11 @@
                     ]
                 ]
             },
-            "Known issues": {
+            "Clear data": {
                 "main": [
                     [
                         {
-                            "node": "Telegram1",
-                            "type": "main",
-                            "index": 0
-                        },
-                        {
-                            "node": "If",
+                            "node": "Send a text message",
                             "type": "main",
                             "index": 0
                         }
@@ -677,7 +538,7 @@
             }
         },
         "authors": "Snake Tech",
-        "name": "Version 7ea6c518",
+        "name": "Version 624bd24a",
         "description": "",
         "autosaved": false
     },
