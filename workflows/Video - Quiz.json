@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2025-12-15T21:58:12.510Z",
+    "updatedAt": "2026-02-06T23:06:15.243Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -147,7 +147,8 @@
                     "id": "xlHLi2jtbfIcs8L6",
                     "name": "DeepL account poubello"
                 }
-            }
+            },
+            "disabled": true
         },
         {
             "parameters": {
@@ -163,34 +164,6 @@
             "id": "be508378-fda0-4d8d-b85d-72bc2b35047a",
             "name": "HTTP Request",
             "executeOnce": false
-        },
-        {
-            "parameters": {
-                "language": "pythonNative",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nglob = _('Global Fields').first().json\nnumber = int(glob.number_question)\nitems = _('Rename Keys').all()[:number]\nreturn items"
-            },
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                704,
-                464
-            ],
-            "id": "182a4a2e-240f-4813-96e9-f07331316cac",
-            "name": "Get limited question"
-        },
-        {
-            "parameters": {
-                "language": "pythonNative",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport html\nimport os\n\nglob = _('Global Fields').first().json\naudio_background = html.escape(glob.get(\"audio_background\", \"\"))\naudio_break = html.escape(glob.get(\"audio_break\", \"\"))\naudio_correct_answer = html.escape(glob.get(\"audio_correct_answer\", \"\"))\ni = 0\n\nfor item in _input.all():\n  i += 1\n  voice_script = \"\"\n\n  voice_script += \"<speak version='1.0' xml:lang='fr-FR'>\"\n  if audio_background:\n    voice_script += f\"\"\"<mstts:backgroundaudio\n        src='{audio_background}'\n        volume='30' fadein='1500' fadeout='2000'/>\"\"\"\n  voice_script += \"<voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\"\n  \n  voice_script += \"<p>\"\n  voice_script += f\"{item.json.get(\"question\")}\"\n  if True: \n    voice_script += f\"<audio src='{audio_break}'/>\"\n  else:\n    voice_script += \"<break time='5s'/>\"\n  if True: \n    voice_script += f\"<audio src='{audio_correct_answer}'/>\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += \"<break strength='medium' />\"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\"\n  voice_script += \"</p>\"\n\n  voice_script += \"</voice></speak>\"\n\n  item.json.voice_script = voice_script\n  item.json.filename = glob.get(\"aws_prefix_audio_file\", \"\") + str(i) + \".mp3\"\n  item.json.aws_url = \"https://\" + glob.get(\"aws_bucket_name\", \"\") + \".s3.\" + glob.get(\"aws_region\", \"\") + \".amazonaws.com/\" + item.json.filename\n\nreturn _input.all()"
-            },
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                928,
-                592
-            ],
-            "id": "5aed2c62-3b22-4143-82a6-bc6ce089fec7",
-            "name": "Get voice prompting"
         },
         {
             "parameters": {
@@ -332,20 +305,6 @@
                 }
             },
             "disabled": true
-        },
-        {
-            "parameters": {
-                "language": "pythonNative",
-                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport json\nimport re\n\ntext = _input.first().json.text\n\njson_content = re.search(\"```json\\n([\\s\\S]*?)\\n```\", text)[1]\n\nquestions = json.loads(json_content)\n\nall_questions_items = _('Rename Keys').all()\nall_questions = [item.get(\"question\", \"\").strip().lower() for item in all_questions_items]\n\nnew_questions = [q1 for q1 in questions if q1.get(\"question\", \"\").strip().lower() not in all_questions]\n\nreturn new_questions"
-            },
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                1040,
-                832
-            ],
-            "id": "57dff129-12d2-466a-9f9d-0349b493a1da",
-            "name": "Get new questions"
         },
         {
             "parameters": {
@@ -879,6 +838,87 @@
             ],
             "id": "15649dbe-8957-4258-8ee8-4a47d79d77cc",
             "name": "Code in JavaScript"
+        },
+        {
+            "parameters": {
+                "language": "pythonNative",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nglob = _('Global Fields').first().json\nnumber = int(glob.number_question)\nitems = _('Rename Keys').all()[:number]\nreturn items"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                224,
+                272
+            ],
+            "id": "182a4a2e-240f-4813-96e9-f07331316cac",
+            "name": "Get limited question Python"
+        },
+        {
+            "parameters": {
+                "jsCode": "const glob = $('Global Fields').first().json;\nconst items = $('Rename Keys').all().slice(0, parseInt(glob.number_question));\nreturn items;"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                704,
+                464
+            ],
+            "id": "b57755f1-01c9-4b22-bc57-a9ac0ad714b2",
+            "name": "Get limited question"
+        },
+        {
+            "parameters": {
+                "language": "pythonNative",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport html\nimport os\n\nglob = _('Global Fields').first().json\naudio_background = html.escape(glob.get(\"audio_background\", \"\"))\naudio_break = html.escape(glob.get(\"audio_break\", \"\"))\naudio_correct_answer = html.escape(glob.get(\"audio_correct_answer\", \"\"))\ni = 0\n\nfor item in _input.all():\n  i += 1\n  voice_script = \"\"\n\n  voice_script += \"<speak version='1.0' xml:lang='fr-FR'>\"\n  if audio_background:\n    voice_script += f\"\"\"<mstts:backgroundaudio\n        src='{audio_background}'\n        volume='30' fadein='1500' fadeout='2000'/>\"\"\"\n  voice_script += \"<voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\"\n  \n  voice_script += \"<p>\"\n  voice_script += f\"{item.json.get(\"question\")}\"\n  if True: \n    voice_script += f\"<audio src='{audio_break}'/>\"\n  else:\n    voice_script += \"<break time='5s'/>\"\n  if True: \n    voice_script += f\"<audio src='{audio_correct_answer}'/>\"\n  voice_script += f\"Réponse {item.json.get(\"correct_answer\")} \"\n  voice_script += \"<break strength='medium' />\"\n  voice_script += f\"{item.json.get(f\"option_{item.json.get(\"correct_answer\").lower()}\")}\"\n  voice_script += \"</p>\"\n\n  voice_script += \"</voice></speak>\"\n\n  item.json.voice_script = voice_script\n  item.json.filename = glob.get(\"aws_prefix_audio_file\", \"\") + str(i) + \".mp3\"\n  item.json.aws_url = \"https://\" + glob.get(\"aws_bucket_name\", \"\") + \".s3.\" + glob.get(\"aws_region\", \"\") + \".amazonaws.com/\" + item.json.filename\n\nreturn _input.all()"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                448,
+                272
+            ],
+            "id": "5aed2c62-3b22-4143-82a6-bc6ce089fec7",
+            "name": "Get voice prompting Python"
+        },
+        {
+            "parameters": {
+                "jsCode": "const glob = $('Global Fields').first().json;\n\nconst escapeHtml = (str) => {\n  if (!str) return '';\n  return str\n    .replace(/&/g, '&amp;')\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;')\n    .replace(/'/g, '&#039;');\n};\n\nconst audio_background = escapeHtml(glob.audio_background || '');\nconst audio_break = escapeHtml(glob.audio_break || '');\nconst audio_correct_answer = escapeHtml(glob.audio_correct_answer || '');\n\nlet i = 0;\nconst items = $input.all();\n\nfor (const item of items) {\n  i++;\n  let voice_script = '';\n  \n  voice_script += \"<speak version='1.0' xml:lang='fr-FR'>\";\n  \n  if (audio_background) {\n    voice_script += `<mstts:backgroundaudio\n        src='${audio_background}'\n        volume='30' fadein='1500' fadeout='2000'/>`;\n  }\n  \n  voice_script += \"<voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\";\n  voice_script += \"<p>\";\n  voice_script += item.json.question || '';\n  \n  if (true) {\n    voice_script += `<audio src='${audio_break}'/>`;\n  } else {\n    voice_script += \"<break time='5s'/>\";\n  }\n  \n  if (true) {\n    voice_script += `<audio src='${audio_correct_answer}'/>`;\n  }\n  \n  const correctAnswer = item.json.correct_answer || '';\n  voice_script += `Réponse ${correctAnswer} `;\n  voice_script += \"<break strength='medium' />\";\n  \n  const optionKey = `option_${correctAnswer.toLowerCase()}`;\n  voice_script += item.json[optionKey] || '';\n  \n  voice_script += \"</p>\";\n  voice_script += \"</voice></speak>\";\n  \n  item.json.voice_script = voice_script;\n  item.json.filename = (glob.aws_prefix_audio_file || '') + i + '.mp3';\n  item.json.aws_url = 'https://' + (glob.aws_bucket_name || '') + '.s3.' + (glob.aws_region || '') + '.amazonaws.com/' + item.json.filename;\n}\n\nreturn items;"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                928,
+                592
+            ],
+            "id": "a02e0b6d-0eef-483d-b98a-8c8212d64a40",
+            "name": "Get voice prompting"
+        },
+        {
+            "parameters": {
+                "language": "pythonNative",
+                "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport json\nimport re\n\ntext = _input.first().json.text\n\njson_content = re.search(\"```json\\n([\\s\\S]*?)\\n```\", text)[1]\n\nquestions = json.loads(json_content)\n\nall_questions_items = _('Rename Keys').all()\nall_questions = [item.get(\"question\", \"\").strip().lower() for item in all_questions_items]\n\nnew_questions = [q1 for q1 in questions if q1.get(\"question\", \"\").strip().lower() not in all_questions]\n\nreturn new_questions"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                352,
+                448
+            ],
+            "id": "57dff129-12d2-466a-9f9d-0349b493a1da",
+            "name": "Get new questions Python"
+        },
+        {
+            "parameters": {
+                "jsCode": "const text = $input.first().json.text;\nconst jsonMatch = text.match(/```json\\n([\\s\\S]*?)\\n```/);\nconst jsonContent = jsonMatch[1];\nconst questions = JSON.parse(jsonContent);\n\nconst allQuestionsItems = $('Rename Keys').all();\nconst allQuestions = allQuestionsItems.map(item => \n  (item.json.question || '').trim().toLowerCase()\n);\n\nconst newQuestions = questions.filter(q => \n  !allQuestions.includes((q.question || '').trim().toLowerCase())\n);\n\nreturn newQuestions;"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1024,
+                832
+            ],
+            "id": "69393ed0-8ef1-4151-bbd4-265210a611c4",
+            "name": "Get new questions"
         }
     ],
     "connections": {
@@ -909,22 +949,6 @@
                 ]
             ]
         },
-        "Get limited question": {
-            "main": [
-                [
-                    {
-                        "node": "Translate a language",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Get voice prompting",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
         "Global Fields": {
             "main": [
                 [
@@ -936,33 +960,11 @@
                 ]
             ]
         },
-        "Get voice prompting": {
-            "main": [
-                [
-                    {
-                        "node": "Retrieve audio data",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
         "Create a row": {
             "main": [
                 [
                     {
                         "node": "Get many database pages",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Get new questions": {
-            "main": [
-                [
-                    {
-                        "node": "Create a database page",
                         "type": "main",
                         "index": 0
                     }
@@ -1184,6 +1186,59 @@
                     }
                 ]
             ]
+        },
+        "Get limited question Python": {
+            "main": [
+                []
+            ]
+        },
+        "Get limited question": {
+            "main": [
+                [
+                    {
+                        "node": "Translate a language",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Get voice prompting",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get voice prompting Python": {
+            "main": [
+                []
+            ]
+        },
+        "Get voice prompting": {
+            "main": [
+                [
+                    {
+                        "node": "Retrieve audio data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get new questions Python": {
+            "main": [
+                []
+            ]
+        },
+        "Get new questions": {
+            "main": [
+                [
+                    {
+                        "node": "Create a database page",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
         }
     },
     "settings": {
@@ -1194,7 +1249,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "65478fa6-cc30-426a-9e0c-5168be491345",
+    "versionId": "3afdc881-4cca-49c9-801f-f9a96bee9768",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
