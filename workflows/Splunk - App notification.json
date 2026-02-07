@@ -1,0 +1,553 @@
+{
+    "updatedAt": "2026-02-06T22:21:24.985Z",
+    "createdAt": "2024-09-28T09:11:06.127Z",
+    "id": "gTBkibbRHEFPmn1l",
+    "name": "Splunk - App notification",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 2
+                    },
+                    "conditions": [
+                        {
+                            "id": "b7f30531-bbfd-48ad-8b72-cfb8a7c28d43",
+                            "leftValue": "={{ $json.body.diff }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "notEmpty",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.2,
+            "position": [
+                -304,
+                48
+            ],
+            "id": "c1bc587e-83b1-486f-b1f1-37af089b415c",
+            "name": "If"
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Transformez la notification de changement de ChangeDetection au format suivant:\n\nLa notification est au format:\n(changed) [nom_produit],[nom_fichier],[ancienne_version],[version_précédente],[date_heure]\n(into) [nom_produit],[nom_fichier],[nouvelle_version],[nouvelle_version_précédente],[date_heure]\n\nTransformer en format Telegram avec des émojis uniquement:\n\n🔄 MISE À JOUR 🔄\n\n📦 Produit : [nom_produit]\n\n➡️ Version : [ancienne_version] → [nouvelle_version]\n⬅️ Version précédente : [version_précédente] → [nouvelle_version_précédente]\n\n⏱️ Date : [date_heure]\n\n🔗 Fichier : [nom_fichier]\n\nN'utilisez pas de formatage spécial comme les étoiles ou les balises HTML. Respect les espaces.\n\nPour chaque produit dans la notification suivante, génère un json ayant comme clé \"text\".\n\nLa notification est la suivante :\n{{ $json.body.diff }}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.chainLlm",
+            "typeVersion": 1.5,
+            "position": [
+                112,
+                16
+            ],
+            "id": "cbf43d69-d629-4d5c-87a4-0c457d142c2b",
+            "name": "Basic LLM Chain"
+        },
+        {
+            "parameters": {
+                "model": "google/gemma-3-12b-it:free",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+            "typeVersion": 1,
+            "position": [
+                112,
+                208
+            ],
+            "id": "073ae533-c155-4b53-a97c-8ebadcb4aebf",
+            "name": "OpenRouter Chat Model",
+            "credentials": {
+                "openRouterApi": {
+                    "id": "eJL3ulSkeT8Q0dwT",
+                    "name": "OpenRouter account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "rules": {
+                    "values": [
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "leftValue": "={{ $json.webhookUrl }}",
+                                        "rightValue": "splunk-appinfo",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "contains"
+                                        },
+                                        "id": "e38b90ea-32e8-4d81-92f0-33436edccd04"
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        },
+                        {
+                            "conditions": {
+                                "options": {
+                                    "caseSensitive": true,
+                                    "leftValue": "",
+                                    "typeValidation": "strict",
+                                    "version": 2
+                                },
+                                "conditions": [
+                                    {
+                                        "id": "172366e4-fc17-4c6d-b3b0-a45d654b307e",
+                                        "leftValue": "={{ $json.webhookUrl }}",
+                                        "rightValue": "splunk-issues",
+                                        "operator": {
+                                            "type": "string",
+                                            "operation": "contains"
+                                        }
+                                    }
+                                ],
+                                "combinator": "and"
+                            }
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.switch",
+            "typeVersion": 3.2,
+            "position": [
+                -80,
+                32
+            ],
+            "id": "0e279135-95c5-4976-b6a1-452167a4dc26",
+            "name": "Switch"
+        },
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "splunk-appinfo",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2,
+            "position": [
+                -544,
+                48
+            ],
+            "id": "b37f12a4-232d-49e6-bfb4-c80acbb3987d",
+            "name": "Appinfo",
+            "webhookId": "6834f464-b579-4250-9b15-8b59562edb97"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Récupérer le texte du LLM\nconst llmOutput = $input.first().json.text || $input.first().json.output;\n\n// Parser le JSON (en nettoyant les backticks si présents)\nlet cleanedText = llmOutput.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n\ntry {\n  const jsonData = JSON.parse(cleanedText);\n  console.log(jsonData)\n  //return { content: jsonData };\n  if (Array.isArray(jsonData)) {\n    return jsonData.map(item => {\n      return {\n        json: {\n          text: item.text\n        }\n      };\n    });\n  }\n} catch (error) {\n  // Si le parsing échoue, retourner l'erreur\n  return { \n    json: { \n      error: \"Failed to parse JSON\", \n      raw_text: llmOutput,\n      error_message: error.message \n    } \n  };\n}"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                448,
+                16
+            ],
+            "id": "807ef64e-2915-49d8-9c0d-e2ec4485f97f",
+            "name": "Clear data"
+        },
+        {
+            "parameters": {
+                "chatId": "1037310358",
+                "text": "={{ $json.text }}",
+                "additionalFields": {
+                    "appendAttribution": false
+                }
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                672,
+                16
+            ],
+            "id": "1ecee336-cf32-4d55-957f-242f235821c7",
+            "name": "Send a text message",
+            "webhookId": "a836d504-bdbd-4146-9135-7a33949596f1",
+            "credentials": {
+                "telegramApi": {
+                    "id": "t5jP1rX1Q7rEmgPc",
+                    "name": "Telegram account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "If": {
+            "main": [
+                [
+                    {
+                        "node": "Switch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Basic LLM Chain": {
+            "main": [
+                [
+                    {
+                        "node": "Clear data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "OpenRouter Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Switch": {
+            "main": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                []
+            ]
+        },
+        "Appinfo": {
+            "main": [
+                [
+                    {
+                        "node": "If",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Clear data": {
+            "main": [
+                [
+                    {
+                        "node": "Send a text message",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "624bd24a-d96e-4a26-b1a4-4772523d4bbe",
+    "activeVersionId": "624bd24a-d96e-4a26-b1a4-4772523d4bbe",
+    "triggerCount": 1,
+    "shared": [
+        {
+            "updatedAt": "2024-09-28T09:11:06.131Z",
+            "createdAt": "2024-09-28T09:11:06.131Z",
+            "role": "workflow:owner",
+            "workflowId": "gTBkibbRHEFPmn1l",
+            "projectId": "lnYpJLFYV8VS8Mcd"
+        }
+    ],
+    "activeVersion": {
+        "updatedAt": "2026-02-01T14:13:11.000Z",
+        "createdAt": "2026-02-01T14:13:09.629Z",
+        "versionId": "624bd24a-d96e-4a26-b1a4-4772523d4bbe",
+        "workflowId": "gTBkibbRHEFPmn1l",
+        "nodes": [
+            {
+                "parameters": {
+                    "conditions": {
+                        "options": {
+                            "caseSensitive": true,
+                            "leftValue": "",
+                            "typeValidation": "strict",
+                            "version": 2
+                        },
+                        "conditions": [
+                            {
+                                "id": "b7f30531-bbfd-48ad-8b72-cfb8a7c28d43",
+                                "leftValue": "={{ $json.body.diff }}",
+                                "rightValue": "",
+                                "operator": {
+                                    "type": "string",
+                                    "operation": "notEmpty",
+                                    "singleValue": true
+                                }
+                            }
+                        ],
+                        "combinator": "and"
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.if",
+                "typeVersion": 2.2,
+                "position": [
+                    -304,
+                    48
+                ],
+                "id": "c1bc587e-83b1-486f-b1f1-37af089b415c",
+                "name": "If"
+            },
+            {
+                "parameters": {
+                    "promptType": "define",
+                    "text": "=Transformez la notification de changement de ChangeDetection au format suivant:\n\nLa notification est au format:\n(changed) [nom_produit],[nom_fichier],[ancienne_version],[version_précédente],[date_heure]\n(into) [nom_produit],[nom_fichier],[nouvelle_version],[nouvelle_version_précédente],[date_heure]\n\nTransformer en format Telegram avec des émojis uniquement:\n\n🔄 MISE À JOUR 🔄\n\n📦 Produit : [nom_produit]\n\n➡️ Version : [ancienne_version] → [nouvelle_version]\n⬅️ Version précédente : [version_précédente] → [nouvelle_version_précédente]\n\n⏱️ Date : [date_heure]\n\n🔗 Fichier : [nom_fichier]\n\nN'utilisez pas de formatage spécial comme les étoiles ou les balises HTML. Respect les espaces.\n\nPour chaque produit dans la notification suivante, génère un json ayant comme clé \"text\".\n\nLa notification est la suivante :\n{{ $json.body.diff }}"
+                },
+                "type": "@n8n/n8n-nodes-langchain.chainLlm",
+                "typeVersion": 1.5,
+                "position": [
+                    112,
+                    16
+                ],
+                "id": "cbf43d69-d629-4d5c-87a4-0c457d142c2b",
+                "name": "Basic LLM Chain"
+            },
+            {
+                "parameters": {
+                    "model": "google/gemma-3-12b-it:free",
+                    "options": {}
+                },
+                "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+                "typeVersion": 1,
+                "position": [
+                    112,
+                    208
+                ],
+                "id": "073ae533-c155-4b53-a97c-8ebadcb4aebf",
+                "name": "OpenRouter Chat Model",
+                "credentials": {
+                    "openRouterApi": {
+                        "id": "eJL3ulSkeT8Q0dwT",
+                        "name": "OpenRouter account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "rules": {
+                        "values": [
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 2
+                                    },
+                                    "conditions": [
+                                        {
+                                            "leftValue": "={{ $json.webhookUrl }}",
+                                            "rightValue": "splunk-appinfo",
+                                            "operator": {
+                                                "type": "string",
+                                                "operation": "contains"
+                                            },
+                                            "id": "e38b90ea-32e8-4d81-92f0-33436edccd04"
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                }
+                            },
+                            {
+                                "conditions": {
+                                    "options": {
+                                        "caseSensitive": true,
+                                        "leftValue": "",
+                                        "typeValidation": "strict",
+                                        "version": 2
+                                    },
+                                    "conditions": [
+                                        {
+                                            "id": "172366e4-fc17-4c6d-b3b0-a45d654b307e",
+                                            "leftValue": "={{ $json.webhookUrl }}",
+                                            "rightValue": "splunk-issues",
+                                            "operator": {
+                                                "type": "string",
+                                                "operation": "contains"
+                                            }
+                                        }
+                                    ],
+                                    "combinator": "and"
+                                }
+                            }
+                        ]
+                    },
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.switch",
+                "typeVersion": 3.2,
+                "position": [
+                    -80,
+                    32
+                ],
+                "id": "0e279135-95c5-4976-b6a1-452167a4dc26",
+                "name": "Switch"
+            },
+            {
+                "parameters": {
+                    "httpMethod": "POST",
+                    "path": "splunk-appinfo",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.webhook",
+                "typeVersion": 2,
+                "position": [
+                    -544,
+                    48
+                ],
+                "id": "b37f12a4-232d-49e6-bfb4-c80acbb3987d",
+                "name": "Appinfo",
+                "webhookId": "6834f464-b579-4250-9b15-8b59562edb97"
+            },
+            {
+                "parameters": {
+                    "jsCode": "// Récupérer le texte du LLM\nconst llmOutput = $input.first().json.text || $input.first().json.output;\n\n// Parser le JSON (en nettoyant les backticks si présents)\nlet cleanedText = llmOutput.replace(/```json\\n?/g, '').replace(/```\\n?/g, '').trim();\n\ntry {\n  const jsonData = JSON.parse(cleanedText);\n  console.log(jsonData)\n  //return { content: jsonData };\n  if (Array.isArray(jsonData)) {\n    return jsonData.map(item => {\n      return {\n        json: {\n          text: item.text\n        }\n      };\n    });\n  }\n} catch (error) {\n  // Si le parsing échoue, retourner l'erreur\n  return { \n    json: { \n      error: \"Failed to parse JSON\", \n      raw_text: llmOutput,\n      error_message: error.message \n    } \n  };\n}"
+                },
+                "type": "n8n-nodes-base.code",
+                "typeVersion": 2,
+                "position": [
+                    448,
+                    16
+                ],
+                "id": "807ef64e-2915-49d8-9c0d-e2ec4485f97f",
+                "name": "Clear data"
+            },
+            {
+                "parameters": {
+                    "chatId": "1037310358",
+                    "text": "={{ $json.text }}",
+                    "additionalFields": {
+                        "appendAttribution": false
+                    }
+                },
+                "type": "n8n-nodes-base.telegram",
+                "typeVersion": 1.2,
+                "position": [
+                    672,
+                    16
+                ],
+                "id": "1ecee336-cf32-4d55-957f-242f235821c7",
+                "name": "Send a text message",
+                "webhookId": "a836d504-bdbd-4146-9135-7a33949596f1",
+                "credentials": {
+                    "telegramApi": {
+                        "id": "t5jP1rX1Q7rEmgPc",
+                        "name": "Telegram account"
+                    }
+                }
+            }
+        ],
+        "connections": {
+            "If": {
+                "main": [
+                    [
+                        {
+                            "node": "Switch",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Basic LLM Chain": {
+                "main": [
+                    [
+                        {
+                            "node": "Clear data",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "OpenRouter Chat Model": {
+                "ai_languageModel": [
+                    [
+                        {
+                            "node": "Basic LLM Chain",
+                            "type": "ai_languageModel",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Switch": {
+                "main": [
+                    [
+                        {
+                            "node": "Basic LLM Chain",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ],
+                    []
+                ]
+            },
+            "Appinfo": {
+                "main": [
+                    [
+                        {
+                            "node": "If",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Clear data": {
+                "main": [
+                    [
+                        {
+                            "node": "Send a text message",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "authors": "Snake Tech",
+        "name": "Version 624bd24a",
+        "description": "",
+        "autosaved": false
+    },
+    "tags": [
+        {
+            "updatedAt": "2025-03-07T09:51:44.106Z",
+            "createdAt": "2025-03-07T09:51:44.106Z",
+            "id": "hrujP4Cg0eJXvNqE",
+            "name": "splunk"
+        }
+    ]
+}
