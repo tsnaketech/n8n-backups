@@ -1,36 +1,11 @@
 {
-    "updatedAt": "2026-02-06T23:06:15.243Z",
+    "updatedAt": "2026-02-07T09:03:57.607Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
     "active": false,
     "isArchived": false,
     "nodes": [
-        {
-            "parameters": {
-                "resource": "audio",
-                "input": "={{ $json.voice_script }}",
-                "voice": "shimmer",
-                "options": {
-                    "response_format": "aac"
-                }
-            },
-            "type": "@n8n/n8n-nodes-langchain.openAi",
-            "typeVersion": 1.8,
-            "position": [
-                816,
-                -352
-            ],
-            "id": "9d5b3f0c-550b-4a94-bfdb-19a4e6f20eee",
-            "name": "Generate audio",
-            "credentials": {
-                "openAiApi": {
-                    "id": "H0VcOhL36gFHQbme",
-                    "name": "OpenAi mickael.lcq account"
-                }
-            },
-            "disabled": true
-        },
         {
             "parameters": {
                 "operation": "update",
@@ -702,7 +677,7 @@
         },
         {
             "parameters": {
-                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json = JSON.parse(item.json.data)\n}\n\nreturn $input.all();"
+                "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  item.json = JSON.parse(item.json.data)\n}\nreturn $input.all();"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
@@ -847,8 +822,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                224,
-                272
+                -32,
+                -144
             ],
             "id": "182a4a2e-240f-4813-96e9-f07331316cac",
             "name": "Get limited question Python"
@@ -874,8 +849,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                448,
-                272
+                192,
+                -144
             ],
             "id": "5aed2c62-3b22-4143-82a6-bc6ce089fec7",
             "name": "Get voice prompting Python"
@@ -901,8 +876,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                352,
-                448
+                96,
+                32
             ],
             "id": "57dff129-12d2-466a-9f9d-0349b493a1da",
             "name": "Get new questions Python"
@@ -1249,7 +1224,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "3afdc881-4cca-49c9-801f-f9a96bee9768",
+    "versionId": "99da1b62-d698-4f65-b397-f0d5c9f83f7f",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
