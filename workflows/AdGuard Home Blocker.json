@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-01-21T19:02:02.543Z",
+    "updatedAt": "2026-02-12T21:43:29.747Z",
     "createdAt": "2026-01-13T00:12:36.309Z",
     "id": "9VKqoiNL2PqJ8hxa2AOJG",
     "name": "AdGuard Home Blocker",
@@ -101,7 +101,7 @@
                     "item": [
                         {
                             "mode": "custom",
-                            "cronExpression": "0 30 0-3/1 * * 1-5"
+                            "cronExpression": "0 0 0-3/1 * * 1-5"
                         }
                     ]
                 }
@@ -281,8 +281,8 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "b3246070-1ce7-468c-9323-ad1a705d394d",
-    "activeVersionId": "b3246070-1ce7-468c-9323-ad1a705d394d",
+    "versionId": "e6c8dd1d-c57a-4bda-9e32-50cab9a8c0e1",
+    "activeVersionId": "e6c8dd1d-c57a-4bda-9e32-50cab9a8c0e1",
     "triggerCount": 3,
     "shared": [
         {
@@ -294,9 +294,9 @@
         }
     ],
     "activeVersion": {
-        "updatedAt": "2026-01-31T15:45:38.000Z",
-        "createdAt": "2026-01-21T19:02:02.543Z",
-        "versionId": "b3246070-1ce7-468c-9323-ad1a705d394d",
+        "updatedAt": "2026-02-12T21:43:30.000Z",
+        "createdAt": "2026-02-12T21:43:29.748Z",
+        "versionId": "e6c8dd1d-c57a-4bda-9e32-50cab9a8c0e1",
         "workflowId": "9VKqoiNL2PqJ8hxa2AOJG",
         "nodes": [
             {
@@ -394,7 +394,7 @@
                         "item": [
                             {
                                 "mode": "custom",
-                                "cronExpression": "0 30 0-3/1 * * 1-5"
+                                "cronExpression": "0 0 0-3/1 * * 1-5"
                             }
                         ]
                     }
@@ -564,7 +564,7 @@
             }
         },
         "authors": "Snake Tech",
-        "name": "Version b3246070",
+        "name": "Version e6c8dd1d",
         "description": "",
         "autosaved": false
     },
