@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-02-12T21:43:29.747Z",
+    "updatedAt": "2026-02-14T09:47:55.108Z",
     "createdAt": "2026-01-13T00:12:36.309Z",
     "id": "9VKqoiNL2PqJ8hxa2AOJG",
     "name": "AdGuard Home Blocker",
@@ -81,7 +81,7 @@
                     "item": [
                         {
                             "mode": "custom",
-                            "cronExpression": "=0 0 12-15/1 * * *"
+                            "cronExpression": "=0 0 10-15/1 * * *"
                         }
                     ]
                 }
@@ -132,67 +132,6 @@
         },
         {
             "parameters": {
-                "rules": {
-                    "values": [
-                        {
-                            "conditions": {
-                                "options": {
-                                    "caseSensitive": true,
-                                    "leftValue": "",
-                                    "typeValidation": "strict",
-                                    "version": 3
-                                },
-                                "conditions": [
-                                    {
-                                        "leftValue": "={{ $now.hour }}",
-                                        "rightValue": 10,
-                                        "operator": {
-                                            "type": "number",
-                                            "operation": "gte"
-                                        },
-                                        "id": "256c40bb-5e3e-48aa-a396-99bb0bc980d1"
-                                    }
-                                ],
-                                "combinator": "and"
-                            }
-                        },
-                        {
-                            "conditions": {
-                                "options": {
-                                    "caseSensitive": true,
-                                    "leftValue": "",
-                                    "typeValidation": "strict",
-                                    "version": 3
-                                },
-                                "conditions": [
-                                    {
-                                        "id": "533782c6-c153-4d83-bf33-7983835beae6",
-                                        "leftValue": "={{ $now.hour }}",
-                                        "rightValue": 1,
-                                        "operator": {
-                                            "type": "number",
-                                            "operation": "gte"
-                                        }
-                                    }
-                                ],
-                                "combinator": "and"
-                            }
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "type": "n8n-nodes-base.switch",
-            "typeVersion": 3.4,
-            "position": [
-                80,
-                96
-            ],
-            "id": "b0186699-8122-423f-98e1-e83906c56d1c",
-            "name": "Switch"
-        },
-        {
-            "parameters": {
                 "triggerTimes": {
                     "item": [
                         {
@@ -240,24 +179,6 @@
                 ]
             ]
         },
-        "Switch": {
-            "main": [
-                [
-                    {
-                        "node": "Débloquer Services",
-                        "type": "main",
-                        "index": 0
-                    }
-                ],
-                [
-                    {
-                        "node": "Bloquer Services",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
         "Trigger Blocage1": {
             "main": [
                 [
@@ -281,8 +202,8 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "e6c8dd1d-c57a-4bda-9e32-50cab9a8c0e1",
-    "activeVersionId": "e6c8dd1d-c57a-4bda-9e32-50cab9a8c0e1",
+    "versionId": "3f556169-2748-4487-bb0d-85e51a56cd52",
+    "activeVersionId": "3f556169-2748-4487-bb0d-85e51a56cd52",
     "triggerCount": 3,
     "shared": [
         {
@@ -294,9 +215,9 @@
         }
     ],
     "activeVersion": {
-        "updatedAt": "2026-02-12T21:43:30.000Z",
-        "createdAt": "2026-02-12T21:43:29.748Z",
-        "versionId": "e6c8dd1d-c57a-4bda-9e32-50cab9a8c0e1",
+        "updatedAt": "2026-02-14T09:47:55.000Z",
+        "createdAt": "2026-02-14T09:47:55.108Z",
+        "versionId": "3f556169-2748-4487-bb0d-85e51a56cd52",
         "workflowId": "9VKqoiNL2PqJ8hxa2AOJG",
         "nodes": [
             {
@@ -374,7 +295,7 @@
                         "item": [
                             {
                                 "mode": "custom",
-                                "cronExpression": "=0 0 12-15/1 * * *"
+                                "cronExpression": "=0 0 10-15/1 * * *"
                             }
                         ]
                     }
@@ -425,67 +346,6 @@
             },
             {
                 "parameters": {
-                    "rules": {
-                        "values": [
-                            {
-                                "conditions": {
-                                    "options": {
-                                        "caseSensitive": true,
-                                        "leftValue": "",
-                                        "typeValidation": "strict",
-                                        "version": 3
-                                    },
-                                    "conditions": [
-                                        {
-                                            "leftValue": "={{ $now.hour }}",
-                                            "rightValue": 10,
-                                            "operator": {
-                                                "type": "number",
-                                                "operation": "gte"
-                                            },
-                                            "id": "256c40bb-5e3e-48aa-a396-99bb0bc980d1"
-                                        }
-                                    ],
-                                    "combinator": "and"
-                                }
-                            },
-                            {
-                                "conditions": {
-                                    "options": {
-                                        "caseSensitive": true,
-                                        "leftValue": "",
-                                        "typeValidation": "strict",
-                                        "version": 3
-                                    },
-                                    "conditions": [
-                                        {
-                                            "id": "533782c6-c153-4d83-bf33-7983835beae6",
-                                            "leftValue": "={{ $now.hour }}",
-                                            "rightValue": 1,
-                                            "operator": {
-                                                "type": "number",
-                                                "operation": "gte"
-                                            }
-                                        }
-                                    ],
-                                    "combinator": "and"
-                                }
-                            }
-                        ]
-                    },
-                    "options": {}
-                },
-                "type": "n8n-nodes-base.switch",
-                "typeVersion": 3.4,
-                "position": [
-                    80,
-                    96
-                ],
-                "id": "b0186699-8122-423f-98e1-e83906c56d1c",
-                "name": "Switch"
-            },
-            {
-                "parameters": {
                     "triggerTimes": {
                         "item": [
                             {
@@ -533,24 +393,6 @@
                     ]
                 ]
             },
-            "Switch": {
-                "main": [
-                    [
-                        {
-                            "node": "Débloquer Services",
-                            "type": "main",
-                            "index": 0
-                        }
-                    ],
-                    [
-                        {
-                            "node": "Bloquer Services",
-                            "type": "main",
-                            "index": 0
-                        }
-                    ]
-                ]
-            },
             "Trigger Blocage1": {
                 "main": [
                     [
@@ -564,7 +406,7 @@
             }
         },
         "authors": "Snake Tech",
-        "name": "Version e6c8dd1d",
+        "name": "Version 3f556169",
         "description": "",
         "autosaved": false
     },
