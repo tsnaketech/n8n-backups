@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-02-07T09:03:57.607Z",
+    "updatedAt": "2026-02-16T23:39:08.941Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -740,7 +740,7 @@
             "parameters": {
                 "operation": "delete",
                 "bucketName": "={{ $('Global Fields').first().json.aws_bucket_name }}",
-                "fileKey": "={{ $node[\"Get voice prompting\"].json.filename }}",
+                "fileKey": "={{ $node[\"Get voice prompting\"][\"json\"][\"filename\"] }}",
                 "options": {}
             },
             "type": "n8n-nodes-base.awsS3",
@@ -762,7 +762,7 @@
             "parameters": {
                 "operation": "get",
                 "propertyName": "data",
-                "key": "={{ $node[\"Get voice prompting\"].json.filename }}",
+                "key": "={{ $node[\"Get voice prompting\"][\"json\"][\"filename\"] }}",
                 "options": {}
             },
             "type": "n8n-nodes-base.redis",
@@ -800,19 +800,6 @@
                     "name": "Redis pika account"
                 }
             }
-        },
-        {
-            "parameters": {
-                "jsCode": "// Iterate over each item in the input\nconst items = []\nconst questions = $(\"Get voice prompting\").all()\n$input.all().forEach((item, i) => {\n  // Map the segments array to keep only specific fields\n  if (item.json && item.json.output && Array.isArray(item.json.output.segments)) {\n    var segments = item.json.output.segments;\n\n    // Ensure there are at least two segments to merge\n    if (segments.length >= 3) {\n      const last = segments[segments.length - 2];\n      const secondLast = segments[segments.length - 1];\n\n      // Create merged segment\n      const mergedSegment = {\n        id: last.id, // Keep the earlier id or use a new one\n        start: last.start, // Use start of the earlier segment\n        end: secondLast.end, // Use end of the last segment\n        text: `${last.text} ${secondLast.text}`.trim() // Concatenate text\n      };\n\n      // Build new segments array: keep all except last two, then add merged\n      const newSegments = segments.slice(0, -2); // Keep all but last two\n      newSegments.push(mergedSegment); // Add merged segment\n      segments = newSegments\n    }\n\n    const data = {};\n    data.audio = item.json.input.audio\n    data.question = questions[i].json.name\n    data.option_a = questions[i].json.option_a\n    data.option_b = questions[i].json.option_b\n    data.option_c = questions[i].json.option_c\n    data.option_d = questions[i].json.option_d\n    data.correct_answer = questions[i].json.correct_answer\n    data.category = questions[i].json.category\n    data.remotion = segments.map(segment => ({\n      id: segment.id,\n      start: segment.start,\n      end: segment.end,\n      text: segment.text.trim()\n    }));\n    items.push(data);\n  }\n});\n\n// Return the modified items\nreturn items;;"
-            },
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                2576,
-                672
-            ],
-            "id": "15649dbe-8957-4258-8ee8-4a47d79d77cc",
-            "name": "Code in JavaScript"
         },
         {
             "parameters": {
@@ -894,6 +881,34 @@
             ],
             "id": "69393ed0-8ef1-4151-bbd4-265210a611c4",
             "name": "Get new questions"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Iterate over each item in the input\nconst items = []\nconst questions = $(\"Get voice prompting\").all()\n$input.all().forEach((item, i) => {\n  // Map the segments array to keep only specific fields\n  if (item.json && item.json.output && Array.isArray(item.json.output.segments)) {\n    var segments = item.json.output.segments;\n\n    // Ensure there are at least two segments to merge\n    if (segments.length >= 3) {\n      const last = segments[segments.length - 2];\n      const secondLast = segments[segments.length - 1];\n\n      // Create merged segment\n      const mergedSegment = {\n        id: last.id, // Keep the earlier id or use a new one\n        start: last.start, // Use start of the earlier segment\n        end: secondLast.end, // Use end of the last segment\n        text: `${last.text} ${secondLast.text}`.trim() // Concatenate text\n      };\n\n      // Build new segments array: keep all except last two, then add merged\n      const newSegments = segments.slice(0, -2); // Keep all but last two\n      newSegments.push(mergedSegment); // Add merged segment\n      segments = newSegments\n    }\n\n    const data = {};\n    data.id = i + 1\n    data.audio = item.json.input.audio\n    data.question = questions[i].json.name\n    data.option_a = questions[i].json.option_a\n    data.option_b = questions[i].json.option_b\n    data.option_c = questions[i].json.option_c\n    data.option_d = questions[i].json.option_d\n    data.correct_answer = questions[i].json.correct_answer\n    data.category = questions[i].json.category\n    data.remotion = segments.map(segment => ({\n      id: segment.id,\n      start: segment.start,\n      end: segment.end,\n      text: segment.text.trim()\n    }));\n    items.push(data);\n  }\n});\n\n// Return the modified items\nreturn items;;"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                2576,
+                672
+            ],
+            "id": "15649dbe-8957-4258-8ee8-4a47d79d77cc",
+            "name": "Prepare for Remotion"
+        },
+        {
+            "parameters": {
+                "aggregate": "aggregateAllItemData",
+                "destinationFieldName": "questions",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.aggregate",
+            "typeVersion": 1,
+            "position": [
+                2800,
+                672
+            ],
+            "id": "9f21045f-418a-4569-bbc2-f756dbc90b23",
+            "name": "Aggregate for Remotion"
         }
     ],
     "connections": {
@@ -1144,7 +1159,7 @@
             "main": [
                 [
                     {
-                        "node": "Code in JavaScript",
+                        "node": "Prepare for Remotion",
                         "type": "main",
                         "index": 0
                     }
@@ -1155,7 +1170,7 @@
             "main": [
                 [
                     {
-                        "node": "Code in JavaScript",
+                        "node": "Prepare for Remotion",
                         "type": "main",
                         "index": 0
                     }
@@ -1214,6 +1229,17 @@
                     }
                 ]
             ]
+        },
+        "Prepare for Remotion": {
+            "main": [
+                [
+                    {
+                        "node": "Aggregate for Remotion",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
         }
     },
     "settings": {
@@ -1224,7 +1250,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "99da1b62-d698-4f65-b397-f0d5c9f83f7f",
+    "versionId": "3d8faa4e-252d-4b6b-86b0-10031293f880",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
