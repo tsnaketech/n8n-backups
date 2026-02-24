@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-02-16T23:39:08.941Z",
+    "updatedAt": "2026-02-24T00:51:32.364Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -904,11 +904,89 @@
             "type": "n8n-nodes-base.aggregate",
             "typeVersion": 1,
             "position": [
-                2800,
+                2784,
                 672
             ],
             "id": "9f21045f-418a-4569-bbc2-f756dbc90b23",
             "name": "Aggregate for Remotion"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.3,
+            "position": [
+                2992,
+                672
+            ],
+            "id": "31f9987e-60b1-423e-aab1-47d55fa5f0fd",
+            "name": "Trigger Render",
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "0e36e411-168b-48ab-a857-ff26a3d5b25e",
+                            "leftValue": "={{ $json.done }}",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "boolean",
+                                "operation": "true",
+                                "singleValue": true
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                3616,
+                672
+            ],
+            "id": "1f70edaa-83a5-473f-a337-d3447beb4c73",
+            "name": "If2",
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "amount": 10
+            },
+            "type": "n8n-nodes-base.wait",
+            "typeVersion": 1.1,
+            "position": [
+                3200,
+                672
+            ],
+            "id": "91100a01-bff7-4372-9726-277af5920480",
+            "name": "Wait 10s",
+            "webhookId": "fb04accc-c0f6-4ef0-b56e-3753974c6e89",
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.3,
+            "position": [
+                3408,
+                672
+            ],
+            "id": "b8c5ab37-b672-4785-91ee-3169c4c78742",
+            "name": "Check Progress",
+            "disabled": true
         }
     ],
     "connections": {
@@ -1240,6 +1318,62 @@
                     }
                 ]
             ]
+        },
+        "Aggregate for Remotion": {
+            "main": [
+                [
+                    {
+                        "node": "Trigger Render",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Trigger Render": {
+            "main": [
+                [
+                    {
+                        "node": "Wait 10s",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If2": {
+            "main": [
+                [],
+                [
+                    {
+                        "node": "Wait 10s",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Wait 10s": {
+            "main": [
+                [
+                    {
+                        "node": "Check Progress",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Check Progress": {
+            "main": [
+                [
+                    {
+                        "node": "If2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
         }
     },
     "settings": {
@@ -1250,7 +1384,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "3d8faa4e-252d-4b6b-86b0-10031293f880",
+    "versionId": "c063c5e8-45ad-47bc-94a6-59054770acaa",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
