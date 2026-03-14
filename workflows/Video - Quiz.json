@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-02-24T00:51:32.364Z",
+    "updatedAt": "2026-03-13T23:53:16.843Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -346,7 +346,7 @@
         },
         {
             "parameters": {
-                "model": "deepseek/deepseek-chat-v3-0324",
+                "model": "qwen/qwen3-vl-8b-instruct",
                 "options": {}
             },
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
@@ -367,7 +367,7 @@
         {
             "parameters": {
                 "promptType": "define",
-                "text": "=Génère {{ Math.abs($json.unused_questions_count - 8) }} QCM. Dans le \"correct_answer\" ne met que la lettre. Format les informations à l'aide du JSON suivant. \n\n{\n  \"question\": \"\",\n  \"option_a\": \"\",\n  \"option_b\": \"\",\n  \"option_c\": \"\",\n  \"option_d\": \"\",\n  \"correct_answer\": \"\",\n  \"category\": \"\"\n}\n\nN'affiche que le JSON. Et ajoute le résultat systématique dans une liste.",
+                "text": "=Génère {{ Math.abs($json.unused_questions_count - 8) }} QCM. Dans le \"correct_answer\" ne met que la lettre. Format les informations à l'aide du JSON suivant. \n\n{\n  \"question\": \"\",\n  \"option_a\": \"\",\n  \"option_b\": \"\",\n  \"option_c\": \"\",\n  \"option_d\": \"\",\n  \"correct_answer\": \"\",\n  \"category\": \"\"\n}\n\nN'affiche que le JSON. Et ajoute le résultat systématique dans une liste.\n\nUn vrai ou faux peut aussi être proposé avec les options option_a pour Vrai et option_b pour Faux.",
                 "batching": {}
             },
             "type": "@n8n/n8n-nodes-langchain.chainLlm",
@@ -912,6 +912,7 @@
         },
         {
             "parameters": {
+                "url": "https://remotionlambda-euwest3-r1cnqfofeb.s3.eu-west-3.amazonaws.com/sites/quiz-video/index.html",
                 "options": {}
             },
             "type": "n8n-nodes-base.httpRequest",
@@ -1384,7 +1385,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "c063c5e8-45ad-47bc-94a6-59054770acaa",
+    "versionId": "e6477456-c2e4-466e-a33d-ebc2a4e3936b",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
