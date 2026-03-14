@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-13T23:53:16.843Z",
+    "updatedAt": "2026-03-14T01:42:33.711Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -193,7 +193,7 @@
                         {
                             "id": "34cdf547-2e37-44f4-b493-9e561b2bd8d1",
                             "name": "aws_bucket_name",
-                            "value": "tsnake-automation",
+                            "value": "remotionaudioquestion-euwest3-r1cnqfofeb",
                             "type": "string"
                         },
                         {
@@ -693,9 +693,7 @@
                 "operation": "upload",
                 "bucketName": "={{ $('Global Fields').first().json.aws_bucket_name }}",
                 "fileName": "={{ $node[\"Get voice prompting\"].json.filename }}",
-                "additionalFields": {
-                    "acl": "publicRead"
-                }
+                "additionalFields": {}
             },
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
@@ -708,8 +706,8 @@
             "executeOnce": false,
             "credentials": {
                 "aws": {
-                    "id": "TVt2s9BRalpzLzvl",
-                    "name": "AWS account n8n tsnake7"
+                    "id": "69PVpJgi3UfZSQdm",
+                    "name": "AWS (IAM) account n8n in snaketech"
                 }
             }
         },
@@ -731,8 +729,8 @@
             "alwaysOutputData": true,
             "credentials": {
                 "aws": {
-                    "id": "TVt2s9BRalpzLzvl",
-                    "name": "AWS account n8n tsnake7"
+                    "id": "69PVpJgi3UfZSQdm",
+                    "name": "AWS (IAM) account n8n in snaketech"
                 }
             }
         },
@@ -753,8 +751,8 @@
             "name": "Delete audio file",
             "credentials": {
                 "aws": {
-                    "id": "TVt2s9BRalpzLzvl",
-                    "name": "AWS account n8n tsnake7"
+                    "id": "69PVpJgi3UfZSQdm",
+                    "name": "AWS (IAM) account n8n in snaketech"
                 }
             }
         },
@@ -1385,7 +1383,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "e6477456-c2e4-466e-a33d-ebc2a4e3936b",
+    "versionId": "d7e59008-a7f0-4234-838e-243f27512296",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
