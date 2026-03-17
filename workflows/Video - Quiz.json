@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-14T01:42:33.711Z",
+    "updatedAt": "2026-03-17T00:59:36.401Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -23,7 +23,7 @@
             "credentials": {
                 "supabaseApi": {
                     "id": "WbnVqEv2ZGhdAeSX",
-                    "name": "Supabase SnakeTech"
+                    "name": "Supabase SnakeTech DB Quiz"
                 }
             },
             "disabled": true
@@ -243,7 +243,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1728,
+                1712,
                 768
             ],
             "id": "db688aaa-9047-492f-9013-78511c1b69cb",
@@ -257,18 +257,19 @@
                     "id": "YOplG9WUCOFF5T4t",
                     "name": "Bearer Azure SnakeTech account"
                 }
-            }
+            },
+            "disabled": true
         },
         {
             "parameters": {
-                "tableId": "QCM Questions",
+                "tableId": "questions",
                 "dataToSend": "autoMapInputData"
             },
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                1568,
-                992
+                1232,
+                832
             ],
             "id": "4d9d84bb-20e4-47f2-8571-39bc0b38a0d5",
             "name": "Create a row",
@@ -276,71 +277,7 @@
             "credentials": {
                 "supabaseApi": {
                     "id": "WbnVqEv2ZGhdAeSX",
-                    "name": "Supabase SnakeTech"
-                }
-            },
-            "disabled": true
-        },
-        {
-            "parameters": {
-                "resource": "databasePage",
-                "databaseId": {
-                    "__rl": true,
-                    "value": "25843d11-1336-80be-aa2c-cad738ad1c7b",
-                    "mode": "list",
-                    "cachedResultName": "QCM Questions Database",
-                    "cachedResultUrl": "https://www.notion.so/25843d11133680beaa2ccad738ad1c7b"
-                },
-                "propertiesUi": {
-                    "propertyValues": [
-                        {
-                            "key": "CreatedAt|date",
-                            "date": "={{ $now.format('yyyy-MM-dd HH:mm:ss') }}"
-                        },
-                        {
-                            "key": "Question|title",
-                            "title": "={{ $json.question }}"
-                        },
-                        {
-                            "key": "Option A|rich_text",
-                            "textContent": "={{ $json.option_a }}"
-                        },
-                        {
-                            "key": "Option B|rich_text",
-                            "textContent": "={{ $json.option_b }}"
-                        },
-                        {
-                            "key": "Option C|rich_text",
-                            "textContent": "={{ $json.option_c }}"
-                        },
-                        {
-                            "key": "Option D|rich_text",
-                            "textContent": "={{ $json.option_d }}"
-                        },
-                        {
-                            "key": "Correct Answer|select",
-                            "selectValue": "={{ $json.correct_answer.toUpperCase() }}"
-                        },
-                        {
-                            "key": "Category|select",
-                            "selectValue": "={{ $json.category }}"
-                        }
-                    ]
-                },
-                "options": {}
-            },
-            "type": "n8n-nodes-base.notion",
-            "typeVersion": 2.2,
-            "position": [
-                1248,
-                832
-            ],
-            "id": "a26f574e-b64f-4cf7-adc5-cbaa336b5359",
-            "name": "Create a database page",
-            "credentials": {
-                "notionApi": {
-                    "id": "g3AwBtYd70JlJQfn",
-                    "name": "Notion SnakeTech account"
+                    "name": "Supabase SnakeTech DB Quiz"
                 }
             }
         },
@@ -352,8 +289,8 @@
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
             "typeVersion": 1,
             "position": [
-                704,
-                1040
+                592,
+                1232
             ],
             "id": "17a5d6ea-3270-4911-bb48-55da80bf9a2a",
             "name": "OpenRouter Chat Model1",
@@ -367,7 +304,7 @@
         {
             "parameters": {
                 "promptType": "define",
-                "text": "=Génère {{ Math.abs($json.unused_questions_count - 8) }} QCM. Dans le \"correct_answer\" ne met que la lettre. Format les informations à l'aide du JSON suivant. \n\n{\n  \"question\": \"\",\n  \"option_a\": \"\",\n  \"option_b\": \"\",\n  \"option_c\": \"\",\n  \"option_d\": \"\",\n  \"correct_answer\": \"\",\n  \"category\": \"\"\n}\n\nN'affiche que le JSON. Et ajoute le résultat systématique dans une liste.\n\nUn vrai ou faux peut aussi être proposé avec les options option_a pour Vrai et option_b pour Faux.",
+                "text": "=Tu es un générateur de questions de quiz en français.\n\nGénère {{ Math.abs($json.unused_questions_count - $('Global Fields').item.json.number_question) }} questions variées en français.\n\n## Règles de génération\n- Mélange les types : QCM (4 options) et Vrai/Faux\n- Les questions doivent être claires, précises et sans ambiguïté\n- Varie les niveaux de difficulté (facile, moyen, difficile)\n- Varie les catégories (histoire, science, sport, culture générale, géographie, etc.)\n- Ne génère jamais deux questions similaires\n- La bonne réponse doit être répartie aléatoirement entre a, b, c et d\n\n## Format de réponse\nRéponds UNIQUEMENT avec un tableau JSON valide, sans texte avant ni après, sans balises markdown.\n\n[\n  {\n    \"question\": \"\",\n    \"option_a\": \"\",\n    \"option_b\": \"\",\n    \"option_c\": \"\",\n    \"option_d\": \"\",\n    \"correct_answer\": \"\",\n    \"category\": \"\",\n    \"language\": \"fr\"\n  }\n]\n\n## Règles strictes\n- \"correct_answer\" contient UNIQUEMENT la lettre (a, b, c ou d)\n- \"language\" vaut toujours \"fr\"\n- Pour un Vrai/Faux : option_a = \"Vrai\", option_b = \"Faux\", option_c = \"\", option_d = \"\"\n- Pour un QCM : les 4 options doivent être remplies\n- Aucun texte explicatif, uniquement le tableau JSON",
                 "batching": {}
             },
             "type": "@n8n/n8n-nodes-langchain.chainLlm",
@@ -392,10 +329,10 @@
                         {
                             "id": "dc084b13-d6ff-40c9-99fa-a161fa9926eb",
                             "leftValue": "={{ $json.unused_questions_count}}",
-                            "rightValue": 8,
+                            "rightValue": "={{ $('Global Fields').item.json.number_question }}",
                             "operator": {
                                 "type": "number",
-                                "operation": "gt"
+                                "operation": "gte"
                             }
                         }
                     ],
@@ -458,34 +395,6 @@
             ],
             "id": "779e9388-c3ce-4404-a931-452ba411f06a",
             "name": "Rename Keys"
-        },
-        {
-            "parameters": {
-                "resource": "databasePage",
-                "operation": "getAll",
-                "databaseId": {
-                    "__rl": true,
-                    "value": "25843d11-1336-80be-aa2c-cad738ad1c7b",
-                    "mode": "list",
-                    "cachedResultName": "Quiz Questions",
-                    "cachedResultUrl": "https://www.notion.so/25843d11133680beaa2ccad738ad1c7b"
-                },
-                "options": {}
-            },
-            "type": "n8n-nodes-base.notion",
-            "typeVersion": 2.2,
-            "position": [
-                -128,
-                640
-            ],
-            "id": "2beb6e12-5e5d-4dbb-b460-13be978214ed",
-            "name": "Get many database pages",
-            "credentials": {
-                "notionApi": {
-                    "id": "g3AwBtYd70JlJQfn",
-                    "name": "Notion SnakeTech account"
-                }
-            }
         },
         {
             "parameters": {},
@@ -640,7 +549,8 @@
                     "id": "3cU5roeQm6SqG6i6",
                     "name": "Replicate Bearer Auth account"
                 }
-            }
+            },
+            "disabled": true
         },
         {
             "parameters": {
@@ -709,7 +619,8 @@
                     "id": "69PVpJgi3UfZSQdm",
                     "name": "AWS (IAM) account n8n in snaketech"
                 }
-            }
+            },
+            "disabled": true
         },
         {
             "parameters": {
@@ -754,7 +665,8 @@
                     "id": "69PVpJgi3UfZSQdm",
                     "name": "AWS (IAM) account n8n in snaketech"
                 }
-            }
+            },
+            "disabled": true
         },
         {
             "parameters": {
@@ -771,12 +683,14 @@
             ],
             "id": "80ade5a2-3ecc-4815-bb06-427dfe80610c",
             "name": "Retrieve transcribe data",
+            "executeOnce": false,
             "credentials": {
                 "redis": {
                     "id": "ua59kyvCowPL9ZRc",
                     "name": "Redis pika account"
                 }
-            }
+            },
+            "onError": "continueErrorOutput"
         },
         {
             "parameters": {
@@ -797,7 +711,8 @@
                     "id": "ua59kyvCowPL9ZRc",
                     "name": "Redis pika account"
                 }
-            }
+            },
+            "disabled": true
         },
         {
             "parameters": {
@@ -869,7 +784,7 @@
         },
         {
             "parameters": {
-                "jsCode": "const text = $input.first().json.text;\nconst jsonMatch = text.match(/```json\\n([\\s\\S]*?)\\n```/);\nconst jsonContent = jsonMatch[1];\nconst questions = JSON.parse(jsonContent);\n\nconst allQuestionsItems = $('Rename Keys').all();\nconst allQuestions = allQuestionsItems.map(item => \n  (item.json.question || '').trim().toLowerCase()\n);\n\nconst newQuestions = questions.filter(q => \n  !allQuestions.includes((q.question || '').trim().toLowerCase())\n);\n\nreturn newQuestions;"
+                "jsCode": "const text = $input.first().json.text;\nconst jsonMatch = text.match(/```json\\n([\\s\\S]*?)\\n```/);\nconst jsonContent = jsonMatch ? jsonMatch[1] : text;\nconst questions = JSON.parse(jsonContent);\n\nconst allQuestionsItems = $('Rename Keys').all();\nconst allQuestions = allQuestionsItems.map(item => \n  (item.json.question || '').trim().toLowerCase()\n);\n\nconst newQuestions = questions.filter(q => \n  !allQuestions.includes((q.question || '').trim().toLowerCase())\n);\n\nreturn newQuestions;"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
@@ -882,7 +797,7 @@
         },
         {
             "parameters": {
-                "jsCode": "// Iterate over each item in the input\nconst items = []\nconst questions = $(\"Get voice prompting\").all()\n$input.all().forEach((item, i) => {\n  // Map the segments array to keep only specific fields\n  if (item.json && item.json.output && Array.isArray(item.json.output.segments)) {\n    var segments = item.json.output.segments;\n\n    // Ensure there are at least two segments to merge\n    if (segments.length >= 3) {\n      const last = segments[segments.length - 2];\n      const secondLast = segments[segments.length - 1];\n\n      // Create merged segment\n      const mergedSegment = {\n        id: last.id, // Keep the earlier id or use a new one\n        start: last.start, // Use start of the earlier segment\n        end: secondLast.end, // Use end of the last segment\n        text: `${last.text} ${secondLast.text}`.trim() // Concatenate text\n      };\n\n      // Build new segments array: keep all except last two, then add merged\n      const newSegments = segments.slice(0, -2); // Keep all but last two\n      newSegments.push(mergedSegment); // Add merged segment\n      segments = newSegments\n    }\n\n    const data = {};\n    data.id = i + 1\n    data.audio = item.json.input.audio\n    data.question = questions[i].json.name\n    data.option_a = questions[i].json.option_a\n    data.option_b = questions[i].json.option_b\n    data.option_c = questions[i].json.option_c\n    data.option_d = questions[i].json.option_d\n    data.correct_answer = questions[i].json.correct_answer\n    data.category = questions[i].json.category\n    data.remotion = segments.map(segment => ({\n      id: segment.id,\n      start: segment.start,\n      end: segment.end,\n      text: segment.text.trim()\n    }));\n    items.push(data);\n  }\n});\n\n// Return the modified items\nreturn items;;"
+                "jsCode": "// Iterate over each item in the input\nconst items = []\nconst questions = $(\"Get voice prompting\").all()\n$input.all().forEach((item, i) => {\n  // Map the segments array to keep only specific fields\n  if (item.json && item.json.output && Array.isArray(item.json.output.segments)) {\n    var segments = item.json.output.segments;\n\n    // Ensure there are at least two segments to merge\n    if (segments.length >= 3) {\n      const last = segments[segments.length - 2];\n      const secondLast = segments[segments.length - 1];\n\n      // Create merged segment\n      const mergedSegment = {\n        id: last.id, // Keep the earlier id or use a new one\n        start: last.start, // Use start of the earlier segment\n        end: secondLast.end, // Use end of the last segment\n        text: `${last.text} ${secondLast.text}`.trim() // Concatenate text\n      };\n\n      // Build new segments array: keep all except last two, then add merged\n      const newSegments = segments.slice(0, -2); // Keep all but last two\n      newSegments.push(mergedSegment); // Add merged segment\n      segments = newSegments\n    }\n\n    const data = {};\n    data.id = i + 1\n    data.audio = item.json.input.audio\n    data.question = questions[i].json.question\n    data.option_a = questions[i].json.option_a\n    data.option_b = questions[i].json.option_b\n    data.option_c = questions[i].json.option_c\n    data.option_d = questions[i].json.option_d\n    data.correct_answer = questions[i].json.correct_answer\n    data.category = questions[i].json.category\n    data.remotion = segments.map(segment => ({\n      id: segment.id,\n      start: segment.start,\n      end: segment.end,\n      text: segment.text.trim()\n    }));\n    items.push(data);\n  }\n});\n\n// Return the modified items\nreturn items;;"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
@@ -907,21 +822,6 @@
             ],
             "id": "9f21045f-418a-4569-bbc2-f756dbc90b23",
             "name": "Aggregate for Remotion"
-        },
-        {
-            "parameters": {
-                "url": "https://remotionlambda-euwest3-r1cnqfofeb.s3.eu-west-3.amazonaws.com/sites/quiz-video/index.html",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.3,
-            "position": [
-                2992,
-                672
-            ],
-            "id": "31f9987e-60b1-423e-aab1-47d55fa5f0fd",
-            "name": "Trigger Render",
-            "disabled": true
         },
         {
             "parameters": {
@@ -951,12 +851,11 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.3,
             "position": [
-                3616,
+                4304,
                 672
             ],
             "id": "1f70edaa-83a5-473f-a337-d3447beb4c73",
-            "name": "If2",
-            "disabled": true
+            "name": "If2"
         },
         {
             "parameters": {
@@ -965,13 +864,12 @@
             "type": "n8n-nodes-base.wait",
             "typeVersion": 1.1,
             "position": [
-                3200,
+                3888,
                 672
             ],
             "id": "91100a01-bff7-4372-9726-277af5920480",
             "name": "Wait 10s",
-            "webhookId": "fb04accc-c0f6-4ef0-b56e-3753974c6e89",
-            "disabled": true
+            "webhookId": "fb04accc-c0f6-4ef0-b56e-3753974c6e89"
         },
         {
             "parameters": {
@@ -980,12 +878,149 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.3,
             "position": [
-                3408,
+                4096,
                 672
             ],
             "id": "b8c5ab37-b672-4785-91ee-3169c4c78742",
-            "name": "Check Progress",
-            "disabled": true
+            "name": "Check Progress"
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                752,
+                1040
+            ],
+            "id": "e06752c5-4e9c-4071-8a28-b213d4264bf3",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "operation": "getAll",
+                "tableId": "questions",
+                "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}"
+            },
+            "type": "n8n-nodes-base.supabaseTool",
+            "typeVersion": 1,
+            "position": [
+                1040,
+                1328
+            ],
+            "id": "125cd85d-03e5-4f67-94cc-5894a4d70786",
+            "name": "Get many rows in Supabase",
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "getAll",
+                "tableId": "questions",
+                "returnAll": true,
+                "filters": {
+                    "conditions": [
+                        {
+                            "keyName": "used",
+                            "condition": "is",
+                            "keyValue": "false"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.supabase",
+            "typeVersion": 1,
+            "position": [
+                -128,
+                640
+            ],
+            "id": "720856bd-2f3e-446c-ae3a-95bcb98c4116",
+            "name": "Get many rows",
+            "executeOnce": false,
+            "alwaysOutputData": true,
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "https://remotionlambda-euwest3-r1cnqfofeb.s3.eu-west-3.amazonaws.com/sites/quiz-video/index.html",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.3,
+            "position": [
+                3776,
+                416
+            ],
+            "id": "31f9987e-60b1-423e-aab1-47d55fa5f0fd",
+            "name": "Trigger Render"
+        },
+        {
+            "parameters": {
+                "function": "arn:aws:lambda:eu-west-3:046049464123:function:remotion-render-4-0-429-mem3008mb-disk2048mb-240sec",
+                "payload": "={{\n  {\n    type: \"start\",\n    region: \"eu-west-3\",\n    serveUrl: \"https://remotionlambda-euwest3-r1cnqfofeb.s3.eu-west-3.amazonaws.com/sites/quiz-video/index.html\",\n    composition: \"QuizComp\",\n    inputProps: { \"questions\": $json.questions },\n    codec: \"h264\",\n    version: \"4.0.429\",\n    concurrencyPerLambda: 3,\n  }\n}}"
+            },
+            "type": "n8n-nodes-base.awsLambda",
+            "typeVersion": 1,
+            "position": [
+                3024,
+                672
+            ],
+            "id": "c6412a4d-0754-4f30-9e22-1b38f8389d36",
+            "name": "AWS Lambda",
+            "credentials": {
+                "aws": {
+                    "id": "69PVpJgi3UfZSQdm",
+                    "name": "AWS (IAM) account n8n in snaketech"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://lambda.eu-west-3.amazonaws.com/2015-03-31/functions/remotion-render-4-0-429-mem3008mb-disk2048mb-2/invocations",
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ JSON.stringify($json) }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                3488,
+                240
+            ],
+            "id": "f14e5ea7-e708-4eb5-ab15-cf685bf5773a",
+            "name": "HTTP Request1"
+        },
+        {
+            "parameters": {
+                "function": "arn:aws:lambda:eu-west-3:046049464123:function:remotion-render-4-0-429-mem3008mb-disk2048mb-240sec",
+                "payload": "={{\n  {\n    type: \"status\",\n    region: \"eu-west-3\",\n    bucketName: $json.result.bucketName,\n    renderId: $json.result.renderId,\n    version: \"4.0.429\",\n  }\n}}"
+            },
+            "type": "n8n-nodes-base.awsLambda",
+            "typeVersion": 1,
+            "position": [
+                3264,
+                672
+            ],
+            "id": "a2f0e654-ab14-4870-81bd-c9dbf2356399",
+            "name": "AWS Lambda1",
+            "credentials": {
+                "aws": {
+                    "id": "69PVpJgi3UfZSQdm",
+                    "name": "AWS (IAM) account n8n in snaketech"
+                }
+            }
         }
     ],
     "connections": {
@@ -1020,7 +1055,7 @@
             "main": [
                 [
                     {
-                        "node": "Get many database pages",
+                        "node": "Get many rows",
                         "type": "main",
                         "index": 0
                     }
@@ -1031,23 +1066,7 @@
             "main": [
                 [
                     {
-                        "node": "Get many database pages",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Create a database page": {
-            "main": [
-                [
-                    {
-                        "node": "Create a row",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Get many database pages",
+                        "node": "Get many rows",
                         "type": "main",
                         "index": 0
                     }
@@ -1059,6 +1078,11 @@
                 [
                     {
                         "node": "Basic LLM Chain",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    },
+                    {
+                        "node": "AI Agent",
                         "type": "ai_languageModel",
                         "index": 0
                     }
@@ -1110,17 +1134,6 @@
                 [
                     {
                         "node": "UnUsed",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Get many database pages": {
-            "main": [
-                [
-                    {
-                        "node": "Rename Keys",
                         "type": "main",
                         "index": 0
                     }
@@ -1229,7 +1242,8 @@
                         "type": "main",
                         "index": 0
                     }
-                ]
+                ],
+                []
             ]
         },
         "Save transcribe data": {
@@ -1300,7 +1314,7 @@
             "main": [
                 [
                     {
-                        "node": "Create a database page",
+                        "node": "Create a row",
                         "type": "main",
                         "index": 0
                     }
@@ -1322,18 +1336,7 @@
             "main": [
                 [
                     {
-                        "node": "Trigger Render",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Trigger Render": {
-            "main": [
-                [
-                    {
-                        "node": "Wait 10s",
+                        "node": "AWS Lambda",
                         "type": "main",
                         "index": 0
                     }
@@ -1373,6 +1376,44 @@
                     }
                 ]
             ]
+        },
+        "Get many rows in Supabase": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get many rows": {
+            "main": [
+                [
+                    {
+                        "node": "Rename Keys",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Trigger Render": {
+            "main": [
+                []
+            ]
+        },
+        "AWS Lambda": {
+            "main": [
+                [
+                    {
+                        "node": "AWS Lambda1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
         }
     },
     "settings": {
@@ -1383,7 +1424,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "d7e59008-a7f0-4234-838e-243f27512296",
+    "versionId": "694ff84f-6fd7-4b5f-a7bb-51e2393b64c6",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
