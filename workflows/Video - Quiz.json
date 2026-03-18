@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-17T00:59:36.401Z",
+    "updatedAt": "2026-03-18T00:59:54.494Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -257,8 +257,7 @@
                     "id": "YOplG9WUCOFF5T4t",
                     "name": "Bearer Azure SnakeTech account"
                 }
-            },
-            "disabled": true
+            }
         },
         {
             "parameters": {
@@ -549,8 +548,7 @@
                     "id": "3cU5roeQm6SqG6i6",
                     "name": "Replicate Bearer Auth account"
                 }
-            },
-            "disabled": true
+            }
         },
         {
             "parameters": {
@@ -565,7 +563,7 @@
                         {
                             "id": "45dd38b3-736f-4807-af36-3c07125a3c83",
                             "leftValue": "={{ $json.LastModified }}",
-                            "rightValue": "={{ $now.minus(200, 'minutes') }}",
+                            "rightValue": "={{ $now.minus(1, 'minutes') }}",
                             "operator": {
                                 "type": "dateTime",
                                 "operation": "after"
@@ -619,8 +617,7 @@
                     "id": "69PVpJgi3UfZSQdm",
                     "name": "AWS (IAM) account n8n in snaketech"
                 }
-            },
-            "disabled": true
+            }
         },
         {
             "parameters": {
@@ -665,8 +662,7 @@
                     "id": "69PVpJgi3UfZSQdm",
                     "name": "AWS (IAM) account n8n in snaketech"
                 }
-            },
-            "disabled": true
+            }
         },
         {
             "parameters": {
@@ -711,8 +707,7 @@
                     "id": "ua59kyvCowPL9ZRc",
                     "name": "Redis pika account"
                 }
-            },
-            "disabled": true
+            }
         },
         {
             "parameters": {
@@ -835,12 +830,11 @@
                     "conditions": [
                         {
                             "id": "0e36e411-168b-48ab-a857-ff26a3d5b25e",
-                            "leftValue": "={{ $json.done }}",
-                            "rightValue": "",
+                            "leftValue": "={{ $json.status }}",
+                            "rightValue": "done",
                             "operator": {
-                                "type": "boolean",
-                                "operation": "true",
-                                "singleValue": true
+                                "type": "string",
+                                "operation": "equals"
                             }
                         }
                     ],
@@ -851,7 +845,7 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.3,
             "position": [
-                4304,
+                3712,
                 672
             ],
             "id": "1f70edaa-83a5-473f-a337-d3447beb4c73",
@@ -864,7 +858,7 @@
             "type": "n8n-nodes-base.wait",
             "typeVersion": 1.1,
             "position": [
-                3888,
+                3296,
                 672
             ],
             "id": "91100a01-bff7-4372-9726-277af5920480",
@@ -873,16 +867,29 @@
         },
         {
             "parameters": {
+                "method": "POST",
+                "url": "http://192.168.1.115:3000/api/render/progress",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpBasicAuth",
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ $('Trigger Render').item.json }}",
                 "options": {}
             },
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.3,
             "position": [
-                4096,
+                3504,
                 672
             ],
             "id": "b8c5ab37-b672-4785-91ee-3169c4c78742",
-            "name": "Check Progress"
+            "name": "Check Progress",
+            "credentials": {
+                "httpBasicAuth": {
+                    "id": "T6YmT5actKu0b4xq",
+                    "name": "AWS (IAM) - snaketech n8n"
+                }
+            }
         },
         {
             "parameters": {
@@ -952,75 +959,101 @@
         },
         {
             "parameters": {
-                "url": "https://remotionlambda-euwest3-r1cnqfofeb.s3.eu-west-3.amazonaws.com/sites/quiz-video/index.html",
+                "method": "POST",
+                "url": "http://192.168.1.115:3000/api/render",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpBasicAuth",
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ $json }}",
                 "options": {}
             },
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.3,
             "position": [
-                3776,
-                416
-            ],
-            "id": "31f9987e-60b1-423e-aab1-47d55fa5f0fd",
-            "name": "Trigger Render"
-        },
-        {
-            "parameters": {
-                "function": "arn:aws:lambda:eu-west-3:046049464123:function:remotion-render-4-0-429-mem3008mb-disk2048mb-240sec",
-                "payload": "={{\n  {\n    type: \"start\",\n    region: \"eu-west-3\",\n    serveUrl: \"https://remotionlambda-euwest3-r1cnqfofeb.s3.eu-west-3.amazonaws.com/sites/quiz-video/index.html\",\n    composition: \"QuizComp\",\n    inputProps: { \"questions\": $json.questions },\n    codec: \"h264\",\n    version: \"4.0.429\",\n    concurrencyPerLambda: 3,\n  }\n}}"
-            },
-            "type": "n8n-nodes-base.awsLambda",
-            "typeVersion": 1,
-            "position": [
-                3024,
+                3040,
                 672
             ],
-            "id": "c6412a4d-0754-4f30-9e22-1b38f8389d36",
-            "name": "AWS Lambda",
+            "id": "31f9987e-60b1-423e-aab1-47d55fa5f0fd",
+            "name": "Trigger Render",
             "credentials": {
                 "aws": {
                     "id": "69PVpJgi3UfZSQdm",
                     "name": "AWS (IAM) account n8n in snaketech"
+                },
+                "httpBasicAuth": {
+                    "id": "T6YmT5actKu0b4xq",
+                    "name": "AWS (IAM) - snaketech n8n"
                 }
             }
         },
         {
             "parameters": {
-                "method": "POST",
-                "url": "https://lambda.eu-west-3.amazonaws.com/2015-03-31/functions/remotion-render-4-0-429-mem3008mb-disk2048mb-2/invocations",
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={{ JSON.stringify($json) }}",
+                "url": "={{ $json.url }}",
                 "options": {}
             },
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                3488,
-                240
+                3936,
+                672
             ],
-            "id": "f14e5ea7-e708-4eb5-ab15-cf685bf5773a",
-            "name": "HTTP Request1"
+            "id": "facfb053-cd37-4243-99e5-884e629fca53",
+            "name": "HTTP Request3"
         },
         {
             "parameters": {
-                "function": "arn:aws:lambda:eu-west-3:046049464123:function:remotion-render-4-0-429-mem3008mb-disk2048mb-240sec",
-                "payload": "={{\n  {\n    type: \"status\",\n    region: \"eu-west-3\",\n    bucketName: $json.result.bucketName,\n    renderId: $json.result.renderId,\n    version: \"4.0.429\",\n  }\n}}"
+                "operation": "update",
+                "tableId": "questions",
+                "filters": {
+                    "conditions": [
+                        {
+                            "keyName": "id",
+                            "condition": "eq",
+                            "keyValue": "={{ $('Get limited question').all().map(item => item.json.id) }}"
+                        }
+                    ]
+                },
+                "fieldsUi": {
+                    "fieldValues": [
+                        {
+                            "fieldId": "used",
+                            "fieldValue": "true"
+                        },
+                        {
+                            "fieldId": "used_at",
+                            "fieldValue": "={{ $now }}"
+                        }
+                    ]
+                }
             },
-            "type": "n8n-nodes-base.awsLambda",
+            "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                3264,
-                672
+                4336,
+                768
             ],
-            "id": "a2f0e654-ab14-4870-81bd-c9dbf2356399",
-            "name": "AWS Lambda1",
+            "id": "2c5082af-3375-412b-ab74-d469f3a62112",
+            "name": "Update a row1",
             "credentials": {
-                "aws": {
-                    "id": "69PVpJgi3UfZSQdm",
-                    "name": "AWS (IAM) account n8n in snaketech"
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
                 }
             }
+        },
+        {
+            "parameters": {
+                "jsCode": "const questions = $('Get limited question').all();\nreturn questions.map(item => ({\n  json: {\n    id: item.json.id,\n  }\n}));"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                4160,
+                688
+            ],
+            "id": "b8327dff-2188-4a75-86a8-5dca29059992",
+            "name": "Code in JavaScript"
         }
     ],
     "connections": {
@@ -1336,7 +1369,7 @@
             "main": [
                 [
                     {
-                        "node": "AWS Lambda",
+                        "node": "Trigger Render",
                         "type": "main",
                         "index": 0
                     }
@@ -1345,7 +1378,13 @@
         },
         "If2": {
             "main": [
-                [],
+                [
+                    {
+                        "node": "HTTP Request3",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
                 [
                     {
                         "node": "Wait 10s",
@@ -1401,14 +1440,20 @@
         },
         "Trigger Render": {
             "main": [
-                []
+                [
+                    {
+                        "node": "Wait 10s",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
             ]
         },
-        "AWS Lambda": {
+        "HTTP Request3": {
             "main": [
                 [
                     {
-                        "node": "AWS Lambda1",
+                        "node": "Code in JavaScript",
                         "type": "main",
                         "index": 0
                     }
@@ -1424,7 +1469,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "694ff84f-6fd7-4b5f-a7bb-51e2393b64c6",
+    "versionId": "50e9dcf0-eb1e-411d-8c83-bea6c6e6308c",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
