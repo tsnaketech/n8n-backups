@@ -1,33 +1,11 @@
 {
-    "updatedAt": "2026-03-18T00:59:54.494Z",
+    "updatedAt": "2026-03-18T13:40:11.166Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
     "active": false,
     "isArchived": false,
     "nodes": [
-        {
-            "parameters": {
-                "operation": "update",
-                "tableId": "QCM Questions",
-                "dataToSend": "autoMapInputData"
-            },
-            "type": "n8n-nodes-base.supabase",
-            "typeVersion": 1,
-            "position": [
-                400,
-                -320
-            ],
-            "id": "9b1ec131-843a-4593-9d46-f3712eaee124",
-            "name": "Update a row",
-            "credentials": {
-                "supabaseApi": {
-                    "id": "WbnVqEv2ZGhdAeSX",
-                    "name": "Supabase SnakeTech DB Quiz"
-                }
-            },
-            "disabled": true
-        },
         {
             "parameters": {
                 "url": "https://westeurope.tts.speech.microsoft.com/cognitiveservices/voices/list",
@@ -80,14 +58,14 @@
                 },
                 "sendBody": true,
                 "specifyBody": "json",
-                "jsonBody": "={\n  \"input\": {\n      \"prompt\": \"Create a background visual representation for this quiz question: {{ $json.text }}. Style: modern, colorful background, no text, no text, no text, no characters, does not answer the question, high quality\",\n      \"style\": \"none\",\n      \"contrast\": \"medium\",\n      \"num_images\": 1,\n      \"aspect_ratio\": \"9:16\",\n      \"prompt_enhance\": true,\n      \"generation_mode\": \"standard\"\n  }\n}\n",
+                "jsonBody": "={\n  \"input\": {\n      \"prompt\": \"Create a background visual representation for this quiz question: {{ $('Get limited question').item.json.question }}. Style: modern, colorful background, no text, no text, no text, no characters, does not answer the question, high quality\",\n      \"style\": \"none\",\n      \"contrast\": \"medium\",\n      \"num_images\": 1,\n      \"aspect_ratio\": \"9:16\",\n      \"prompt_enhance\": true,\n      \"generation_mode\": \"standard\"\n  }\n}\n",
                 "options": {}
             },
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1120,
-                352
+                1504,
+                768
             ],
             "id": "f1124172-cac5-4d93-ae53-831449ba999f",
             "name": "Replicate leonardoai/lucid-origin",
@@ -112,8 +90,8 @@
             "type": "n8n-nodes-base.deepL",
             "typeVersion": 1,
             "position": [
-                928,
-                352
+                592,
+                224
             ],
             "id": "5ef4e151-eefe-4cdc-959d-b95d6bb29b71",
             "name": "Translate a language",
@@ -133,8 +111,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1312,
-                352
+                1696,
+                768
             ],
             "id": "be508378-fda0-4d8d-b85d-72bc2b35047a",
             "name": "HTTP Request",
@@ -243,8 +221,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1712,
-                768
+                1696,
+                960
             ],
             "id": "db688aaa-9047-492f-9013-78511c1b69cb",
             "name": "Generate Voice",
@@ -288,8 +266,8 @@
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
             "typeVersion": 1,
             "position": [
-                592,
-                1232
+                432,
+                864
             ],
             "id": "17a5d6ea-3270-4911-bb48-55da80bf9a2a",
             "name": "OpenRouter Chat Model1",
@@ -533,8 +511,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                2128,
-                768
+                2112,
+                960
             ],
             "id": "bfa63a14-47f4-40cf-960c-1547a4b16a96",
             "name": "Replicate openai/whisper",
@@ -578,7 +556,7 @@
             "typeVersion": 2.2,
             "position": [
                 1312,
-                592
+                624
             ],
             "id": "cb3d21df-7b33-4d75-90fb-5e9ab3d871c1",
             "name": "If1"
@@ -590,8 +568,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                2336,
-                576
+                2320,
+                608
             ],
             "id": "836bc558-f156-4376-a482-2b39357b0f9c",
             "name": "String to Json"
@@ -606,8 +584,8 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                1920,
-                768
+                1904,
+                960
             ],
             "id": "087eee0a-203c-4f32-a994-3a82db996833",
             "name": "Save audio file",
@@ -629,7 +607,7 @@
             "typeVersion": 2,
             "position": [
                 1120,
-                592
+                624
             ],
             "id": "070c3c6e-4f09-463e-b3f9-18af6ab9da2b",
             "name": "Retrieve audio data",
@@ -652,8 +630,8 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                1520,
-                768
+                1504,
+                960
             ],
             "id": "744b2f79-26a1-4578-9abf-ab6324dd6f7a",
             "name": "Delete audio file",
@@ -674,8 +652,8 @@
             "type": "n8n-nodes-base.redis",
             "typeVersion": 1,
             "position": [
-                2128,
-                576
+                2112,
+                608
             ],
             "id": "80ade5a2-3ecc-4815-bb06-427dfe80610c",
             "name": "Retrieve transcribe data",
@@ -683,7 +661,7 @@
             "credentials": {
                 "redis": {
                     "id": "ua59kyvCowPL9ZRc",
-                    "name": "Redis pika account"
+                    "name": "Redis - pika account"
                 }
             },
             "onError": "continueErrorOutput"
@@ -697,15 +675,15 @@
             "type": "n8n-nodes-base.redis",
             "typeVersion": 1,
             "position": [
-                2336,
-                768
+                2320,
+                960
             ],
             "id": "68a37856-a4b4-4a7b-b6d0-604845a15e5e",
             "name": "Save transcribe data",
             "credentials": {
                 "redis": {
                     "id": "ua59kyvCowPL9ZRc",
-                    "name": "Redis pika account"
+                    "name": "Redis - pika account"
                 }
             }
         },
@@ -731,7 +709,7 @@
             "typeVersion": 2,
             "position": [
                 704,
-                464
+                624
             ],
             "id": "b57755f1-01c9-4b22-bc57-a9ac0ad714b2",
             "name": "Get limited question"
@@ -758,7 +736,7 @@
             "typeVersion": 2,
             "position": [
                 928,
-                592
+                624
             ],
             "id": "a02e0b6d-0eef-483d-b98a-8c8212d64a40",
             "name": "Get voice prompting"
@@ -797,8 +775,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                2576,
-                672
+                2560,
+                736
             ],
             "id": "15649dbe-8957-4258-8ee8-4a47d79d77cc",
             "name": "Prepare for Remotion"
@@ -812,8 +790,8 @@
             "type": "n8n-nodes-base.aggregate",
             "typeVersion": 1,
             "position": [
-                2784,
-                672
+                2768,
+                736
             ],
             "id": "9f21045f-418a-4569-bbc2-f756dbc90b23",
             "name": "Aggregate for Remotion"
@@ -845,8 +823,8 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.3,
             "position": [
-                3712,
-                672
+                3696,
+                736
             ],
             "id": "1f70edaa-83a5-473f-a337-d3447beb4c73",
             "name": "If2"
@@ -858,8 +836,8 @@
             "type": "n8n-nodes-base.wait",
             "typeVersion": 1.1,
             "position": [
-                3296,
-                672
+                3280,
+                736
             ],
             "id": "91100a01-bff7-4372-9726-277af5920480",
             "name": "Wait 10s",
@@ -879,8 +857,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.3,
             "position": [
-                3504,
-                672
+                3488,
+                736
             ],
             "id": "b8c5ab37-b672-4785-91ee-3169c4c78742",
             "name": "Check Progress",
@@ -898,8 +876,8 @@
             "type": "@n8n/n8n-nodes-langchain.agent",
             "typeVersion": 3.1,
             "position": [
-                752,
-                1040
+                704,
+                1024
             ],
             "id": "e06752c5-4e9c-4071-8a28-b213d4264bf3",
             "name": "AI Agent"
@@ -913,8 +891,8 @@
             "type": "n8n-nodes-base.supabaseTool",
             "typeVersion": 1,
             "position": [
-                1040,
-                1328
+                496,
+                1120
             ],
             "id": "125cd85d-03e5-4f67-94cc-5894a4d70786",
             "name": "Get many rows in Supabase",
@@ -971,8 +949,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.3,
             "position": [
-                3040,
-                672
+                2992,
+                736
             ],
             "id": "31f9987e-60b1-423e-aab1-47d55fa5f0fd",
             "name": "Trigger Render",
@@ -995,8 +973,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                3936,
-                672
+                3920,
+                736
             ],
             "id": "facfb053-cd37-4243-99e5-884e629fca53",
             "name": "HTTP Request3"
@@ -1010,7 +988,7 @@
                         {
                             "keyName": "id",
                             "condition": "eq",
-                            "keyValue": "={{ $('Get limited question').all().map(item => item.json.id) }}"
+                            "keyValue": "={{ $json.id }}"
                         }
                     ]
                 },
@@ -1030,17 +1008,18 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                4336,
-                768
+                4352,
+                736
             ],
             "id": "2c5082af-3375-412b-ab74-d469f3a62112",
-            "name": "Update a row1",
+            "name": "Update a row",
             "credentials": {
                 "supabaseApi": {
                     "id": "WbnVqEv2ZGhdAeSX",
                     "name": "Supabase SnakeTech DB Quiz"
                 }
-            }
+            },
+            "disabled": true
         },
         {
             "parameters": {
@@ -1049,28 +1028,38 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                4160,
-                688
+                4128,
+                736
             ],
             "id": "b8327dff-2188-4a75-86a8-5dca29059992",
-            "name": "Code in JavaScript"
+            "name": "Retreive id"
+        },
+        {
+            "parameters": {
+                "operation": "set",
+                "key": "={{ $binary.data.fileName }}",
+                "value": "={{ $binary }}"
+            },
+            "type": "n8n-nodes-base.redis",
+            "typeVersion": 1,
+            "position": [
+                1904,
+                768
+            ],
+            "id": "5e3441fb-462e-4241-8ce4-80b5ea769a24",
+            "name": "Save image base64",
+            "credentials": {
+                "redis": {
+                    "id": "ua59kyvCowPL9ZRc",
+                    "name": "Redis - pika account"
+                }
+            }
         }
     ],
     "connections": {
-        "Update a row": {
-            "main": [
-                []
-            ]
-        },
         "Translate a language": {
             "main": [
-                [
-                    {
-                        "node": "Replicate leonardoai/lucid-origin",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
+                []
             ]
         },
         "Replicate leonardoai/lucid-origin": {
@@ -1219,6 +1208,11 @@
                         "node": "Delete audio file",
                         "type": "main",
                         "index": 0
+                    },
+                    {
+                        "node": "Replicate leonardoai/lucid-origin",
+                        "type": "main",
+                        "index": 0
                     }
                 ]
             ]
@@ -1309,11 +1303,6 @@
         "Get limited question": {
             "main": [
                 [
-                    {
-                        "node": "Translate a language",
-                        "type": "main",
-                        "index": 0
-                    },
                     {
                         "node": "Get voice prompting",
                         "type": "main",
@@ -1453,7 +1442,29 @@
             "main": [
                 [
                     {
-                        "node": "Code in JavaScript",
+                        "node": "Retreive id",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Retreive id": {
+            "main": [
+                [
+                    {
+                        "node": "Update a row",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "main": [
+                [
+                    {
+                        "node": "Save image base64",
                         "type": "main",
                         "index": 0
                     }
@@ -1469,7 +1480,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "50e9dcf0-eb1e-411d-8c83-bea6c6e6308c",
+    "versionId": "0b7a3424-5f93-425b-aee7-1d5e42dae442",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
