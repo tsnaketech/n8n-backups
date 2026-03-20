@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-18T13:40:11.166Z",
+    "updatedAt": "2026-03-19T22:57:16.328Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -64,12 +64,12 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1504,
-                768
+                1536,
+                992
             ],
             "id": "f1124172-cac5-4d93-ae53-831449ba999f",
             "name": "Replicate leonardoai/lucid-origin",
-            "executeOnce": true,
+            "executeOnce": false,
             "credentials": {
                 "httpHeaderAuth": {
                     "id": "3sytPF58vLXwSQtC",
@@ -111,8 +111,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1696,
-                768
+                1728,
+                992
             ],
             "id": "be508378-fda0-4d8d-b85d-72bc2b35047a",
             "name": "HTTP Request",
@@ -221,8 +221,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1696,
-                960
+                1728,
+                800
             ],
             "id": "db688aaa-9047-492f-9013-78511c1b69cb",
             "name": "Generate Voice",
@@ -511,8 +511,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                2112,
-                960
+                2144,
+                800
             ],
             "id": "bfa63a14-47f4-40cf-960c-1547a4b16a96",
             "name": "Replicate openai/whisper",
@@ -584,8 +584,8 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                1904,
-                960
+                1936,
+                800
             ],
             "id": "087eee0a-203c-4f32-a994-3a82db996833",
             "name": "Save audio file",
@@ -630,8 +630,8 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                1504,
-                960
+                1536,
+                800
             ],
             "id": "744b2f79-26a1-4578-9abf-ab6324dd6f7a",
             "name": "Delete audio file",
@@ -647,12 +647,14 @@
                 "operation": "get",
                 "propertyName": "data",
                 "key": "={{ $node[\"Get voice prompting\"][\"json\"][\"filename\"] }}",
-                "options": {}
+                "options": {
+                    "dotNotation": true
+                }
             },
             "type": "n8n-nodes-base.redis",
             "typeVersion": 1,
             "position": [
-                2112,
+                2128,
                 608
             ],
             "id": "80ade5a2-3ecc-4815-bb06-427dfe80610c",
@@ -675,8 +677,8 @@
             "type": "n8n-nodes-base.redis",
             "typeVersion": 1,
             "position": [
-                2320,
-                960
+                2352,
+                800
             ],
             "id": "68a37856-a4b4-4a7b-b6d0-604845a15e5e",
             "name": "Save transcribe data",
@@ -1037,14 +1039,14 @@
         {
             "parameters": {
                 "operation": "set",
-                "key": "={{ $binary.data.fileName }}",
-                "value": "={{ $binary }}"
+                "key": "=img_{{ $node[\"Get voice prompting\"].json.filename.split(\"_\").last() }}",
+                "value": "={{ $json.data }}"
             },
             "type": "n8n-nodes-base.redis",
             "typeVersion": 1,
             "position": [
-                1904,
-                768
+                2704,
+                1200
             ],
             "id": "5e3441fb-462e-4241-8ce4-80b5ea769a24",
             "name": "Save image base64",
@@ -1054,6 +1056,36 @@
                     "name": "Redis - pika account"
                 }
             }
+        },
+        {
+            "parameters": {
+                "operation": "binaryToPropery",
+                "destinationKey": "={{ $node[\"Get voice prompting\"].json.filename.split(\"_\").last() }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.extractFromFile",
+            "typeVersion": 1.1,
+            "position": [
+                1936,
+                992
+            ],
+            "id": "79daff08-02b9-49e4-914b-4d37ca14441f",
+            "name": "Extract from File"
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "combineBy": "combineByPosition",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                2304,
+                976
+            ],
+            "id": "6c95b0ef-94df-401f-9ddb-c595ee738c34",
+            "name": "Merge"
         }
     ],
     "connections": {
@@ -1208,11 +1240,6 @@
                         "node": "Delete audio file",
                         "type": "main",
                         "index": 0
-                    },
-                    {
-                        "node": "Replicate leonardoai/lucid-origin",
-                        "type": "main",
-                        "index": 0
                     }
                 ]
             ]
@@ -1221,7 +1248,7 @@
             "main": [
                 [
                     {
-                        "node": "Save transcribe data",
+                        "node": "Merge",
                         "type": "main",
                         "index": 0
                     }
@@ -1233,6 +1260,11 @@
                 [
                     {
                         "node": "Replicate openai/whisper",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Replicate leonardoai/lucid-origin",
                         "type": "main",
                         "index": 0
                     }
@@ -1464,9 +1496,20 @@
             "main": [
                 [
                     {
-                        "node": "Save image base64",
+                        "node": "Extract from File",
                         "type": "main",
                         "index": 0
+                    }
+                ]
+            ]
+        },
+        "Extract from File": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
                     }
                 ]
             ]
@@ -1480,7 +1523,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "0b7a3424-5f93-425b-aee7-1d5e42dae442",
+    "versionId": "2b67fe04-3995-4c04-9e76-7776f86262c5",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
