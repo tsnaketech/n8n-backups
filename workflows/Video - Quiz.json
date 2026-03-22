@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-19T22:57:16.328Z",
+    "updatedAt": "2026-03-21T22:19:14.677Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -64,7 +64,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1536,
+                1472,
                 992
             ],
             "id": "f1124172-cac5-4d93-ae53-831449ba999f",
@@ -111,7 +111,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1728,
+                1664,
                 992
             ],
             "id": "be508378-fda0-4d8d-b85d-72bc2b35047a",
@@ -221,7 +221,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1728,
+                1664,
                 800
             ],
             "id": "db688aaa-9047-492f-9013-78511c1b69cb",
@@ -511,7 +511,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                2144,
+                2080,
                 800
             ],
             "id": "bfa63a14-47f4-40cf-960c-1547a4b16a96",
@@ -584,7 +584,7 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                1936,
+                1872,
                 800
             ],
             "id": "087eee0a-203c-4f32-a994-3a82db996833",
@@ -630,7 +630,7 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                1536,
+                1472,
                 800
             ],
             "id": "744b2f79-26a1-4578-9abf-ab6324dd6f7a",
@@ -639,53 +639,6 @@
                 "aws": {
                     "id": "69PVpJgi3UfZSQdm",
                     "name": "AWS (IAM) account n8n in snaketech"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "operation": "get",
-                "propertyName": "data",
-                "key": "={{ $node[\"Get voice prompting\"][\"json\"][\"filename\"] }}",
-                "options": {
-                    "dotNotation": true
-                }
-            },
-            "type": "n8n-nodes-base.redis",
-            "typeVersion": 1,
-            "position": [
-                2128,
-                608
-            ],
-            "id": "80ade5a2-3ecc-4815-bb06-427dfe80610c",
-            "name": "Retrieve transcribe data",
-            "executeOnce": false,
-            "credentials": {
-                "redis": {
-                    "id": "ua59kyvCowPL9ZRc",
-                    "name": "Redis - pika account"
-                }
-            },
-            "onError": "continueErrorOutput"
-        },
-        {
-            "parameters": {
-                "operation": "set",
-                "key": "={{ $json.input.audio.split('/').pop() }}",
-                "value": "={{ $json.toJsonString() }}"
-            },
-            "type": "n8n-nodes-base.redis",
-            "typeVersion": 1,
-            "position": [
-                2352,
-                800
-            ],
-            "id": "68a37856-a4b4-4a7b-b6d0-604845a15e5e",
-            "name": "Save transcribe data",
-            "credentials": {
-                "redis": {
-                    "id": "ua59kyvCowPL9ZRc",
-                    "name": "Redis - pika account"
                 }
             }
         },
@@ -1066,7 +1019,7 @@
             "type": "n8n-nodes-base.extractFromFile",
             "typeVersion": 1.1,
             "position": [
-                1936,
+                1872,
                 992
             ],
             "id": "79daff08-02b9-49e4-914b-4d37ca14441f",
@@ -1081,11 +1034,58 @@
             "type": "n8n-nodes-base.merge",
             "typeVersion": 3.2,
             "position": [
-                2304,
+                2240,
                 976
             ],
             "id": "6c95b0ef-94df-401f-9ddb-c595ee738c34",
             "name": "Merge"
+        },
+        {
+            "parameters": {
+                "operation": "get",
+                "propertyName": "data",
+                "key": "={{ $node[\"Get voice prompting\"][\"json\"][\"filename\"] }}",
+                "options": {
+                    "dotNotation": true
+                }
+            },
+            "type": "n8n-nodes-base.redis",
+            "typeVersion": 1,
+            "position": [
+                2128,
+                608
+            ],
+            "id": "80ade5a2-3ecc-4815-bb06-427dfe80610c",
+            "name": "Retrieve data",
+            "executeOnce": false,
+            "credentials": {
+                "redis": {
+                    "id": "ua59kyvCowPL9ZRc",
+                    "name": "Redis - pika account"
+                }
+            },
+            "onError": "continueErrorOutput"
+        },
+        {
+            "parameters": {
+                "operation": "set",
+                "key": "={{ $json.input.audio.split('/').pop() }}",
+                "value": "={{ $json.toJsonString() }}"
+            },
+            "type": "n8n-nodes-base.redis",
+            "typeVersion": 1,
+            "position": [
+                2320,
+                800
+            ],
+            "id": "68a37856-a4b4-4a7b-b6d0-604845a15e5e",
+            "name": "Save data",
+            "credentials": {
+                "redis": {
+                    "id": "ua59kyvCowPL9ZRc",
+                    "name": "Redis - pika account"
+                }
+            }
         }
     ],
     "connections": {
@@ -1230,7 +1230,7 @@
             "main": [
                 [
                     {
-                        "node": "Retrieve transcribe data",
+                        "node": "Retrieve data",
                         "type": "main",
                         "index": 0
                     }
@@ -1287,29 +1287,6 @@
                 [
                     {
                         "node": "Generate Voice",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Retrieve transcribe data": {
-            "main": [
-                [
-                    {
-                        "node": "String to Json",
-                        "type": "main",
-                        "index": 0
-                    }
-                ],
-                []
-            ]
-        },
-        "Save transcribe data": {
-            "main": [
-                [
-                    {
-                        "node": "Prepare for Remotion",
                         "type": "main",
                         "index": 0
                     }
@@ -1513,6 +1490,34 @@
                     }
                 ]
             ]
+        },
+        "Retrieve data": {
+            "main": [
+                [
+                    {
+                        "node": "String to Json",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                []
+            ]
+        },
+        "Save data": {
+            "main": [
+                [
+                    {
+                        "node": "Prepare for Remotion",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge": {
+            "main": [
+                []
+            ]
         }
     },
     "settings": {
@@ -1523,7 +1528,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "2b67fe04-3995-4c04-9e76-7776f86262c5",
+    "versionId": "996d978c-0f8f-409e-afcb-5a24dc21ae96",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
