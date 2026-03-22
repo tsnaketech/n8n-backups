@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-15T02:07:09.181Z",
+    "updatedAt": "2026-03-21T22:19:48.789Z",
     "createdAt": "2025-08-11T22:17:19.789Z",
     "id": "faLgq7WA8mepwvto",
     "name": "Test2",
@@ -11,8 +11,8 @@
             "type": "n8n-nodes-base.manualTrigger",
             "typeVersion": 1,
             "position": [
-                0,
-                0
+                -160,
+                -80
             ],
             "id": "16674370-9666-4c82-bf76-c41bf79b877f",
             "name": "When clicking ‘Execute workflow’"
@@ -58,7 +58,7 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                416,
+                432,
                 0
             ],
             "id": "8724c22f-c566-43d7-b11f-ccbbe32292e7",
@@ -69,6 +69,19 @@
                     "name": "Supabase SnakeTech DB Quiz"
                 }
             }
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                48,
+                -80
+            ],
+            "id": "d3dcccbb-3f73-4bd3-81a5-4373f8eeba4e",
+            "name": "HTTP Request"
         }
     ],
     "connections": {
@@ -76,7 +89,7 @@
             "main": [
                 [
                     {
-                        "node": "Get many rows",
+                        "node": "HTTP Request",
                         "type": "main",
                         "index": 0
                     }
@@ -97,7 +110,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "b2adbef6-c28a-4b4d-af58-814dab64fd14",
+    "versionId": "ed0ce524-497a-4b05-b994-8a57e669165a",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
