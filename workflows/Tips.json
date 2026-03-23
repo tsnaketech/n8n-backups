@@ -1,0 +1,191 @@
+{
+    "updatedAt": "2026-03-22T21:15:31.502Z",
+    "createdAt": "2025-08-11T22:17:19.789Z",
+    "id": "faLgq7WA8mepwvto",
+    "name": "Tips",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                -128,
+                -176
+            ],
+            "id": "16674370-9666-4c82-bf76-c41bf79b877f",
+            "name": "When clicking ‘Execute workflow’"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "e6f3929f-adee-45d8-af88-e934146cb756",
+                            "name": "image_url",
+                            "value": "=https://imgs.search.brave.com/Z_prwXNRxAkDRmKU3Sdr2SHLY_Uc035KInENKfcILMY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI4/NTI2MzgwNi9mci9w/aG90by9wZXJzb25h/bC1wZXJzcGVjdGl2/ZS1vZi1wb2xhcm9p/ZC1waWN0dXJlLW92/ZXJsYXBwaW5nLWEt/Y291bnRyeS1yb2Fk/LWluLXR1c2Nhbnku/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PXJreEtvZ3cxZmxH/TEEyU1QwcHdDSkE4/YVdXN1FPRU84M0hY/a0xhQVN1WUE9",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                80,
+                -112
+            ],
+            "id": "2b0d2f61-c9ab-4cb3-a96f-90def9ab7a4f",
+            "name": "Edit Fields"
+        },
+        {
+            "parameters": {
+                "operation": "getAll",
+                "tableId": "questions",
+                "returnAll": true,
+                "filters": {
+                    "conditions": [
+                        {
+                            "keyName": "used",
+                            "condition": "is",
+                            "keyValue": "false"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.supabase",
+            "typeVersion": 1,
+            "position": [
+                704,
+                48
+            ],
+            "id": "8724c22f-c566-43d7-b11f-ccbbe32292e7",
+            "name": "Get many rows",
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "https://imgs.search.brave.com/Z_prwXNRxAkDRmKU3Sdr2SHLY_Uc035KInENKfcILMY/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5nZXR0eWltYWdl/cy5jb20vaWQvMTI4/NTI2MzgwNi9mci9w/aG90by9wZXJzb25h/bC1wZXJzcGVjdGl2/ZS1vZi1wb2xhcm9p/ZC1waWN0dXJlLW92/ZXJsYXBwaW5nLWEt/Y291bnRyeS1yb2Fk/LWluLXR1c2Nhbnku/anBnP3M9NjEyeDYx/MiZ3PTAmaz0yMCZj/PXJreEtvZ3cxZmxH/TEEyU1QwcHdDSkE4/YVdXN1FPRU84M0hY/a0xhQVN1WUE9",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                80,
+                -288
+            ],
+            "id": "d3dcccbb-3f73-4bd3-81a5-4373f8eeba4e",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "jsCode": "const url = $input.first().json.image_url;\nconst response = await this.helpers.request({ url, encoding: null });\nconst base64 = Buffer.from(response).toString('base64');\n\nreturn [{\n  json: {\n    base64: `data:image/jpeg;base64,${base64}`\n  }\n}];\n"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                480,
+                -96
+            ],
+            "id": "a0c12f74-2743-4d1e-b093-ad0c21078be1",
+            "name": "Code in JavaScript"
+        },
+        {
+            "parameters": {
+                "url": "={{ $binary.data.id.replace('filesystem-v2:', 'http://localhost:5678/rest/binary-data/') }}",
+                "options": {
+                    "response": {
+                        "response": {
+                            "responseFormat": "file"
+                        }
+                    }
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                496,
+                128
+            ],
+            "id": "b11cc99f-5bc3-4925-9d64-9164bfa31806",
+            "name": "HTTP Request1"
+        },
+        {
+            "parameters": {
+                "jsCode": "const items = $input.all();\n\nconst results = await Promise.all(\n  items.map(async (item, index) => {\n    const buffer = await this.helpers.getBinaryDataBuffer(index, 'data');\n    const mimeType = item.binary['data'].mimeType;\n    const base64 = buffer.toString('base64');\n\n    return {\n      json: {\n        img: {\n          base64: `data:${mimeType};base64,${base64}`,\n          fileName: item.binary['data'].fileName\n        }\n      }\n    };\n  })\n);\n\nreturn results;\n"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                352,
+                -288
+            ],
+            "id": "d9f95eb9-ecc4-40de-9ae4-2aab60af9e1f",
+            "name": "Get Base64"
+        }
+    ],
+    "connections": {
+        "When clicking ‘Execute workflow’": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Edit Fields": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "main": [
+                [
+                    {
+                        "node": "Get Base64",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "c1d4eeed-48c9-44e7-847c-ba79a54dbda1",
+    "activeVersionId": null,
+    "triggerCount": 0,
+    "shared": [
+        {
+            "updatedAt": "2025-08-11T22:17:19.795Z",
+            "createdAt": "2025-08-11T22:17:19.795Z",
+            "role": "workflow:owner",
+            "workflowId": "faLgq7WA8mepwvto",
+            "projectId": "lnYpJLFYV8VS8Mcd"
+        }
+    ],
+    "activeVersion": null,
+    "tags": []
+}
