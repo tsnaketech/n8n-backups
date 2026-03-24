@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-02-08T20:11:20.232Z",
+    "updatedAt": "2026-03-23T22:47:01.396Z",
     "createdAt": "2024-09-28T09:11:06.127Z",
     "id": "gTBkibbRHEFPmn1l",
     "name": "Splunk - App notification",
@@ -56,7 +56,7 @@
         },
         {
             "parameters": {
-                "model": "qwen/qwen3-next-80b-a3b-instruct:free",
+                "model": "minimax/minimax-m2.5:free",
                 "options": {}
             },
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
@@ -267,8 +267,8 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "daae1d98-33a6-4507-a731-1eaac062f284",
-    "activeVersionId": "daae1d98-33a6-4507-a731-1eaac062f284",
+    "versionId": "8efcc406-12f3-4ed5-8ac1-e7a31fb6a180",
+    "activeVersionId": "8efcc406-12f3-4ed5-8ac1-e7a31fb6a180",
     "triggerCount": 1,
     "shared": [
         {
@@ -280,9 +280,9 @@
         }
     ],
     "activeVersion": {
-        "updatedAt": "2026-02-08T20:11:22.000Z",
-        "createdAt": "2026-02-08T20:11:20.233Z",
-        "versionId": "daae1d98-33a6-4507-a731-1eaac062f284",
+        "updatedAt": "2026-03-23T22:47:07.000Z",
+        "createdAt": "2026-03-23T22:47:01.396Z",
+        "versionId": "8efcc406-12f3-4ed5-8ac1-e7a31fb6a180",
         "workflowId": "gTBkibbRHEFPmn1l",
         "nodes": [
             {
@@ -335,7 +335,7 @@
             },
             {
                 "parameters": {
-                    "model": "qwen/qwen3-next-80b-a3b-instruct:free",
+                    "model": "minimax/minimax-m2.5:free",
                     "options": {}
                 },
                 "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
@@ -538,9 +538,9 @@
             }
         },
         "authors": "Snake Tech",
-        "name": "Version daae1d98",
+        "name": "Version 8efcc406",
         "description": "",
-        "autosaved": false
+        "autosaved": true
     },
     "tags": [
         {
