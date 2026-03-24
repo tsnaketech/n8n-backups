@@ -1,0 +1,479 @@
+{
+    "updatedAt": "2026-03-23T22:40:37.226Z",
+    "createdAt": "2026-03-23T01:20:23.064Z",
+    "id": "zMCp4Tn9xfnvkJWQ",
+    "name": "Configuration",
+    "active": true,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {
+                "updates": [
+                    "callback_query"
+                ],
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.telegramTrigger",
+            "typeVersion": 1.2,
+            "position": [
+                0,
+                0
+            ],
+            "id": "50df6a56-1cea-41a7-a538-11eda878098a",
+            "name": "Telegram Trigger",
+            "webhookId": "0a3c5f75-9ca8-42a9-8450-452afcef60d0",
+            "credentials": {
+                "telegramApi": {
+                    "id": "t5jP1rX1Q7rEmgPc",
+                    "name": "Telegram account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.callback_query.data.replace('https://n8n.snaketech.net', 'http://192.168.1.112') }}\n",
+                "options": {
+                    "allowUnauthorizedCerts": true
+                }
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                208,
+                0
+            ],
+            "id": "20db582b-8731-4802-b9eb-252434f54d49",
+            "name": "HTTP Request"
+        },
+        {
+            "parameters": {
+                "path": "terms",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                0,
+                192
+            ],
+            "id": "ce0e2ab4-46ef-4752-b699-ba859b2508b7",
+            "name": "Webhook Terms",
+            "webhookId": "2a177a87-cc38-42a2-8a68-3d0de1924a1c"
+        },
+        {
+            "parameters": {
+                "path": "privacy",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                0,
+                368
+            ],
+            "id": "c760fe00-5b95-4903-9684-c84046f18deb",
+            "name": "Webhook Privacy",
+            "webhookId": "3f1eaea9-0340-40b7-8044-4dc213bd7472"
+        },
+        {
+            "parameters": {
+                "respondWith": "text",
+                "responseBody": "=<html>\n<body>\n  <h1>Terms of Service</h1>\n  <p>This application automatically publishes quiz videos on TikTok.</p>\n  <p>By using this service, you agree that:</p>\n  <ul>\n    <li>Content is generated automatically</li>\n    <li>Videos are published on your TikTok account</li>\n    <li>You are responsible for your TikTok account</li>\n  </ul>\n  <p>Contact: ton@email.com</p>\n</body>\n</html>",
+                "options": {
+                    "responseCode": 200
+                }
+            },
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.5,
+            "position": [
+                208,
+                192
+            ],
+            "id": "2f5de9ed-c43b-43e3-978c-fccb6ece4aad",
+            "name": "Respond Terms"
+        },
+        {
+            "parameters": {
+                "respondWith": "text",
+                "responseBody": "=<html>\n<body>\n  <h1>Privacy Policy</h1>\n  <p>This application publishes quiz videos on TikTok automatically.</p>\n  <p>Data we access:</p>\n  <ul>\n    <li>TikTok account information (username only)</li>\n    <li>Video upload permissions</li>\n  </ul>\n  <p>We do NOT collect, store or share any personal data.</p>\n  <p>Contact: ton@email.com</p>\n</body>\n</html>",
+                "options": {
+                    "responseCode": 200
+                }
+            },
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.5,
+            "position": [
+                208,
+                368
+            ],
+            "id": "7121fa47-a5c8-47ce-a1dc-868144513361",
+            "name": "Respond Privacy"
+        },
+        {
+            "parameters": {
+                "path": "tiktokAXygyEFRgMQPRpi7Oi92wzoUaHO9Im2d.txt",
+                "responseMode": "responseNode",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 2.1,
+            "position": [
+                0,
+                544
+            ],
+            "id": "b84a5cf6-025c-46f1-a76b-b4db230152fe",
+            "name": "Webhook TikTok File",
+            "webhookId": "dbc3a71e-58c7-4bc0-b1da-74c2a9c0ed87"
+        },
+        {
+            "parameters": {
+                "respondWith": "text",
+                "responseBody": "tiktok-developers-site-verification=AXygyEFRgMQPRpi7Oi92wzoUaHO9Im2d",
+                "options": {
+                    "responseCode": 200
+                }
+            },
+            "type": "n8n-nodes-base.respondToWebhook",
+            "typeVersion": 1.5,
+            "position": [
+                208,
+                544
+            ],
+            "id": "21881b43-469c-4ed9-9229-94b76e3d7817",
+            "name": "Respond TikTok File"
+        },
+        {
+            "parameters": {
+                "resource": "callback",
+                "queryId": "={{ $('Telegram Trigger').item.json.callback_query.id }}",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                416,
+                0
+            ],
+            "id": "116512b7-ebbb-4876-ac1d-9a24905340bd",
+            "name": "Answer Query a callback",
+            "webhookId": "59140bdd-56c3-487c-80a3-00ddd7d224f9",
+            "credentials": {
+                "telegramApi": {
+                    "id": "t5jP1rX1Q7rEmgPc",
+                    "name": "Telegram account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Telegram Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "HTTP Request",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request": {
+            "main": [
+                [
+                    {
+                        "node": "Answer Query a callback",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook Terms": {
+            "main": [
+                [
+                    {
+                        "node": "Respond Terms",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook Privacy": {
+            "main": [
+                [
+                    {
+                        "node": "Respond Privacy",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Webhook TikTok File": {
+            "main": [
+                [
+                    {
+                        "node": "Respond TikTok File",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "a261f859-522a-4e8c-b969-c33f4d79548a",
+    "activeVersionId": "a261f859-522a-4e8c-b969-c33f4d79548a",
+    "triggerCount": 4,
+    "shared": [
+        {
+            "updatedAt": "2026-03-23T01:20:23.065Z",
+            "createdAt": "2026-03-23T01:20:23.065Z",
+            "role": "workflow:owner",
+            "workflowId": "zMCp4Tn9xfnvkJWQ",
+            "projectId": "lnYpJLFYV8VS8Mcd"
+        }
+    ],
+    "activeVersion": {
+        "updatedAt": "2026-03-23T22:40:42.000Z",
+        "createdAt": "2026-03-23T22:40:37.226Z",
+        "versionId": "a261f859-522a-4e8c-b969-c33f4d79548a",
+        "workflowId": "zMCp4Tn9xfnvkJWQ",
+        "nodes": [
+            {
+                "parameters": {
+                    "updates": [
+                        "callback_query"
+                    ],
+                    "additionalFields": {}
+                },
+                "type": "n8n-nodes-base.telegramTrigger",
+                "typeVersion": 1.2,
+                "position": [
+                    0,
+                    0
+                ],
+                "id": "50df6a56-1cea-41a7-a538-11eda878098a",
+                "name": "Telegram Trigger",
+                "webhookId": "0a3c5f75-9ca8-42a9-8450-452afcef60d0",
+                "credentials": {
+                    "telegramApi": {
+                        "id": "t5jP1rX1Q7rEmgPc",
+                        "name": "Telegram account"
+                    }
+                }
+            },
+            {
+                "parameters": {
+                    "url": "={{ $json.callback_query.data.replace('https://n8n.snaketech.net', 'http://192.168.1.112') }}\n",
+                    "options": {
+                        "allowUnauthorizedCerts": true
+                    }
+                },
+                "type": "n8n-nodes-base.httpRequest",
+                "typeVersion": 4.4,
+                "position": [
+                    208,
+                    0
+                ],
+                "id": "20db582b-8731-4802-b9eb-252434f54d49",
+                "name": "HTTP Request"
+            },
+            {
+                "parameters": {
+                    "path": "terms",
+                    "responseMode": "responseNode",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.webhook",
+                "typeVersion": 2.1,
+                "position": [
+                    0,
+                    192
+                ],
+                "id": "ce0e2ab4-46ef-4752-b699-ba859b2508b7",
+                "name": "Webhook Terms",
+                "webhookId": "2a177a87-cc38-42a2-8a68-3d0de1924a1c"
+            },
+            {
+                "parameters": {
+                    "path": "privacy",
+                    "responseMode": "responseNode",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.webhook",
+                "typeVersion": 2.1,
+                "position": [
+                    0,
+                    368
+                ],
+                "id": "c760fe00-5b95-4903-9684-c84046f18deb",
+                "name": "Webhook Privacy",
+                "webhookId": "3f1eaea9-0340-40b7-8044-4dc213bd7472"
+            },
+            {
+                "parameters": {
+                    "respondWith": "text",
+                    "responseBody": "=<html>\n<body>\n  <h1>Terms of Service</h1>\n  <p>This application automatically publishes quiz videos on TikTok.</p>\n  <p>By using this service, you agree that:</p>\n  <ul>\n    <li>Content is generated automatically</li>\n    <li>Videos are published on your TikTok account</li>\n    <li>You are responsible for your TikTok account</li>\n  </ul>\n  <p>Contact: ton@email.com</p>\n</body>\n</html>",
+                    "options": {
+                        "responseCode": 200
+                    }
+                },
+                "type": "n8n-nodes-base.respondToWebhook",
+                "typeVersion": 1.5,
+                "position": [
+                    208,
+                    192
+                ],
+                "id": "2f5de9ed-c43b-43e3-978c-fccb6ece4aad",
+                "name": "Respond Terms"
+            },
+            {
+                "parameters": {
+                    "respondWith": "text",
+                    "responseBody": "=<html>\n<body>\n  <h1>Privacy Policy</h1>\n  <p>This application publishes quiz videos on TikTok automatically.</p>\n  <p>Data we access:</p>\n  <ul>\n    <li>TikTok account information (username only)</li>\n    <li>Video upload permissions</li>\n  </ul>\n  <p>We do NOT collect, store or share any personal data.</p>\n  <p>Contact: ton@email.com</p>\n</body>\n</html>",
+                    "options": {
+                        "responseCode": 200
+                    }
+                },
+                "type": "n8n-nodes-base.respondToWebhook",
+                "typeVersion": 1.5,
+                "position": [
+                    208,
+                    368
+                ],
+                "id": "7121fa47-a5c8-47ce-a1dc-868144513361",
+                "name": "Respond Privacy"
+            },
+            {
+                "parameters": {
+                    "path": "tiktokAXygyEFRgMQPRpi7Oi92wzoUaHO9Im2d.txt",
+                    "responseMode": "responseNode",
+                    "options": {}
+                },
+                "type": "n8n-nodes-base.webhook",
+                "typeVersion": 2.1,
+                "position": [
+                    0,
+                    544
+                ],
+                "id": "b84a5cf6-025c-46f1-a76b-b4db230152fe",
+                "name": "Webhook TikTok File",
+                "webhookId": "dbc3a71e-58c7-4bc0-b1da-74c2a9c0ed87"
+            },
+            {
+                "parameters": {
+                    "respondWith": "text",
+                    "responseBody": "tiktok-developers-site-verification=AXygyEFRgMQPRpi7Oi92wzoUaHO9Im2d",
+                    "options": {
+                        "responseCode": 200
+                    }
+                },
+                "type": "n8n-nodes-base.respondToWebhook",
+                "typeVersion": 1.5,
+                "position": [
+                    208,
+                    544
+                ],
+                "id": "21881b43-469c-4ed9-9229-94b76e3d7817",
+                "name": "Respond TikTok File"
+            },
+            {
+                "parameters": {
+                    "resource": "callback",
+                    "queryId": "={{ $('Telegram Trigger').item.json.callback_query.id }}",
+                    "additionalFields": {}
+                },
+                "type": "n8n-nodes-base.telegram",
+                "typeVersion": 1.2,
+                "position": [
+                    416,
+                    0
+                ],
+                "id": "116512b7-ebbb-4876-ac1d-9a24905340bd",
+                "name": "Answer Query a callback",
+                "webhookId": "59140bdd-56c3-487c-80a3-00ddd7d224f9",
+                "credentials": {
+                    "telegramApi": {
+                        "id": "t5jP1rX1Q7rEmgPc",
+                        "name": "Telegram account"
+                    }
+                }
+            }
+        ],
+        "connections": {
+            "Telegram Trigger": {
+                "main": [
+                    [
+                        {
+                            "node": "HTTP Request",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "HTTP Request": {
+                "main": [
+                    [
+                        {
+                            "node": "Answer Query a callback",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Webhook Terms": {
+                "main": [
+                    [
+                        {
+                            "node": "Respond Terms",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Webhook Privacy": {
+                "main": [
+                    [
+                        {
+                            "node": "Respond Privacy",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            },
+            "Webhook TikTok File": {
+                "main": [
+                    [
+                        {
+                            "node": "Respond TikTok File",
+                            "type": "main",
+                            "index": 0
+                        }
+                    ]
+                ]
+            }
+        },
+        "authors": "Snake Tech",
+        "name": "Version a261f859",
+        "description": "",
+        "autosaved": true
+    },
+    "tags": []
+}
