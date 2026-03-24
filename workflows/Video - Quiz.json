@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-23T00:59:31.776Z",
+    "updatedAt": "2026-03-24T00:58:28.429Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -64,7 +64,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1872,
+                1824,
                 944
             ],
             "id": "f1124172-cac5-4d93-ae53-831449ba999f",
@@ -91,7 +91,7 @@
             "typeVersion": 1,
             "position": [
                 592,
-                224
+                -64
             ],
             "id": "5ef4e151-eefe-4cdc-959d-b95d6bb29b71",
             "name": "Translate a language",
@@ -170,6 +170,18 @@
                             "name": "aws_prefix_img_file",
                             "value": "img_",
                             "type": "string"
+                        },
+                        {
+                            "id": "c03b84bd-d352-4f83-bbf7-128aade0cfc8",
+                            "name": "telegram_chat_id",
+                            "value": "1037310358",
+                            "type": "string"
+                        },
+                        {
+                            "id": "b53884e0-fb8b-41d2-9888-77a1f52ea862",
+                            "name": "aws_bucket_remotion",
+                            "value": "remotionlambda-euwest3-r1cnqfofeb",
+                            "type": "string"
                         }
                     ]
                 },
@@ -212,7 +224,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                2064,
+                2016,
                 752
             ],
             "id": "db688aaa-9047-492f-9013-78511c1b69cb",
@@ -502,7 +514,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                2672,
+                2624,
                 848
             ],
             "id": "bfa63a14-47f4-40cf-960c-1547a4b16a96",
@@ -561,7 +573,7 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                2832,
+                2816,
                 624
             ],
             "id": "836bc558-f156-4376-a482-2b39357b0f9c",
@@ -577,7 +589,7 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                2272,
+                2224,
                 752
             ],
             "id": "087eee0a-203c-4f32-a994-3a82db996833",
@@ -704,7 +716,7 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                3136,
+                3072,
                 736
             ],
             "id": "15649dbe-8957-4258-8ee8-4a47d79d77cc",
@@ -719,7 +731,7 @@
             "type": "n8n-nodes-base.aggregate",
             "typeVersion": 1,
             "position": [
-                3424,
+                3312,
                 736
             ],
             "id": "9f21045f-418a-4569-bbc2-f756dbc90b23",
@@ -732,7 +744,7 @@
             "type": "n8n-nodes-base.wait",
             "typeVersion": 1.1,
             "position": [
-                3920,
+                3808,
                 736
             ],
             "id": "91100a01-bff7-4372-9726-277af5920480",
@@ -753,7 +765,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.3,
             "position": [
-                4128,
+                4016,
                 736
             ],
             "id": "b8c5ab37-b672-4785-91ee-3169c4c78742",
@@ -845,7 +857,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.3,
             "position": [
-                3680,
+                3552,
                 736
             ],
             "id": "31f9987e-60b1-423e-aab1-47d55fa5f0fd",
@@ -869,8 +881,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                4576,
-                720
+                3104,
+                1168
             ],
             "id": "facfb053-cd37-4243-99e5-884e629fca53",
             "name": "HTTP Request3"
@@ -904,8 +916,8 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                5440,
-                912
+                4352,
+                1072
             ],
             "id": "2c5082af-3375-412b-ab74-d469f3a62112",
             "name": "Update a row",
@@ -924,8 +936,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                5184,
-                912
+                4176,
+                1072
             ],
             "id": "b8327dff-2188-4a75-86a8-5dca29059992",
             "name": "Retreive id"
@@ -942,7 +954,7 @@
             "type": "n8n-nodes-base.redis",
             "typeVersion": 1,
             "position": [
-                2480,
+                2432,
                 624
             ],
             "id": "80ade5a2-3ecc-4815-bb06-427dfe80610c",
@@ -965,7 +977,7 @@
             "type": "n8n-nodes-base.redis",
             "typeVersion": 1,
             "position": [
-                2832,
+                2816,
                 848
             ],
             "id": "68a37856-a4b4-4a7b-b6d0-604845a15e5e",
@@ -984,8 +996,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                2544,
-                1232
+                1840,
+                -224
             ],
             "id": "cc6b548a-06ef-42d3-8d51-98af026586d8",
             "name": "Get Base64"
@@ -998,7 +1010,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                2064,
+                2016,
                 944
             ],
             "id": "f1ad0036-da41-459d-ac8e-ed3196c8c112",
@@ -1036,7 +1048,7 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                1872,
+                1824,
                 752
             ],
             "id": "744b2f79-26a1-4578-9abf-ab6324dd6f7a",
@@ -1058,7 +1070,7 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                2272,
+                2224,
                 944
             ],
             "id": "0e0d3604-5cb5-4929-88e3-ca55d2605706",
@@ -1079,7 +1091,7 @@
             "type": "n8n-nodes-base.merge",
             "typeVersion": 3.2,
             "position": [
-                2480,
+                2432,
                 848
             ],
             "id": "8b1175c7-1798-4ec4-8d7c-09bec0ecadd0",
@@ -1112,7 +1124,7 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.3,
             "position": [
-                4336,
+                4224,
                 736
             ],
             "id": "1f70edaa-83a5-473f-a337-d3447beb4c73",
@@ -1121,7 +1133,7 @@
         {
             "parameters": {
                 "operation": "sendVideo",
-                "chatId": "1037310358",
+                "chatId": "={{ $('Global Fields').first().json.telegram_chat_id }}",
                 "binaryData": true,
                 "replyMarkup": "inlineKeyboard",
                 "inlineKeyboard": {
@@ -1151,8 +1163,8 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                4816,
-                720
+                3328,
+                1168
             ],
             "id": "c8b9096f-9a8a-4303-b056-5826b5e45662",
             "name": "Send a video",
@@ -1166,19 +1178,89 @@
         },
         {
             "parameters": {
-                "resource": "callback",
-                "queryId": "={{ $json.callback_query.id }}",
+                "resume": "webhook",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.wait",
+            "typeVersion": 1.1,
+            "position": [
+                3536,
+                1168
+            ],
+            "id": "5bcac4d7-8d81-44d7-b9d4-2ac9ea59fa03",
+            "name": "Wait",
+            "webhookId": "1dc6f45d-d014-4089-a6d9-3bcaa72ef0d7"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "7535eca9-6427-4b10-b60f-b53607bb2433",
+                            "leftValue": "={{ $json.query.action }}",
+                            "rightValue": "validate",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                3712,
+                1168
+            ],
+            "id": "92befeba-b6c0-4197-b294-92d314fb0089",
+            "name": "If2"
+        },
+        {
+            "parameters": {
+                "resource": "folder",
+                "operation": "delete",
+                "bucketName": "={{ $('Global Fields').item.json.aws_bucket_remotion }}",
+                "folderKey": "={{ $('Global Fields').item.json.aws_bucket_remotion }}/render/{{ $('HTTP Request3').item.json.renderId }}"
+            },
+            "type": "n8n-nodes-base.awsS3",
+            "typeVersion": 2,
+            "position": [
+                3968,
+                1296
+            ],
+            "id": "9c74abe5-dc73-46f3-b0d3-d72786398b3b",
+            "name": "Delete a folder",
+            "credentials": {
+                "aws": {
+                    "id": "TVt2s9BRalpzLzvl",
+                    "name": "AWS account n8n tsnake7"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "chatId": "={{ $('Global Fields').item.json.telegram_chat_id }}",
+                "text": "❌ Vidéo rejetée et supprimée.",
                 "additionalFields": {}
             },
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                5680,
-                448
+                4176,
+                1296
             ],
-            "id": "ac70d0e1-3131-4af8-b8b8-3d6bee515a00",
-            "name": "Answer Query a callback",
-            "webhookId": "a35126ff-14e1-405a-b72b-2c3cbd03aa8a",
+            "id": "a72caee1-ade9-4a75-b65f-e09d41d4d7bc",
+            "name": "Send a text message",
+            "webhookId": "8eebb6d1-c6bc-4ffc-ac9a-d9ad4fa971d2",
             "credentials": {
                 "telegramApi": {
                     "id": "t5jP1rX1Q7rEmgPc",
@@ -1188,20 +1270,45 @@
         },
         {
             "parameters": {
-                "resume": "webhook",
-                "options": {
-                    "webhookSuffix": ""
+                "videoUrl": "={{ $('HTTP Request3').item.json.url }}",
+                "additionalFields": {
+                    "title": "={{ $('HTTP Request3').item.json.renderId }}"
                 }
             },
-            "type": "n8n-nodes-base.wait",
-            "typeVersion": 1.1,
+            "type": "@igabm/n8n-nodes-tiktok.tiktok",
+            "typeVersion": 2,
             "position": [
-                4992,
-                720
+                3968,
+                976
             ],
-            "id": "5bcac4d7-8d81-44d7-b9d4-2ac9ea59fa03",
-            "name": "Wait",
-            "webhookId": "1dc6f45d-d014-4089-a6d9-3bcaa72ef0d7"
+            "id": "203646b4-6967-40b8-86e3-8370953ce681",
+            "name": "Upload video",
+            "credentials": {
+                "tiktokOAuth2Api": {
+                    "id": "f7LWIqMqugOODtgW",
+                    "name": "TikTok SnakeTech SandBox"
+                }
+            },
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "resource": "post"
+            },
+            "type": "@bufferapp/n8n-nodes-buffer.buffer",
+            "typeVersion": 1,
+            "position": [
+                2261.026657263871,
+                144
+            ],
+            "id": "7e4a59c2-2aa7-47fb-b7b3-fbc991b079df",
+            "name": "Create a post",
+            "credentials": {
+                "bufferApi": {
+                    "id": "rIKeG3eYuucES4WA",
+                    "name": "Buffer account"
+                }
+            }
         }
     ],
     "connections": {
@@ -1675,7 +1782,53 @@
         },
         "Wait": {
             "main": [
-                []
+                [
+                    {
+                        "node": "If2",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If2": {
+            "main": [
+                [
+                    {
+                        "node": "Upload video",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Delete a folder",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Delete a folder": {
+            "main": [
+                [
+                    {
+                        "node": "Send a text message",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Upload video": {
+            "main": [
+                [
+                    {
+                        "node": "Retreive id",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
             ]
         }
     },
@@ -4938,9 +5091,82 @@
                     "item": 6
                 }
             }
+        ],
+        "Send a video": [
+            {
+                "json": {
+                    "ok": true,
+                    "result": {
+                        "message_id": 181,
+                        "from": {
+                            "id": 8016456219,
+                            "is_bot": true,
+                            "first_name": "SplunkInfo",
+                            "username": "SplunkInfoBot"
+                        },
+                        "chat": {
+                            "id": 1037310358,
+                            "first_name": "Mickael",
+                            "username": "tisnake7",
+                            "type": "private"
+                        },
+                        "date": 1774305765,
+                        "video": {
+                            "duration": 0,
+                            "width": 320,
+                            "height": 320,
+                            "file_name": "out.mp4",
+                            "mime_type": "video/mp4",
+                            "file_id": "BAACAgQAAxkDAAO1acHB5fjujeW299tq3IdHb1LfpOcAAkIfAALMVBBS7DXVJyi-sDc6BA",
+                            "file_unique_id": "AgADQh8AAsxUEFI",
+                            "file_size": 12706930
+                        },
+                        "reply_markup": {
+                            "inline_keyboard": [
+                                [
+                                    {
+                                        "text": "✅ Valider",
+                                        "callback_data": "https://n8n.snaketech.net/webhook-waiting/22075?action=validate"
+                                    },
+                                    {
+                                        "text": "❌ Rejeter",
+                                        "callback_data": "https://n8n.snaketech.net/webhook-waiting/22075?action=reject"
+                                    }
+                                ]
+                            ]
+                        }
+                    }
+                },
+                "pairedItem": {
+                    "item": 0
+                }
+            }
+        ],
+        "Wait": [
+            {
+                "json": {
+                    "headers": {
+                        "accept": "application/json,text/html,application/xhtml+xml,application/xml,text/*;q=0.9, image/*;q=0.8, */*;q=0.7",
+                        "user-agent": "axios/1.13.5",
+                        "accept-encoding": "gzip, compress, deflate, br",
+                        "host": "192.168.1.112",
+                        "connection": "close"
+                    },
+                    "params": {},
+                    "query": {
+                        "action": "validate"
+                    },
+                    "body": {},
+                    "webhookUrl": "https://n8n.snaketech.net/webhook-test/1dc6f45d-d014-4089-a6d9-3bcaa72ef0d7",
+                    "executionMode": "test"
+                },
+                "pairedItem": {
+                    "item": 0
+                }
+            }
         ]
     },
-    "versionId": "886aa4d9-c4b2-4354-8e5d-77e4747ec2a0",
+    "versionId": "9614b66c-10d8-43cf-9f2b-7dc74411e780",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
