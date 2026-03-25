@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-24T00:58:28.429Z",
+    "updatedAt": "2026-03-24T20:44:38.735Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -248,8 +248,8 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                1232,
-                832
+                1456,
+                816
             ],
             "id": "4d9d84bb-20e4-47f2-8571-39bc0b38a0d5",
             "name": "Create a row",
@@ -269,8 +269,8 @@
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
             "typeVersion": 1,
             "position": [
-                192,
-                864
+                704,
+                1168
             ],
             "id": "17a5d6ea-3270-4911-bb48-55da80bf9a2a",
             "name": "OpenRouter Chat Model1",
@@ -284,14 +284,14 @@
         {
             "parameters": {
                 "promptType": "define",
-                "text": "=Tu es un générateur de questions de quiz en français.\n\nGénère {{ Math.abs($json.unused_questions_count - $('Global Fields').item.json.number_question) }} questions variées en français.\n\n## Règles de génération\n- Mélange les types : QCM (4 options) et Vrai/Faux\n- Les questions doivent être claires, précises et sans ambiguïté\n- Varie les niveaux de difficulté (facile, moyen, difficile)\n- Varie les catégories (histoire, science, sport, culture générale, géographie, etc.)\n- Ne génère jamais deux questions similaires\n- La bonne réponse doit être répartie aléatoirement entre a, b, c et d\n\n## Format de réponse\nRéponds UNIQUEMENT avec un tableau JSON valide, sans texte avant ni après, sans balises markdown.\n\n[\n  {\n    \"question\": \"\",\n    \"option_a\": \"\",\n    \"option_b\": \"\",\n    \"option_c\": \"\",\n    \"option_d\": \"\",\n    \"correct_answer\": \"\",\n    \"category\": \"\",\n    \"language\": \"fr\"\n  }\n]\n\n## Règles strictes\n- \"correct_answer\" contient UNIQUEMENT la lettre (a, b, c ou d)\n- \"language\" vaut toujours \"fr\"\n- Pour un Vrai/Faux : option_a = \"Vrai\", option_b = \"Faux\", option_c = \"\", option_d = \"\"\n- Pour un QCM : les 4 options doivent être remplies\n- Aucun texte explicatif, uniquement le tableau JSON",
+                "text": "=Tu es un générateur expert de questions de quiz en français pour des vidéos dynamiques et engageantes.\n\nGénère {{ Math.abs($json.unused_questions_count - $('Global Fields').item.json.number_question) }} questions en français.\n\n## Objectif\nCes questions sont destinées à des vidéos quiz : elles doivent être percutantes, mémorables et adaptées à un large public.\n\n## Types de questions\n\n### QCM (4 options) — environ 70% des questions\n- option_a, option_b, option_c, option_d : toutes remplies et différentes\n- Les mauvaises réponses doivent être plausibles mais clairement fausses pour qui connaît la réponse\n- correct_answer : \"a\", \"b\", \"c\" ou \"d\"\n\n### Vrai/Faux — environ 30% des questions\n- option_a = traduction de \"Vrai\" selon le champ \"language\"\n- option_b = traduction de \"Faux\" selon le champ \"language\"\n- option_c = \"\"\n- option_d = \"\"\n- correct_answer : \"a\" ou \"b\" uniquement\n\n## Règles de génération\n\n### Qualité des questions\n- Formule chaque question comme une accroche directe et dynamique (\"Quel est...\", \"Lequel de ces...\", \"En quelle année...\", \"Qui a...\", \"Est-il vrai que...\")\n- Privilégie les faits vérifiables, surprenants ou méconnus pour maximiser l'engagement\n- Évite toute ambiguïté, double négation ou formulation trop complexe\n- Maximum 120 caractères par question\n- Maximum 35 caractères par option de réponse\n\n### Diversité obligatoire\n- Répartis équitablement entre ces catégories : histoire, science, sport, culture générale, géographie, cinéma/séries, musique, gastronomie, nature/animaux, technologie\n- Alterne les niveaux : 30% facile, 50% moyen, 20% difficile\n- La bonne réponse doit être distribuée aléatoirement et équitablement entre a, b, c et d\n- Ne génère jamais deux questions au sujet similaire\n\n## Format de réponse\nRéponds UNIQUEMENT avec un tableau JSON valide, sans texte avant ni après, sans balises markdown, sans commentaires.\n\n[\n  {\n    \"question\": \"\",\n    \"option_a\": \"\",\n    \"option_b\": \"\",\n    \"option_c\": \"\",\n    \"option_d\": \"\",\n    \"correct_answer\": \"\",\n    \"category\": \"\",\n    \"difficulty\": \"facile\" | \"moyen\" | \"difficile\",\n    \"fun_fact\": \"\",\n    \"language\": \"fr\"\n  }\n]\n\n## Règles strictes du JSON\n- \"correct_answer\" : UNIQUEMENT la lettre a, b, c ou d (minuscule)\n- \"language\" : toujours \"fr\"\n- \"difficulty\" : toujours l'une des trois valeurs exactes : \"facile\", \"moyen\", \"difficile\"\n- \"fun_fact\" : une phrase courte (max 100 caractères) révélant un détail surprenant lié à la réponse, utile pour l'écran de résultat dans la vidéo\n- Aucun champ vide sauf option_c et option_d pour les questions Vrai/Faux\n- Aucun texte, explication ou markdown en dehors du tableau JSON",
                 "batching": {}
             },
             "type": "@n8n/n8n-nodes-langchain.chainLlm",
             "typeVersion": 1.7,
             "position": [
                 704,
-                752
+                832
             ],
             "id": "662dd6e4-3dfb-4dfc-8350-75da4a2c36eb",
             "name": "Basic LLM Chain"
@@ -779,40 +779,6 @@
         },
         {
             "parameters": {
-                "options": {}
-            },
-            "type": "@n8n/n8n-nodes-langchain.agent",
-            "typeVersion": 3.1,
-            "position": [
-                688,
-                944
-            ],
-            "id": "e06752c5-4e9c-4071-8a28-b213d4264bf3",
-            "name": "AI Agent"
-        },
-        {
-            "parameters": {
-                "operation": "getAll",
-                "tableId": "questions",
-                "limit": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Limit', ``, 'number') }}"
-            },
-            "type": "n8n-nodes-base.supabaseTool",
-            "typeVersion": 1,
-            "position": [
-                384,
-                912
-            ],
-            "id": "125cd85d-03e5-4f67-94cc-5894a4d70786",
-            "name": "Get many rows in Supabase",
-            "credentials": {
-                "supabaseApi": {
-                    "id": "WbnVqEv2ZGhdAeSX",
-                    "name": "Supabase SnakeTech DB Quiz"
-                }
-            }
-        },
-        {
-            "parameters": {
                 "operation": "getAll",
                 "tableId": "questions",
                 "returnAll": true,
@@ -875,20 +841,6 @@
         },
         {
             "parameters": {
-                "url": "={{ $json.url }}",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.4,
-            "position": [
-                3104,
-                1168
-            ],
-            "id": "facfb053-cd37-4243-99e5-884e629fca53",
-            "name": "HTTP Request3"
-        },
-        {
-            "parameters": {
                 "operation": "update",
                 "tableId": "questions",
                 "filters": {
@@ -916,7 +868,7 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                4352,
+                4192,
                 1072
             ],
             "id": "2c5082af-3375-412b-ab74-d469f3a62112",
@@ -936,7 +888,7 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                4176,
+                4032,
                 1072
             ],
             "id": "b8327dff-2188-4a75-86a8-5dca29059992",
@@ -1163,7 +1115,7 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                3328,
+                3280,
                 1168
             ],
             "id": "c8b9096f-9a8a-4303-b056-5826b5e45662",
@@ -1184,7 +1136,7 @@
             "type": "n8n-nodes-base.wait",
             "typeVersion": 1.1,
             "position": [
-                3536,
+                3472,
                 1168
             ],
             "id": "5bcac4d7-8d81-44d7-b9d4-2ac9ea59fa03",
@@ -1218,7 +1170,7 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.3,
             "position": [
-                3712,
+                3648,
                 1168
             ],
             "id": "92befeba-b6c0-4197-b294-92d314fb0089",
@@ -1229,13 +1181,13 @@
                 "resource": "folder",
                 "operation": "delete",
                 "bucketName": "={{ $('Global Fields').item.json.aws_bucket_remotion }}",
-                "folderKey": "={{ $('Global Fields').item.json.aws_bucket_remotion }}/render/{{ $('HTTP Request3').item.json.renderId }}"
+                "folderKey": "={{ $('Global Fields').item.json.aws_bucket_remotion }}/render/{{ $('Get finale render').item.json.renderId }}"
             },
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                3968,
-                1296
+                3856,
+                1280
             ],
             "id": "9c74abe5-dc73-46f3-b0d3-d72786398b3b",
             "name": "Delete a folder",
@@ -1255,8 +1207,8 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                4176,
-                1296
+                4032,
+                1280
             ],
             "id": "a72caee1-ade9-4a75-b65f-e09d41d4d7bc",
             "name": "Send a text message",
@@ -1270,16 +1222,16 @@
         },
         {
             "parameters": {
-                "videoUrl": "={{ $('HTTP Request3').item.json.url }}",
+                "videoUrl": "={{ $('Get finale render').item.json.url }}",
                 "additionalFields": {
-                    "title": "={{ $('HTTP Request3').item.json.renderId }}"
+                    "title": "={{ $('Get finale render').item.json.renderId }}"
                 }
             },
             "type": "@igabm/n8n-nodes-tiktok.tiktok",
             "typeVersion": 2,
             "position": [
-                3968,
-                976
+                3488,
+                960
             ],
             "id": "203646b4-6967-40b8-86e3-8370953ce681",
             "name": "Upload video",
@@ -1293,13 +1245,17 @@
         },
         {
             "parameters": {
-                "resource": "post"
+                "resource": "post",
+                "organizationId": "63c4502f8b243e78b60c2240",
+                "channelId": "69c1e435af47dacb694a86e0|tiktok",
+                "attachmentType": "video",
+                "videoUrl": "={{ $('Get finale render').item.json.url }}"
             },
             "type": "@bufferapp/n8n-nodes-buffer.buffer",
             "typeVersion": 1,
             "position": [
-                2261.026657263871,
-                144
+                3856,
+                1072
             ],
             "id": "7e4a59c2-2aa7-47fb-b7b3-fbc991b079df",
             "name": "Create a post",
@@ -1309,6 +1265,54 @@
                     "name": "Buffer account"
                 }
             }
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.url }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                3104,
+                1168
+            ],
+            "id": "facfb053-cd37-4243-99e5-884e629fca53",
+            "name": "Get finale render"
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "24186634-001e-48d2-a9f9-8d007ae5115f",
+                            "leftValue": "",
+                            "rightValue": "",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals",
+                                "name": "filter.operator.equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                1232,
+                832
+            ],
+            "id": "8a9d9dda-522a-40b2-8c18-dd02084074ee",
+            "name": "If3"
         }
     ],
     "connections": {
@@ -1355,11 +1359,6 @@
                 [
                     {
                         "node": "Basic LLM Chain",
-                        "type": "ai_languageModel",
-                        "index": 0
-                    },
-                    {
-                        "node": "AI Agent",
                         "type": "ai_languageModel",
                         "index": 0
                     }
@@ -1562,7 +1561,7 @@
             "main": [
                 [
                     {
-                        "node": "Create a row",
+                        "node": "If3",
                         "type": "main",
                         "index": 0
                     }
@@ -1613,17 +1612,6 @@
                 ]
             ]
         },
-        "Get many rows in Supabase": {
-            "ai_tool": [
-                [
-                    {
-                        "node": "AI Agent",
-                        "type": "ai_tool",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
         "Get many rows": {
             "main": [
                 [
@@ -1640,17 +1628,6 @@
                 [
                     {
                         "node": "Wait 10s",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "HTTP Request3": {
-            "main": [
-                [
-                    {
-                        "node": "Send a video",
                         "type": "main",
                         "index": 0
                     }
@@ -1755,7 +1732,7 @@
             "main": [
                 [
                     {
-                        "node": "HTTP Request3",
+                        "node": "Get finale render",
                         "type": "main",
                         "index": 0
                     }
@@ -1795,7 +1772,7 @@
             "main": [
                 [
                     {
-                        "node": "Upload video",
+                        "node": "Create a post",
                         "type": "main",
                         "index": 0
                     }
@@ -1822,9 +1799,43 @@
         },
         "Upload video": {
             "main": [
+                []
+            ]
+        },
+        "Create a post": {
+            "main": [
                 [
                     {
                         "node": "Retreive id",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get finale render": {
+            "main": [
+                [
+                    {
+                        "node": "Send a video",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If3": {
+            "main": [
+                [
+                    {
+                        "node": "Create a row",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Get many rows",
                         "type": "main",
                         "index": 0
                     }
@@ -4601,31 +4612,6 @@
                 }
             }
         ],
-        "HTTP Request3": [
-            {
-                "json": {
-                    "status": "done",
-                    "url": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-r1cnqfofeb/renders/l4wu939jqb/out.mp4",
-                    "renderId": "l4wu939jqb"
-                },
-                "binary": {
-                    "data": {
-                        "mimeType": "video/mp4",
-                        "fileType": "video",
-                        "fileExtension": "mp4",
-                        "data": "filesystem-v2",
-                        "directory": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-r1cnqfofeb/renders/l4wu939jqb/out.mp4",
-                        "fileName": "out.mp4",
-                        "id": "filesystem-v2:workflows/aw4R5UbolnyUZ37J/executions/21957/binary_data/e636cfee-bc5a-4632-bac8-469ffd7185ab",
-                        "fileSize": "12.7 MB",
-                        "bytes": 12706930
-                    }
-                },
-                "pairedItem": {
-                    "item": 0
-                }
-            }
-        ],
         "Trigger Render": [
             {
                 "json": {
@@ -5164,9 +5150,64 @@
                     "item": 0
                 }
             }
+        ],
+        "Create a post": [
+            {
+                "json": {
+                    "id": "69c1e4540d13c0696e545051",
+                    "status": "sending",
+                    "text": "",
+                    "dueAt": "2026-03-24T01:09:40.763Z",
+                    "sentAt": null,
+                    "createdAt": "2026-03-24T01:09:40.727Z",
+                    "updatedAt": "2026-03-24T01:09:40.736Z",
+                    "channelId": "69c1e435af47dacb694a86e0",
+                    "channelService": "tiktok",
+                    "shareMode": "shareNow",
+                    "isCustomScheduled": false,
+                    "externalLink": null,
+                    "assets": [
+                        {
+                            "id": null,
+                            "type": "video",
+                            "mimeType": "video/mp4",
+                            "source": "https://buffer-updates-media-backfill-bucket.s3.amazonaws.com/63c4502f8b243e78b60c2240/69c1e435af47dacb694a86e0/69c1e4540d13c0696e545051_video.mp4",
+                            "thumbnail": ""
+                        }
+                    ]
+                },
+                "pairedItem": {
+                    "item": 0
+                }
+            }
+        ],
+        "Get finale render": [
+            {
+                "json": {
+                    "status": "done",
+                    "url": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-r1cnqfofeb/renders/l4wu939jqb/out.mp4",
+                    "renderId": "l4wu939jqb"
+                },
+                "binary": {
+                    "data": {
+                        "mimeType": "video/mp4",
+                        "fileType": "video",
+                        "fileExtension": "mp4",
+                        "data": "filesystem-v2",
+                        "directory": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-r1cnqfofeb/renders/l4wu939jqb/out.mp4",
+                        "fileName": "out.mp4",
+                        "id": "filesystem-v2:workflows/aw4R5UbolnyUZ37J/executions/21957/binary_data/e636cfee-bc5a-4632-bac8-469ffd7185ab",
+                        "fileSize": "12.7 MB",
+                        "bytes": 12706930
+                    }
+                },
+                "pairedItem": {
+                    "item": 0
+                }
+            }
         ]
     },
-    "versionId": "9614b66c-10d8-43cf-9f2b-7dc74411e780",
+    "versionId": "fa1bfe7b-061c-41c9-a856-48d49c973a49",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
