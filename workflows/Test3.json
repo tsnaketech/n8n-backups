@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-25T00:39:40.942Z",
+    "updatedAt": "2026-03-25T19:00:33.913Z",
     "createdAt": "2025-08-24T00:20:39.940Z",
     "id": "hWfazNhHPQI4TYzk",
     "name": "Test3",
@@ -8,20 +8,8 @@
     "nodes": [
         {
             "parameters": {
-                "options": {}
-            },
-            "type": "@n8n/n8n-nodes-langchain.chatTrigger",
-            "typeVersion": 1.4,
-            "position": [
-                0,
-                0
-            ],
-            "id": "016f1c52-0d9e-4214-93aa-01888515929f",
-            "name": "When chat message received",
-            "webhookId": "761c24ea-6728-460d-a3f6-e0779ec14ec4"
-        },
-        {
-            "parameters": {
+                "promptType": "define",
+                "text": "=Tu es un générateur expert de questions de quiz en français pour des vidéos dynamiques et engageantes.\n\nGénère 2 questions en français.\n\n## Objectif\nCes questions sont destinées à des vidéos quiz : elles doivent être percutantes, mémorables et adaptées à un large public.\n\n## Types de questions\n\n### QCM (4 options) — environ 70% des questions\n- option_a, option_b, option_c, option_d : toutes remplies et différentes\n- Les mauvaises réponses doivent être plausibles mais clairement fausses pour qui connaît la réponse\n- correct_answer : \"a\", \"b\", \"c\" et \"d\" (répartis aléatoirement et équitablement)\n\n### Vrai/Faux — environ 30% des questions\n- option_a = traduction de \"Vrai\" selon le champ \"language\"\n- option_b = traduction de \"Faux\" selon le champ \"language\"\n- option_c = \"\"\n- option_d = \"\"\n- correct_answer : \"a\" ou \"b\" uniquement\n\n## Règles de génération\n\n### Qualité des questions\n- Formule chaque question comme une accroche directe et dynamique (\"Quel est...\", \"Lequel de ces...\", \"En quelle année...\", \"Qui a...\", \"Est-il vrai que...\")\n- Privilégie les faits vérifiables, surprenants ou méconnus pour maximiser l'engagement\n- Évite toute ambiguïté, double négation ou formulation trop complexe\n- Maximum 120 caractères par question\n- Maximum 35 caractères par option de réponse\n\n### Diversité obligatoire\n- Répartis équitablement entre ces catégories : histoire, science, sport, culture générale, géographie, cinéma/séries, musique, gastronomie, nature/animaux, technologie\n- Alterne les niveaux : 30% facile, 50% moyen, 20% difficile\n- La bonne réponse doit être distribuée aléatoirement et équitablement entre a, b, c et d\n- Ne génère jamais deux questions au sujet similaire\n\n## Format de réponse\nRéponds UNIQUEMENT avec un tableau JSON valide, sans texte avant ni après, sans balises markdown, sans commentaires.\n\n[\n  {\n    \"question\": \"\",\n    \"option_a\": \"\",\n    \"option_b\": \"\",\n    \"option_c\": \"\",\n    \"option_d\": \"\",\n    \"correct_answer\": \"\",\n    \"category\": \"\",\n    \"difficulty\": \"facile\" | \"moyen\" | \"difficile\",\n    \"fun_fact\": \"\",\n    \"language\": \"fr\"\n  }\n]\n\n## Règles strictes du JSON\n- \"correct_answer\" : UNIQUEMENT la lettre a, b, c ou d (minuscule)\n- \"language\" : toujours \"fr\"\n- \"difficulty\" : toujours l'une des trois valeurs exactes : \"facile\", \"moyen\", \"difficile\"\n- \"fun_fact\" : une phrase courte (max 100 caractères) révélant un détail surprenant lié à la réponse, utile pour l'écran de résultat dans la vidéo\n- Aucun champ vide sauf option_c et option_d pour les questions Vrai/Faux\n- Aucun texte, explication ou markdown en dehors du tableau JSON",
                 "batching": {}
             },
             "type": "@n8n/n8n-nodes-langchain.chainLlm",
@@ -35,16 +23,47 @@
         },
         {
             "parameters": {
+                "model": "openai/gpt-oss-20b",
                 "options": {}
             },
             "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
             "typeVersion": 1,
             "position": [
-                416,
-                0
+                160,
+                224
             ],
             "id": "9e41907f-c77f-4c1f-b2fa-ee3ca8da9d21",
-            "name": "Groq Chat Model"
+            "name": "Groq Chat Model",
+            "credentials": {
+                "groqApi": {
+                    "id": "fu1zbj5SisambkYU",
+                    "name": "Groq account snaketech77"
+                }
+            }
+        },
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ],
+            "id": "3ba4d406-bad5-46bc-9c6e-945aebaf42ae",
+            "name": "When clicking ‘Execute workflow’"
+        },
+        {
+            "parameters": {
+                "jsCode": "const text = $input.first().json.text;\nconst jsonMatch = text.match(/```json\\n([\\s\\S]*?)\\n```/);\nconst jsonContent = jsonMatch ? jsonMatch[1] : text;\nconst questions = JSON.parse(jsonContent);\n\nreturn questions;"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                544,
+                0
+            ],
+            "id": "2b9dbae7-80db-4138-b9bc-cee99976afd6",
+            "name": "Code in JavaScript"
         }
     ],
     "connections": {
@@ -59,11 +78,22 @@
                 ]
             ]
         },
-        "When chat message received": {
+        "When clicking ‘Execute workflow’": {
             "main": [
                 [
                     {
                         "node": "Basic LLM Chain",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Basic LLM Chain": {
+            "main": [
+                [
+                    {
+                        "node": "Code in JavaScript",
                         "type": "main",
                         "index": 0
                     }
@@ -79,7 +109,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "93e9a781-d5b5-49ce-96f0-f9a66fd4723e",
+    "versionId": "e266b5a3-5dee-4f37-a8c4-4e19a6a5d155",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
