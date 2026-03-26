@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-24T20:44:38.735Z",
+    "updatedAt": "2026-03-26T01:00:11.339Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -248,12 +248,12 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                1456,
+                1600,
                 816
             ],
             "id": "4d9d84bb-20e4-47f2-8571-39bc0b38a0d5",
             "name": "Create a row",
-            "alwaysOutputData": true,
+            "alwaysOutputData": false,
             "credentials": {
                 "supabaseApi": {
                     "id": "WbnVqEv2ZGhdAeSX",
@@ -263,28 +263,8 @@
         },
         {
             "parameters": {
-                "model": "qwen/qwen3-vl-8b-instruct",
-                "options": {}
-            },
-            "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
-            "typeVersion": 1,
-            "position": [
-                704,
-                1168
-            ],
-            "id": "17a5d6ea-3270-4911-bb48-55da80bf9a2a",
-            "name": "OpenRouter Chat Model1",
-            "credentials": {
-                "openRouterApi": {
-                    "id": "eJL3ulSkeT8Q0dwT",
-                    "name": "OpenRouter account"
-                }
-            }
-        },
-        {
-            "parameters": {
                 "promptType": "define",
-                "text": "=Tu es un générateur expert de questions de quiz en français pour des vidéos dynamiques et engageantes.\n\nGénère {{ Math.abs($json.unused_questions_count - $('Global Fields').item.json.number_question) }} questions en français.\n\n## Objectif\nCes questions sont destinées à des vidéos quiz : elles doivent être percutantes, mémorables et adaptées à un large public.\n\n## Types de questions\n\n### QCM (4 options) — environ 70% des questions\n- option_a, option_b, option_c, option_d : toutes remplies et différentes\n- Les mauvaises réponses doivent être plausibles mais clairement fausses pour qui connaît la réponse\n- correct_answer : \"a\", \"b\", \"c\" ou \"d\"\n\n### Vrai/Faux — environ 30% des questions\n- option_a = traduction de \"Vrai\" selon le champ \"language\"\n- option_b = traduction de \"Faux\" selon le champ \"language\"\n- option_c = \"\"\n- option_d = \"\"\n- correct_answer : \"a\" ou \"b\" uniquement\n\n## Règles de génération\n\n### Qualité des questions\n- Formule chaque question comme une accroche directe et dynamique (\"Quel est...\", \"Lequel de ces...\", \"En quelle année...\", \"Qui a...\", \"Est-il vrai que...\")\n- Privilégie les faits vérifiables, surprenants ou méconnus pour maximiser l'engagement\n- Évite toute ambiguïté, double négation ou formulation trop complexe\n- Maximum 120 caractères par question\n- Maximum 35 caractères par option de réponse\n\n### Diversité obligatoire\n- Répartis équitablement entre ces catégories : histoire, science, sport, culture générale, géographie, cinéma/séries, musique, gastronomie, nature/animaux, technologie\n- Alterne les niveaux : 30% facile, 50% moyen, 20% difficile\n- La bonne réponse doit être distribuée aléatoirement et équitablement entre a, b, c et d\n- Ne génère jamais deux questions au sujet similaire\n\n## Format de réponse\nRéponds UNIQUEMENT avec un tableau JSON valide, sans texte avant ni après, sans balises markdown, sans commentaires.\n\n[\n  {\n    \"question\": \"\",\n    \"option_a\": \"\",\n    \"option_b\": \"\",\n    \"option_c\": \"\",\n    \"option_d\": \"\",\n    \"correct_answer\": \"\",\n    \"category\": \"\",\n    \"difficulty\": \"facile\" | \"moyen\" | \"difficile\",\n    \"fun_fact\": \"\",\n    \"language\": \"fr\"\n  }\n]\n\n## Règles strictes du JSON\n- \"correct_answer\" : UNIQUEMENT la lettre a, b, c ou d (minuscule)\n- \"language\" : toujours \"fr\"\n- \"difficulty\" : toujours l'une des trois valeurs exactes : \"facile\", \"moyen\", \"difficile\"\n- \"fun_fact\" : une phrase courte (max 100 caractères) révélant un détail surprenant lié à la réponse, utile pour l'écran de résultat dans la vidéo\n- Aucun champ vide sauf option_c et option_d pour les questions Vrai/Faux\n- Aucun texte, explication ou markdown en dehors du tableau JSON",
+                "text": "=Tu es un générateur expert de questions de quiz en français pour des vidéos dynamiques et engageantes.\n\nGénère {{ Math.abs($json.unused_questions_count - $('Global Fields').item.json.number_question) }} questions en français.\n\n## Objectif\nCes questions sont destinées à des vidéos quiz : elles doivent être percutantes, mémorables et adaptées à un large public.\n\n## Types de questions\n\n### QCM (4 options) — environ 70% des questions\n- option_a, option_b, option_c, option_d : toutes remplies et différentes\n- Les mauvaises réponses doivent être plausibles mais clairement fausses pour qui connaît la réponse\n- correct_answer : \"a\", \"b\", \"c\" et \"d\" (répartis aléatoirement et équitablement)\n\n### Vrai/Faux — environ 30% des questions\n- option_a = traduction de \"Vrai\" selon le champ \"language\"\n- option_b = traduction de \"Faux\" selon le champ \"language\"\n- option_c = \"\"\n- option_d = \"\"\n- correct_answer : \"a\" ou \"b\" uniquement\n\n## Règles de génération\n\n### Qualité des questions\n- Formule chaque question comme une accroche directe et dynamique (\"Quel est...\", \"Lequel de ces...\", \"En quelle année...\", \"Qui a...\", \"Est-il vrai que...\")\n- Privilégie les faits vérifiables, surprenants ou méconnus pour maximiser l'engagement\n- Évite toute ambiguïté, double négation ou formulation trop complexe\n- Maximum 120 caractères par question\n- Maximum 35 caractères par option de réponse\n\n### Diversité obligatoire\n- Répartis équitablement entre ces catégories : histoire, science, sport, culture générale, géographie, cinéma/séries, musique, gastronomie, nature/animaux, technologie\n- Alterne les niveaux : 30% facile, 50% moyen, 20% difficile\n- La bonne réponse doit être distribuée aléatoirement et équitablement entre a, b, c et d\n- Ne génère jamais deux questions au sujet similaire\n\n## Format de réponse\nRéponds UNIQUEMENT avec un tableau JSON valide, sans texte avant ni après, sans balises markdown, sans commentaires.\n\n[\n  {\n    \"question\": \"\",\n    \"option_a\": \"\",\n    \"option_b\": \"\",\n    \"option_c\": \"\",\n    \"option_d\": \"\",\n    \"correct_answer\": \"\",\n    \"category\": \"\",\n    \"difficulty\": \"facile\" | \"moyen\" | \"difficile\",\n    \"fun_fact\": \"\",\n    \"language\": \"fr\"\n  }\n]\n\n## Règles strictes du JSON\n- \"correct_answer\" : UNIQUEMENT la lettre a, b, c ou d (minuscule)\n- \"language\" : toujours \"fr\"\n- \"difficulty\" : toujours l'une des trois valeurs exactes : \"facile\", \"moyen\", \"difficile\"\n- \"fun_fact\" : une phrase courte (max 100 caractères) révélant un détail surprenant lié à la réponse, utile pour l'écran de résultat dans la vidéo\n- Aucun champ vide sauf option_c et option_d pour les questions Vrai/Faux\n- Aucun texte, explication ou markdown en dehors du tableau JSON",
                 "batching": {}
             },
             "type": "@n8n/n8n-nodes-langchain.chainLlm",
@@ -1145,39 +1125,6 @@
         },
         {
             "parameters": {
-                "conditions": {
-                    "options": {
-                        "caseSensitive": true,
-                        "leftValue": "",
-                        "typeValidation": "strict",
-                        "version": 3
-                    },
-                    "conditions": [
-                        {
-                            "id": "7535eca9-6427-4b10-b60f-b53607bb2433",
-                            "leftValue": "={{ $json.query.action }}",
-                            "rightValue": "validate",
-                            "operator": {
-                                "type": "string",
-                                "operation": "equals"
-                            }
-                        }
-                    ],
-                    "combinator": "and"
-                },
-                "options": {}
-            },
-            "type": "n8n-nodes-base.if",
-            "typeVersion": 2.3,
-            "position": [
-                3648,
-                1168
-            ],
-            "id": "92befeba-b6c0-4197-b294-92d314fb0089",
-            "name": "If2"
-        },
-        {
-            "parameters": {
                 "resource": "folder",
                 "operation": "delete",
                 "bucketName": "={{ $('Global Fields').item.json.aws_bucket_remotion }}",
@@ -1282,6 +1229,107 @@
         },
         {
             "parameters": {
+                "operation": "get",
+                "tableId": "questions",
+                "filters": {
+                    "conditions": [
+                        {
+                            "keyName": "question",
+                            "keyValue": "={{ $json.question }}"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.supabase",
+            "typeVersion": 1,
+            "position": [
+                1200,
+                832
+            ],
+            "id": "9ca8576b-6bba-4577-a1f1-ac93d79b2616",
+            "name": "Get a row",
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "model": "qwen/qwen3-32b",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+            "typeVersion": 1,
+            "position": [
+                768,
+                1120
+            ],
+            "id": "e497a1c9-a2c6-41fd-85fd-0331208ec76f",
+            "name": "Groq Chat Model",
+            "credentials": {
+                "groqApi": {
+                    "id": "fu1zbj5SisambkYU",
+                    "name": "Groq account snaketech77"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "model": "qwen/qwen3-vl-8b-instruct",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
+            "typeVersion": 1,
+            "position": [
+                624,
+                1120
+            ],
+            "id": "17a5d6ea-3270-4911-bb48-55da80bf9a2a",
+            "name": "OpenRouter Chat Model",
+            "credentials": {
+                "openRouterApi": {
+                    "id": "eJL3ulSkeT8Q0dwT",
+                    "name": "OpenRouter account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "7535eca9-6427-4b10-b60f-b53607bb2433",
+                            "leftValue": "={{ $json.query.action }}",
+                            "rightValue": "validate",
+                            "operator": {
+                                "type": "string",
+                                "operation": "equals"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                3648,
+                1168
+            ],
+            "id": "92befeba-b6c0-4197-b294-92d314fb0089",
+            "name": "If validate"
+        },
+        {
+            "parameters": {
                 "conditions": {
                     "options": {
                         "caseSensitive": true,
@@ -1292,7 +1340,7 @@
                     "conditions": [
                         {
                             "id": "24186634-001e-48d2-a9f9-8d007ae5115f",
-                            "leftValue": "",
+                            "leftValue": "={{ $json.question }}",
                             "rightValue": "",
                             "operator": {
                                 "type": "string",
@@ -1308,11 +1356,11 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.3,
             "position": [
-                1232,
+                1376,
                 832
             ],
             "id": "8a9d9dda-522a-40b2-8c18-dd02084074ee",
-            "name": "If3"
+            "name": "If question"
         }
     ],
     "connections": {
@@ -1349,17 +1397,6 @@
                     {
                         "node": "Get many rows",
                         "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "OpenRouter Chat Model1": {
-            "ai_languageModel": [
-                [
-                    {
-                        "node": "Basic LLM Chain",
-                        "type": "ai_languageModel",
                         "index": 0
                     }
                 ]
@@ -1561,7 +1598,7 @@
             "main": [
                 [
                     {
-                        "node": "If3",
+                        "node": "Get a row",
                         "type": "main",
                         "index": 0
                     }
@@ -1761,25 +1798,7 @@
             "main": [
                 [
                     {
-                        "node": "If2",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "If2": {
-            "main": [
-                [
-                    {
-                        "node": "Create a post",
-                        "type": "main",
-                        "index": 0
-                    }
-                ],
-                [
-                    {
-                        "node": "Delete a folder",
+                        "node": "If validate",
                         "type": "main",
                         "index": 0
                     }
@@ -1824,7 +1843,52 @@
                 ]
             ]
         },
-        "If3": {
+        "Get a row": {
+            "main": [
+                [
+                    {
+                        "node": "If question",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "OpenRouter Chat Model": {
+            "ai_languageModel": [
+                []
+            ]
+        },
+        "Groq Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Basic LLM Chain",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If validate": {
+            "main": [
+                [
+                    {
+                        "node": "Create a post",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Delete a folder",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If question": {
             "main": [
                 [
                     {
@@ -5207,7 +5271,7 @@
             }
         ]
     },
-    "versionId": "fa1bfe7b-061c-41c9-a856-48d49c973a49",
+    "versionId": "33108df2-9ae5-49e9-bc04-0927da4ce4cb",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
