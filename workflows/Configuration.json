@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-23T22:40:37.226Z",
+    "updatedAt": "2026-03-26T23:58:27.414Z",
     "createdAt": "2026-03-23T01:20:23.064Z",
     "id": "zMCp4Tn9xfnvkJWQ",
     "name": "Configuration",
@@ -113,7 +113,7 @@
         },
         {
             "parameters": {
-                "path": "tiktokAXygyEFRgMQPRpi7Oi92wzoUaHO9Im2d.txt",
+                "path": "tiktokSNgucIojUTWgKGnW8Zqh1L2CXwG3EDta.txt",
                 "responseMode": "responseNode",
                 "options": {}
             },
@@ -130,7 +130,7 @@
         {
             "parameters": {
                 "respondWith": "text",
-                "responseBody": "tiktok-developers-site-verification=AXygyEFRgMQPRpi7Oi92wzoUaHO9Im2d",
+                "responseBody": "tiktok-developers-site-verification=SNgucIojUTWgKGnW8Zqh1L2CXwG3EDta",
                 "options": {
                     "responseCode": 200
                 }
@@ -234,8 +234,8 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "a261f859-522a-4e8c-b969-c33f4d79548a",
-    "activeVersionId": "a261f859-522a-4e8c-b969-c33f4d79548a",
+    "versionId": "f84062fb-8c6f-446e-a2b7-5b643008f8bb",
+    "activeVersionId": "f84062fb-8c6f-446e-a2b7-5b643008f8bb",
     "triggerCount": 4,
     "shared": [
         {
@@ -247,9 +247,9 @@
         }
     ],
     "activeVersion": {
-        "updatedAt": "2026-03-23T22:40:42.000Z",
-        "createdAt": "2026-03-23T22:40:37.226Z",
-        "versionId": "a261f859-522a-4e8c-b969-c33f4d79548a",
+        "updatedAt": "2026-03-26T23:58:29.000Z",
+        "createdAt": "2026-03-26T23:58:27.414Z",
+        "versionId": "f84062fb-8c6f-446e-a2b7-5b643008f8bb",
         "workflowId": "zMCp4Tn9xfnvkJWQ",
         "nodes": [
             {
@@ -359,7 +359,7 @@
             },
             {
                 "parameters": {
-                    "path": "tiktokAXygyEFRgMQPRpi7Oi92wzoUaHO9Im2d.txt",
+                    "path": "tiktokSNgucIojUTWgKGnW8Zqh1L2CXwG3EDta.txt",
                     "responseMode": "responseNode",
                     "options": {}
                 },
@@ -376,7 +376,7 @@
             {
                 "parameters": {
                     "respondWith": "text",
-                    "responseBody": "tiktok-developers-site-verification=AXygyEFRgMQPRpi7Oi92wzoUaHO9Im2d",
+                    "responseBody": "tiktok-developers-site-verification=SNgucIojUTWgKGnW8Zqh1L2CXwG3EDta",
                     "options": {
                         "responseCode": 200
                     }
@@ -471,7 +471,7 @@
             }
         },
         "authors": "Snake Tech",
-        "name": "Version a261f859",
+        "name": "Version f84062fb",
         "description": "",
         "autosaved": true
     },
