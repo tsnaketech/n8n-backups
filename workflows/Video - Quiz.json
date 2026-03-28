@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-27T00:34:26.930Z",
+    "updatedAt": "2026-03-27T17:36:44.940Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -848,8 +848,8 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                4528,
-                1088
+                4576,
+                1008
             ],
             "id": "2c5082af-3375-412b-ab74-d469f3a62112",
             "name": "Update a row",
@@ -867,8 +867,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                4368,
-                1088
+                4416,
+                1008
             ],
             "id": "b8327dff-2188-4a75-86a8-5dca29059992",
             "name": "Retreive id"
@@ -1171,33 +1171,9 @@
             "credentials": {
                 "tiktokOAuth2Api": {
                     "id": "f7LWIqMqugOODtgW",
-                    "name": "TikTok SnakeTech SandBox"
+                    "name": "TikTok SnakeTech Try"
                 }
             }
-        },
-        {
-            "parameters": {
-                "resource": "post",
-                "organizationId": "63c4502f8b243e78b60c2240",
-                "channelId": "69c1e435af47dacb694a86e0|tiktok",
-                "attachmentType": "video",
-                "videoUrl": "={{ $('Get finale render').item.json.url }}"
-            },
-            "type": "@bufferapp/n8n-nodes-buffer.buffer",
-            "typeVersion": 1,
-            "position": [
-                3456,
-                944
-            ],
-            "id": "7e4a59c2-2aa7-47fb-b7b3-fbc991b079df",
-            "name": "Create a post",
-            "credentials": {
-                "bufferApi": {
-                    "id": "rIKeG3eYuucES4WA",
-                    "name": "Buffer account"
-                }
-            },
-            "disabled": true
         },
         {
             "parameters": {
@@ -1399,6 +1375,76 @@
             ],
             "id": "835cb831-3e7a-4dce-a5a3-aa592e742543",
             "name": "Get render for upload"
+        },
+        {
+            "parameters": {
+                "chatId": "={{ $('Global Fields').item.json.telegram_chat_id }}",
+                "text": "❌ Vidéo rejetée et supprimée.",
+                "additionalFields": {}
+            },
+            "type": "n8n-nodes-base.telegram",
+            "typeVersion": 1.2,
+            "position": [
+                4768,
+                1008
+            ],
+            "id": "f07b6163-ac74-4fad-b45a-a19deb05248a",
+            "name": "Send a text message1",
+            "webhookId": "8eebb6d1-c6bc-4ffc-ac9a-d9ad4fa971d2",
+            "credentials": {
+                "telegramApi": {
+                    "id": "t5jP1rX1Q7rEmgPc",
+                    "name": "Telegram account"
+                }
+            },
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "tableId": "logs",
+                "fieldsUi": {
+                    "fieldValues": [
+                        {
+                            "fieldId": "workflow",
+                            "fieldValue": "={{ $workflow.name }}"
+                        },
+                        {
+                            "fieldId": "status",
+                            "fieldValue": "succes"
+                        },
+                        {
+                            "fieldId": "message",
+                            "fieldValue": "Video uploaded successfully"
+                        },
+                        {
+                            "fieldId": "question_id",
+                            "fieldValue": "={{ $json.id }}"
+                        },
+                        {
+                            "fieldId": "render_id",
+                            "fieldValue": "={{ $('Get finale render').item.json.renderId }}"
+                        },
+                        {
+                            "fieldId": "tiktok_id",
+                            "fieldValue": "={{ $json.tiktok_video_id }}"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.supabase",
+            "typeVersion": 1,
+            "position": [
+                4576,
+                1184
+            ],
+            "id": "e267355f-4274-4d72-8f7a-dd1c588b7f6a",
+            "name": "Log Upload successful",
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
+                }
+            }
         }
     ],
     "connections": {
@@ -1716,6 +1762,11 @@
                         "node": "Update a row",
                         "type": "main",
                         "index": 0
+                    },
+                    {
+                        "node": "Log Upload successful",
+                        "type": "main",
+                        "index": 0
                     }
                 ]
             ]
@@ -1854,11 +1905,6 @@
                 ]
             ]
         },
-        "Create a post": {
-            "main": [
-                []
-            ]
-        },
         "Get finale render": {
             "main": [
                 [
@@ -1960,6 +2006,17 @@
                 [
                     {
                         "node": "Upload video",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update a row": {
+            "main": [
+                [
+                    {
+                        "node": "Send a text message1",
                         "type": "main",
                         "index": 0
                     }
@@ -4802,7 +4859,7 @@
             }
         ]
     },
-    "versionId": "84d81268-7acc-4b43-b35a-c9c87b3d9b03",
+    "versionId": "ff66a33a-9b40-4dcf-9da5-5ce30aa8fd94",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
