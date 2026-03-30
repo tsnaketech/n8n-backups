@@ -1,0 +1,204 @@
+{
+    "updatedAt": "2026-03-29T23:45:27.101Z",
+    "createdAt": "2026-03-29T22:47:47.215Z",
+    "id": "aOAxm6ZNoDHDxzSv",
+    "name": "Create embeddings in an table exists",
+    "active": false,
+    "isArchived": false,
+    "nodes": [
+        {
+            "parameters": {},
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                32,
+                0
+            ],
+            "id": "b28b015a-a5b4-45c1-b2e7-103d402c1def",
+            "name": "When clicking ‘Execute workflow’"
+        },
+        {
+            "parameters": {
+                "operation": "getAll",
+                "tableId": "questions",
+                "returnAll": true,
+                "filters": {
+                    "conditions": [
+                        {
+                            "keyName": "embedding",
+                            "condition": "is",
+                            "keyValue": "null"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.supabase",
+            "typeVersion": 1,
+            "position": [
+                208,
+                0
+            ],
+            "id": "2bc92f95-0b1b-4cfc-beb8-0ef9fba4be12",
+            "name": "Get many rows",
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "tableId": "questions",
+                "filters": {
+                    "conditions": [
+                        {
+                            "keyName": "id",
+                            "condition": "eq",
+                            "keyValue": "={{ $json.id }}"
+                        }
+                    ]
+                },
+                "fieldsUi": {
+                    "fieldValues": [
+                        {
+                            "fieldId": "embedding",
+                            "fieldValue": "={{ $json.data[0].embedding }}"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.supabase",
+            "typeVersion": 1,
+            "position": [
+                768,
+                0
+            ],
+            "id": "4e7b08ab-dbd5-4f8a-907d-5b367c87325d",
+            "name": "Update a row",
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "mode": "combine",
+                "combineBy": "combineByPosition",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.merge",
+            "typeVersion": 3.2,
+            "position": [
+                608,
+                0
+            ],
+            "id": "c85b8b55-7c66-4a2a-81d8-14a8c94085f9",
+            "name": "Merge"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://api.openai.com/v1/embeddings",
+                "authentication": "predefinedCredentialType",
+                "nodeCredentialType": "openAiApi",
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"input\": \"{{ $json.question }}\",\n  \"model\": \"text-embedding-3-small\"\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                400,
+                -128
+            ],
+            "id": "5e2d5ca7-74a0-4eb9-9bc7-f2f5ae0ed80a",
+            "name": "OpenAI Embeddings",
+            "credentials": {
+                "openAiApi": {
+                    "id": "H0VcOhL36gFHQbme",
+                    "name": "OpenAi mickael.lcq account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "When clicking ‘Execute workflow’": {
+            "main": [
+                [
+                    {
+                        "node": "Get many rows",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get many rows": {
+            "main": [
+                [
+                    {
+                        "node": "OpenAI Embeddings",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 1
+                    }
+                ]
+            ]
+        },
+        "Merge": {
+            "main": [
+                [
+                    {
+                        "node": "Update a row",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "OpenAI Embeddings": {
+            "main": [
+                [
+                    {
+                        "node": "Merge",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1",
+        "binaryMode": "separate",
+        "availableInMCP": false
+    },
+    "staticData": null,
+    "meta": {
+        "templateCredsSetupCompleted": true
+    },
+    "pinData": {},
+    "versionId": "484a69ea-399d-4729-a121-00f27acc6c13",
+    "activeVersionId": null,
+    "triggerCount": 0,
+    "shared": [
+        {
+            "updatedAt": "2026-03-29T22:47:47.218Z",
+            "createdAt": "2026-03-29T22:47:47.218Z",
+            "role": "workflow:owner",
+            "workflowId": "aOAxm6ZNoDHDxzSv",
+            "projectId": "lnYpJLFYV8VS8Mcd"
+        }
+    ],
+    "activeVersion": null,
+    "tags": []
+}
