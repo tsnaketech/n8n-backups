@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-27T17:36:44.940Z",
+    "updatedAt": "2026-03-29T23:59:22.805Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -64,8 +64,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1984,
-                944
+                2048,
+                768
             ],
             "id": "f1124172-cac5-4d93-ae53-831449ba999f",
             "name": "Replicate leonardoai/lucid-origin",
@@ -224,8 +224,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                2176,
-                752
+                2240,
+                576
             ],
             "id": "db688aaa-9047-492f-9013-78511c1b69cb",
             "name": "Generate Voice",
@@ -248,7 +248,7 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                1744,
+                1856,
                 816
             ],
             "id": "4d9d84bb-20e4-47f2-8571-39bc0b38a0d5",
@@ -260,21 +260,6 @@
                     "name": "Supabase SnakeTech DB Quiz"
                 }
             }
-        },
-        {
-            "parameters": {
-                "promptType": "define",
-                "text": "=Tu es un générateur expert de questions de quiz en français pour des vidéos dynamiques et engageantes.\n\nGénère 1 questions en français.\n\n## Objectif\nCes questions sont destinées à des vidéos quiz : elles doivent être percutantes, mémorables et adaptées à un large public.\n\n## Types de questions\n\n### QCM (4 options) — environ 70% des questions\n- option_a, option_b, option_c, option_d : toutes remplies et différentes\n- Les mauvaises réponses doivent être plausibles mais clairement fausses pour qui connaît la réponse\n- correct_answer : \"a\", \"b\", \"c\" et \"d\" (répartis aléatoirement et équitablement)\n\n### Vrai/Faux — environ 30% des questions\n- option_a = traduction de \"Vrai\" selon le champ \"language\"\n- option_b = traduction de \"Faux\" selon le champ \"language\"\n- option_c = \"\"\n- option_d = \"\"\n- correct_answer : \"a\" ou \"b\" uniquement\n\n## Règles de génération\n\n### Qualité des questions\n- Formule chaque question comme une accroche directe et dynamique (\"Quel est...\", \"Lequel de ces...\", \"En quelle année...\", \"Qui a...\", \"Est-il vrai que...\")\n- Privilégie les faits vérifiables, surprenants ou méconnus pour maximiser l'engagement\n- Évite toute ambiguïté, double négation ou formulation trop complexe\n- Maximum 120 caractères par question\n- Maximum 35 caractères par option de réponse\n\n### Diversité obligatoire\n- Répartis équitablement entre ces catégories : histoire, science, sport, culture générale, géographie, cinéma/séries, musique, gastronomie, nature/animaux, technologie\n- Alterne les niveaux : 30% facile, 50% moyen, 20% difficile\n- La bonne réponse doit être distribuée aléatoirement et équitablement entre a, b, c et d\n- Ne génère jamais deux questions au sujet similaire\n\n## Format de réponse\nRéponds UNIQUEMENT avec un tableau JSON valide, sans texte avant ni après, sans balises markdown, sans commentaires.\n\n[\n  {\n    \"question\": \"\",\n    \"option_a\": \"\",\n    \"option_b\": \"\",\n    \"option_c\": \"\",\n    \"option_d\": \"\",\n    \"correct_answer\": \"\",\n    \"category\": \"\",\n    \"difficulty\": \"facile\" | \"moyen\" | \"difficile\",\n    \"fun_fact\": \"\",\n    \"language\": \"fr\"\n  }\n]\n\n## Règles strictes du JSON\n- \"correct_answer\" : UNIQUEMENT la lettre a, b, c ou d (minuscule)\n- \"language\" : toujours \"fr\"\n- \"difficulty\" : toujours l'une des trois valeurs exactes : \"facile\", \"moyen\", \"difficile\"\n- \"fun_fact\" : une phrase courte (max 100 caractères) révélant un détail surprenant lié à la réponse, utile pour l'écran de résultat dans la vidéo\n- Aucun champ vide sauf option_c et option_d pour les questions Vrai/Faux\n- Aucun texte, explication ou markdown en dehors du tableau JSON",
-                "batching": {}
-            },
-            "type": "@n8n/n8n-nodes-langchain.chainLlm",
-            "typeVersion": 1.7,
-            "position": [
-                704,
-                832
-            ],
-            "id": "662dd6e4-3dfb-4dfc-8350-75da4a2c36eb",
-            "name": "Basic LLM Chain"
         },
         {
             "parameters": {
@@ -494,8 +479,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                2784,
-                848
+                2848,
+                672
             ],
             "id": "bfa63a14-47f4-40cf-960c-1547a4b16a96",
             "name": "Replicate openai/whisper",
@@ -540,8 +525,8 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.2,
             "position": [
-                1616,
-                640
+                1648,
+                512
             ],
             "id": "cb3d21df-7b33-4d75-90fb-5e9ab3d871c1",
             "name": "If1"
@@ -553,8 +538,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                2976,
-                624
+                3040,
+                448
             ],
             "id": "836bc558-f156-4376-a482-2b39357b0f9c",
             "name": "String to Json"
@@ -569,8 +554,8 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                2384,
-                752
+                2448,
+                576
             ],
             "id": "087eee0a-203c-4f32-a994-3a82db996833",
             "name": "Save audio file",
@@ -651,19 +636,6 @@
         },
         {
             "parameters": {
-                "jsCode": "const glob = $('Global Fields').first().json;\n\nconst escapeHtml = (str) => {\n  if (!str) return '';\n  return str\n    .replace(/&/g, '&amp;')\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;')\n    .replace(/'/g, '&#039;');\n};\n\nconst audio_background = escapeHtml(glob.audio_background || '');\nconst audio_break = escapeHtml(glob.audio_break || '');\nconst audio_correct_answer = escapeHtml(glob.audio_correct_answer || '');\n\nlet i = 0;\nconst items = $input.all();\n\nfor (const item of items) {\n  i++;\n  let voice_script = '';\n  \n  voice_script += \"<speak version='1.0' xml:lang='fr-FR'>\";\n  \n  if (audio_background) {\n    voice_script += `<mstts:backgroundaudio\n        src='${audio_background}'\n        volume='30' fadein='1500' fadeout='2000'/>`;\n  }\n  \n  voice_script += \"<voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\";\n  voice_script += \"<p>\";\n  voice_script += item.json.question || '';\n  \n  if (true) {\n    voice_script += `<audio src='${audio_break}'/>`;\n  } else {\n    voice_script += \"<break time='5s'/>\";\n  }\n  \n  if (true) {\n    voice_script += `<audio src='${audio_correct_answer}'/>`;\n  }\n  \n  const correctAnswer = item.json.correct_answer || '';\n  voice_script += `Réponse ${correctAnswer} `;\n  voice_script += \"<break strength='medium' />\";\n  \n  const optionKey = `option_${correctAnswer.toLowerCase()}`;\n  voice_script += item.json[optionKey] || '';\n  \n  voice_script += \"</p>\";\n  voice_script += \"</voice></speak>\";\n  \n  item.json.voice_script = voice_script;\n  item.json.audio_filename = (glob.aws_prefix_audio_file || '') + i + '.mp3';\n  item.json.image_filename = (glob.aws_prefix_img_file || '') + i + '.png';\n  item.json.audio_url = 'https://' + (glob.aws_bucket_name || '') + '.s3.' + (glob.aws_region || '') + '.amazonaws.com/audio/' + item.json.audio_filename;\n  item.json.image_url = 'https://' + (glob.aws_bucket_name || '') + '.s3.' + (glob.aws_region || '') + '.amazonaws.com/image/' + item.json.image_filename;\n}\n\nreturn items;"
-            },
-            "type": "n8n-nodes-base.code",
-            "typeVersion": 2,
-            "position": [
-                928,
-                624
-            ],
-            "id": "a02e0b6d-0eef-483d-b98a-8c8212d64a40",
-            "name": "Get voice prompting"
-        },
-        {
-            "parameters": {
                 "language": "pythonNative",
                 "pythonCode": "# Loop over input items and add a new field called 'myNewField' to the JSON of each one\nimport json\nimport re\n\ntext = _input.first().json.text\n\njson_content = re.search(\"```json\\n([\\s\\S]*?)\\n```\", text)[1]\n\nquestions = json.loads(json_content)\n\nall_questions_items = _('Rename Keys').all()\nall_questions = [item.get(\"question\", \"\").strip().lower() for item in all_questions_items]\n\nnew_questions = [q1 for q1 in questions if q1.get(\"question\", \"\").strip().lower() not in all_questions]\n\nreturn new_questions"
             },
@@ -678,26 +650,26 @@
         },
         {
             "parameters": {
-                "jsCode": "const text = $input.first().json.text;\nconst jsonMatch = text.match(/```json\\n([\\s\\S]*?)\\n```/);\nconst jsonContent = jsonMatch ? jsonMatch[1] : text;\nconst questions = JSON.parse(jsonContent);\n\nconst allQuestionsItems = $('Rename Keys').all();\nconst allQuestions = allQuestionsItems.map(item => \n  (item.json.question || '').trim().toLowerCase()\n);\n\nconst newQuestions = questions.filter(q => \n  !allQuestions.includes((q.question || '').trim().toLowerCase())\n);\n\nreturn newQuestions;"
+                "jsCode": "const text = $input.first().json.output;\nconst jsonMatch = text.match(/```json\\n([\\s\\S]*?)\\n```/);\nconst jsonContent = jsonMatch ? jsonMatch[1] : text;\nconst questions = JSON.parse(jsonContent);\n\n// const allQuestionsItems = $('Rename Keys').all();\n// const allQuestions = allQuestionsItems.map(item => \n//   (item.json.question || '').trim().toLowerCase()\n// );\n\n// const newQuestions = questions.filter(q => \n//   !allQuestions.includes((q.question || '').trim().toLowerCase())\n// );\n\nreturn questions;"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                1024,
-                832
+                928,
+                784
             ],
             "id": "69393ed0-8ef1-4151-bbd4-265210a611c4",
             "name": "Get new questions"
         },
         {
             "parameters": {
-                "jsCode": "// Iterate over each item in the input\nconst items = []\nconst questions = $(\"Get voice prompting\").all();\n$input.all().forEach((item, i) => {\n  // Map the segments array to keep only specific fields\n  if (item.json && item.json.output && Array.isArray(item.json.output.segments)) {\n    var segments = item.json.output.segments;\n\n    // Ensure there are at least two segments to merge\n    if (segments.length >= 3) {\n      const last = segments[segments.length - 2];\n      const secondLast = segments[segments.length - 1];\n\n      // Create merged segment\n      const mergedSegment = {\n        id: last.id, // Keep the earlier id or use a new one\n        start: last.start, // Use start of the earlier segment\n        end: secondLast.end, // Use end of the last segment\n        text: `${last.text} ${secondLast.text}`.trim() // Concatenate text\n      };\n\n      // Build new segments array: keep all except last two, then add merged\n      const newSegments = segments.slice(0, -2); // Keep all but last two\n      newSegments.push(mergedSegment); // Add merged segment\n      segments = newSegments\n    }\n\n    const data = {};\n    data.id = i + 1\n    data.audio = item.json.input.audio\n    data.image = questions[i].json.image_url\n    data.question = questions[i].json.question\n    data.option_a = questions[i].json.option_a\n    data.option_b = questions[i].json.option_b\n    data.option_c = questions[i].json.option_c\n    data.option_d = questions[i].json.option_d\n    data.correct_answer = questions[i].json.correct_answer\n    data.category = questions[i].json.category\n    data.remotion = segments.map(segment => ({\n      id: segment.id,\n      start: segment.start,\n      end: segment.end,\n      text: segment.text.trim()\n    }));\n    items.push(data);\n  }\n});\n\n// Return the modified items\nreturn items;"
+                "jsCode": "// Iterate over each item in the input\nconst items = []\nconst questions = $(\"Generate Azure Speech prompting\").all();\n$input.all().forEach((item, i) => {\n  // Map the segments array to keep only specific fields\n  if (item.json && item.json.output && Array.isArray(item.json.output.segments)) {\n    var segments = item.json.output.segments;\n\n    // Ensure there are at least two segments to merge\n    if (segments.length >= 3) {\n      const last = segments[segments.length - 2];\n      const secondLast = segments[segments.length - 1];\n\n      // Create merged segment\n      const mergedSegment = {\n        id: last.id, // Keep the earlier id or use a new one\n        start: last.start, // Use start of the earlier segment\n        end: secondLast.end, // Use end of the last segment\n        text: `${last.text} ${secondLast.text}`.trim() // Concatenate text\n      };\n\n      // Build new segments array: keep all except last two, then add merged\n      const newSegments = segments.slice(0, -2); // Keep all but last two\n      newSegments.push(mergedSegment); // Add merged segment\n      segments = newSegments\n    }\n\n    const data = {};\n    data.id = i + 1\n    data.audio = item.json.input.audio\n    data.image = questions[i].json.image_url\n    data.question = questions[i].json.question\n    data.option_a = questions[i].json.option_a\n    data.option_b = questions[i].json.option_b\n    data.option_c = questions[i].json.option_c\n    data.option_d = questions[i].json.option_d\n    data.correct_answer = questions[i].json.correct_answer\n    data.category = questions[i].json.category\n    data.remotion = segments.map(segment => ({\n      id: segment.id,\n      start: segment.start,\n      end: segment.end,\n      text: segment.text.trim()\n    }));\n    items.push(data);\n  }\n});\n\n// Return the modified items\nreturn items;"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                3248,
-                736
+                3312,
+                560
             ],
             "id": "15649dbe-8957-4258-8ee8-4a47d79d77cc",
             "name": "Prepare for Remotion"
@@ -711,8 +683,8 @@
             "type": "n8n-nodes-base.aggregate",
             "typeVersion": 1,
             "position": [
-                3472,
-                736
+                3536,
+                560
             ],
             "id": "9f21045f-418a-4569-bbc2-f756dbc90b23",
             "name": "Aggregate for Remotion"
@@ -724,8 +696,8 @@
             "type": "n8n-nodes-base.wait",
             "typeVersion": 1.1,
             "position": [
-                3968,
-                736
+                4032,
+                560
             ],
             "id": "91100a01-bff7-4372-9726-277af5920480",
             "name": "Wait 10s",
@@ -745,8 +717,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.3,
             "position": [
-                4176,
-                736
+                4240,
+                560
             ],
             "id": "b8c5ab37-b672-4785-91ee-3169c4c78742",
             "name": "Check Progress",
@@ -803,8 +775,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.3,
             "position": [
-                3712,
-                736
+                3776,
+                560
             ],
             "id": "31f9987e-60b1-423e-aab1-47d55fa5f0fd",
             "name": "Trigger Render",
@@ -848,8 +820,8 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                4576,
-                1008
+                4640,
+                832
             ],
             "id": "2c5082af-3375-412b-ab74-d469f3a62112",
             "name": "Update a row",
@@ -858,7 +830,8 @@
                     "id": "WbnVqEv2ZGhdAeSX",
                     "name": "Supabase SnakeTech DB Quiz"
                 }
-            }
+            },
+            "disabled": true
         },
         {
             "parameters": {
@@ -867,8 +840,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                4416,
-                1008
+                4480,
+                832
             ],
             "id": "b8327dff-2188-4a75-86a8-5dca29059992",
             "name": "Retreive id"
@@ -885,8 +858,8 @@
             "type": "n8n-nodes-base.redis",
             "typeVersion": 1,
             "position": [
-                2592,
-                624
+                2656,
+                448
             ],
             "id": "80ade5a2-3ecc-4815-bb06-427dfe80610c",
             "name": "Retrieve data",
@@ -908,8 +881,8 @@
             "type": "n8n-nodes-base.redis",
             "typeVersion": 1,
             "position": [
-                2976,
-                848
+                3040,
+                672
             ],
             "id": "68a37856-a4b4-4a7b-b6d0-604845a15e5e",
             "name": "Save data",
@@ -941,8 +914,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                2176,
-                944
+                2240,
+                768
             ],
             "id": "f1ad0036-da41-459d-ac8e-ed3196c8c112",
             "name": "Get image"
@@ -979,8 +952,8 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                2384,
-                944
+                2448,
+                768
             ],
             "id": "0e0d3604-5cb5-4929-88e3-ca55d2605706",
             "name": "Save image file",
@@ -1006,8 +979,8 @@
             "type": "n8n-nodes-base.merge",
             "typeVersion": 3.2,
             "position": [
-                2592,
-                848
+                2656,
+                672
             ],
             "id": "8b1175c7-1798-4ec4-8d7c-09bec0ecadd0",
             "name": "Merge"
@@ -1039,8 +1012,8 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.3,
             "position": [
-                4384,
-                736
+                4448,
+                560
             ],
             "id": "1f70edaa-83a5-473f-a337-d3447beb4c73",
             "name": "If done"
@@ -1078,8 +1051,8 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                3440,
-                1168
+                3504,
+                992
             ],
             "id": "c8b9096f-9a8a-4303-b056-5826b5e45662",
             "name": "Send a video",
@@ -1099,8 +1072,8 @@
             "type": "n8n-nodes-base.wait",
             "typeVersion": 1.1,
             "position": [
-                3632,
-                1168
+                3696,
+                992
             ],
             "id": "5bcac4d7-8d81-44d7-b9d4-2ac9ea59fa03",
             "name": "Wait",
@@ -1116,8 +1089,8 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                4016,
-                1280
+                4080,
+                1104
             ],
             "id": "9c74abe5-dc73-46f3-b0d3-d72786398b3b",
             "name": "Delete a folder",
@@ -1138,8 +1111,8 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                4192,
-                1280
+                4256,
+                1104
             ],
             "id": "a72caee1-ade9-4a75-b65f-e09d41d4d7bc",
             "name": "Send a text message",
@@ -1163,8 +1136,8 @@
             "type": "@igabm/n8n-nodes-tiktok.tiktok",
             "typeVersion": 2,
             "position": [
-                4192,
-                1088
+                4256,
+                912
             ],
             "id": "203646b4-6967-40b8-86e3-8370953ce681",
             "name": "Upload video",
@@ -1183,8 +1156,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                3264,
-                1168
+                3328,
+                992
             ],
             "id": "facfb053-cd37-4243-99e5-884e629fca53",
             "name": "Get finale render"
@@ -1205,8 +1178,8 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                1200,
-                832
+                1104,
+                784
             ],
             "id": "9ca8576b-6bba-4577-a1f1-ac93d79b2616",
             "name": "Get a row",
@@ -1226,8 +1199,8 @@
             "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
             "typeVersion": 1,
             "position": [
-                688,
-                1104
+                480,
+                1024
             ],
             "id": "e497a1c9-a2c6-41fd-85fd-0331208ec76f",
             "name": "Groq Chat Model",
@@ -1246,8 +1219,8 @@
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
             "typeVersion": 1,
             "position": [
-                848,
-                1104
+                -384,
+                1600
             ],
             "id": "17a5d6ea-3270-4911-bb48-55da80bf9a2a",
             "name": "OpenRouter Chat Model",
@@ -1285,8 +1258,8 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.3,
             "position": [
-                3808,
-                1168
+                3872,
+                992
             ],
             "id": "92befeba-b6c0-4197-b294-92d314fb0089",
             "name": "If validate"
@@ -1319,26 +1292,11 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.3,
             "position": [
-                1376,
-                832
+                1280,
+                784
             ],
             "id": "8a9d9dda-522a-40b2-8c18-dd02084074ee",
             "name": "If question"
-        },
-        {
-            "parameters": {
-                "mode": "raw",
-                "jsonOutput": "={{ $('Get new questions').item.json }}",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.set",
-            "typeVersion": 3.4,
-            "position": [
-                1568,
-                816
-            ],
-            "id": "32767d7c-df86-44ff-b472-80866169bfd0",
-            "name": "Retreave data"
         },
         {
             "parameters": {
@@ -1350,8 +1308,8 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                1984,
-                752
+                2048,
+                576
             ],
             "id": "744b2f79-26a1-4578-9abf-ab6324dd6f7a",
             "name": "Delete audio file",
@@ -1370,8 +1328,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                4016,
-                1088
+                4080,
+                912
             ],
             "id": "835cb831-3e7a-4dce-a5a3-aa592e742543",
             "name": "Get render for upload"
@@ -1379,14 +1337,14 @@
         {
             "parameters": {
                 "chatId": "={{ $('Global Fields').item.json.telegram_chat_id }}",
-                "text": "❌ Vidéo rejetée et supprimée.",
+                "text": "❌",
                 "additionalFields": {}
             },
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                4768,
-                1008
+                4832,
+                832
             ],
             "id": "f07b6163-ac74-4fad-b45a-a19deb05248a",
             "name": "Send a text message1",
@@ -1396,8 +1354,7 @@
                     "id": "t5jP1rX1Q7rEmgPc",
                     "name": "Telegram account"
                 }
-            },
-            "disabled": true
+            }
         },
         {
             "parameters": {
@@ -1434,8 +1391,8 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                4576,
-                1184
+                4640,
+                1008
             ],
             "id": "e267355f-4274-4d72-8f7a-dd1c588b7f6a",
             "name": "Log Upload successful",
@@ -1445,6 +1402,144 @@
                     "name": "Supabase SnakeTech DB Quiz"
                 }
             }
+        },
+        {
+            "parameters": {
+                "jsCode": "const glob = $('Global Fields').first().json;\n\nconst escapeHtml = (str) => {\n  if (!str) return '';\n  return str\n    .replace(/&/g, '&amp;')\n    .replace(/</g, '&lt;')\n    .replace(/>/g, '&gt;')\n    .replace(/\"/g, '&quot;')\n    .replace(/'/g, '&#039;');\n};\n\nconst audio_background = escapeHtml(glob.audio_background || '');\nconst audio_break = escapeHtml(glob.audio_break || '');\nconst audio_correct_answer = escapeHtml(glob.audio_correct_answer || '');\n\nlet i = 0;\nconst items = $input.all();\n\nfor (const item of items) {\n  i++;\n  let voice_script = '';\n  \n  voice_script += \"<speak version='1.0' xml:lang='fr-FR'>\";\n  \n  if (audio_background) {\n    voice_script += `<mstts:backgroundaudio\n        src='${audio_background}'\n        volume='30' fadein='1500' fadeout='2000'/>`;\n  }\n  \n  voice_script += \"<voice xml:lang='fr-FR' xml:gender='Male' name='fr-FR-RemyMultilingualNeural'>\";\n  voice_script += \"<p>\";\n  voice_script += item.json.question || '';\n  \n  if (true) {\n    voice_script += `<audio src='${audio_break}'/>`;\n  } else {\n    voice_script += \"<break time='5s'/>\";\n  }\n  \n  if (true) {\n    voice_script += `<audio src='${audio_correct_answer}'/>`;\n  }\n  \n  const correctAnswer = item.json.correct_answer || '';\n  voice_script += `Réponse ${correctAnswer} `;\n  voice_script += \"<break strength='medium' />\";\n  \n  const optionKey = `option_${correctAnswer.toLowerCase()}`;\n  voice_script += item.json[optionKey] || '';\n  \n  voice_script += \"</p>\";\n  voice_script += \"</voice></speak>\";\n  \n  item.json.voice_script = voice_script;\n  item.json.audio_filename = (glob.aws_prefix_audio_file || '') + i + '.mp3';\n  item.json.image_filename = (glob.aws_prefix_img_file || '') + i + '.png';\n  item.json.audio_url = 'https://' + (glob.aws_bucket_name || '') + '.s3.' + (glob.aws_region || '') + '.amazonaws.com/audio/' + item.json.audio_filename;\n  item.json.image_url = 'https://' + (glob.aws_bucket_name || '') + '.s3.' + (glob.aws_region || '') + '.amazonaws.com/image/' + item.json.image_filename;\n}\n\nreturn items;"
+            },
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                928,
+                624
+            ],
+            "id": "a02e0b6d-0eef-483d-b98a-8c8212d64a40",
+            "name": "Generate Azure Speech prompting"
+        },
+        {
+            "parameters": {
+                "sessionIdType": "customKey",
+                "sessionKey": "16"
+            },
+            "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
+            "typeVersion": 1.5,
+            "position": [
+                592,
+                1024
+            ],
+            "id": "828b4d85-fccf-4a96-910f-e4c1320097a0",
+            "name": "Redis Chat Memory",
+            "credentials": {
+                "redis": {
+                    "id": "ua59kyvCowPL9ZRc",
+                    "name": "Redis - pika account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "mode": "retrieve-as-tool",
+                "toolDescription": "Use this tool to check if a similar question already exists in the quiz \ndatabase before creating a new one. Always use this tool first when you \nhave generated a new question. If a similar question is found, discard \nthe new question and generate a different one.",
+                "tableName": {
+                    "__rl": true,
+                    "value": "questions",
+                    "mode": "list",
+                    "cachedResultName": "questions"
+                },
+                "topK": 1,
+                "options": {
+                    "queryName": "match_questions"
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+            "typeVersion": 1.3,
+            "position": [
+                704,
+                1024
+            ],
+            "id": "7f9cf88e-ace6-4737-8e99-4d78772e4efc",
+            "name": "Supabase Vector Store",
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "Tu es un générateur expert de questions de quiz en français pour des vidéos dynamiques et engageantes.\n\nGénère 1 questions en français.\n\n## Objectif\nCes questions sont destinées à des vidéos quiz : elles doivent être percutantes, mémorables et adaptées à un large public.\n\n## Types de questions\n\n### QCM (4 options) — environ 70% des questions\n- option_a, option_b, option_c, option_d : toutes remplies et différentes\n- Les mauvaises réponses doivent être plausibles mais clairement fausses pour qui connaît la réponse\n- correct_answer : \"a\", \"b\", \"c\" et \"d\" (répartis aléatoirement et équitablement)\n\n### Vrai/Faux — environ 30% des questions\n- option_a = traduction de \"Vrai\" selon le champ \"language\"\n- option_b = traduction de \"Faux\" selon le champ \"language\"\n- option_c = \"\"\n- option_d = \"\"\n- correct_answer : \"a\" ou \"b\" uniquement\n\n## Règles de génération\n\n### Qualité des questions\n- Formule chaque question comme une accroche directe et dynamique (\"Quel est...\", \"Lequel de ces...\", \"En quelle année...\", \"Qui a...\", \"Est-il vrai que...\")\n- Privilégie les faits vérifiables, surprenants ou méconnus pour maximiser l'engagement\n- Évite toute ambiguïté, double négation ou formulation trop complexe\n- Maximum 120 caractères par question\n- Maximum 35 caractères par option de réponse\n- Les questions ne doivent pas être similaires à ce qui est présent dans Supabase. Utilise le tool Supabase Vector Store obligatoirement.\n\n### Diversité obligatoire\n- Répartis équitablement entre ces catégories : histoire, science, sport, culture générale, géographie, cinéma/séries, musique, gastronomie, nature/animaux, technologie\n- Alterne les niveaux : 30% facile, 50% moyen, 20% difficile\n- La bonne réponse doit être distribuée aléatoirement et équitablement entre a, b, c et d\n- Ne génère jamais deux questions au sujet similaire\n\n## Format de réponse\nRéponds UNIQUEMENT avec un tableau JSON valide, sans texte avant ni après, sans balises markdown, sans commentaires.\n\n[\n  {\n    \"question\": \"\",\n    \"option_a\": \"\",\n    \"option_b\": \"\",\n    \"option_c\": \"\",\n    \"option_d\": \"\",\n    \"correct_answer\": \"\",\n    \"category\": \"\",\n    \"difficulty\": \"facile\" | \"moyen\" | \"difficile\",\n    \"fun_fact\": \"\",\n    \"language\": \"fr\"\n  }\n]\n\n## Règles strictes du JSON\n- \"correct_answer\" : UNIQUEMENT la lettre a, b, c ou d (minuscule)\n- \"language\" : toujours \"fr\"\n- \"difficulty\" : toujours l'une des trois valeurs exactes : \"facile\", \"moyen\", \"difficile\"\n- \"fun_fact\" : une phrase courte (max 100 caractères) révélant un détail surprenant lié à la réponse, utile pour l'écran de résultat dans la vidéo\n- Aucun champ vide sauf option_c et option_d pour les questions Vrai/Faux\n- Aucun texte, explication ou markdown en dehors du tableau JSON",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                608,
+                784
+            ],
+            "id": "74eee40a-7eec-4624-8cf6-e192efc09612",
+            "name": "AI Agent"
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://api.openai.com/v1/embeddings",
+                "authentication": "predefinedCredentialType",
+                "nodeCredentialType": "openAiApi",
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={\n  \"input\": \"{{ $json.question }}\",\n  \"model\": \"text-embedding-3-small\"\n}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.4,
+            "position": [
+                1520,
+                816
+            ],
+            "id": "c5b26bb5-b518-49a1-a700-fca8e5d3a47e",
+            "name": "OpenAI Embeddings",
+            "credentials": {
+                "openAiApi": {
+                    "id": "H0VcOhL36gFHQbme",
+                    "name": "OpenAi mickael.lcq account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
+            "typeVersion": 1.2,
+            "position": [
+                704,
+                1184
+            ],
+            "id": "efd09392-8863-4c68-93a1-8233d959497e",
+            "name": "Embeddings OpenAI",
+            "credentials": {
+                "openAiApi": {
+                    "id": "H0VcOhL36gFHQbme",
+                    "name": "OpenAi mickael.lcq account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "mode": "raw",
+                "jsonOutput": "={{ \n  Object.assign(\n    $('Get new questions').item.json,\n    { \"embedding\": $input.first().json.data[0].embedding }\n  ) \n}}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
+            "position": [
+                1696,
+                816
+            ],
+            "id": "32767d7c-df86-44ff-b472-80866169bfd0",
+            "name": "Retrieve data before create"
         }
     ],
     "connections": {
@@ -1486,17 +1581,6 @@
                 ]
             ]
         },
-        "Basic LLM Chain": {
-            "main": [
-                [
-                    {
-                        "node": "Get new questions",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
         "If": {
             "main": [
                 [
@@ -1508,7 +1592,7 @@
                 ],
                 [
                     {
-                        "node": "Basic LLM Chain",
+                        "node": "AI Agent",
                         "type": "main",
                         "index": 0
                     }
@@ -1645,7 +1729,7 @@
             "main": [
                 [
                     {
-                        "node": "Get voice prompting",
+                        "node": "Generate Azure Speech prompting",
                         "type": "main",
                         "index": 0
                     }
@@ -1655,22 +1739,6 @@
         "Get voice prompting Python": {
             "main": [
                 []
-            ]
-        },
-        "Get voice prompting": {
-            "main": [
-                [
-                    {
-                        "node": "Retrieve audio data",
-                        "type": "main",
-                        "index": 0
-                    },
-                    {
-                        "node": "Merge1",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
             ]
         },
         "Get new questions Python": {
@@ -1936,7 +2004,7 @@
             "ai_languageModel": [
                 [
                     {
-                        "node": "Basic LLM Chain",
+                        "node": "AI Agent",
                         "type": "ai_languageModel",
                         "index": 0
                     }
@@ -1965,25 +2033,14 @@
             "main": [
                 [
                     {
-                        "node": "Retreave data",
+                        "node": "OpenAI Embeddings",
                         "type": "main",
                         "index": 0
                     }
                 ],
                 [
                     {
-                        "node": "Get many rows",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Retreave data": {
-            "main": [
-                [
-                    {
-                        "node": "Create a row",
+                        "node": "Get new questions",
                         "type": "main",
                         "index": 0
                     }
@@ -2017,6 +2074,91 @@
                 [
                     {
                         "node": "Send a text message1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Azure Speech prompting": {
+            "main": [
+                [
+                    {
+                        "node": "Retrieve audio data",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Merge1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Redis Chat Memory": {
+            "ai_memory": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_memory",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Supabase Vector Store": {
+            "ai_tool": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_tool",
+                        "index": 0
+                    }
+                ]
+            ],
+            "main": [
+                []
+            ]
+        },
+        "AI Agent": {
+            "main": [
+                [
+                    {
+                        "node": "Get new questions",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Embeddings OpenAI": {
+            "ai_embedding": [
+                [
+                    {
+                        "node": "Supabase Vector Store",
+                        "type": "ai_embedding",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "OpenAI Embeddings": {
+            "main": [
+                [
+                    {
+                        "node": "Retrieve data before create",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Retrieve data before create": {
+            "main": [
+                [
+                    {
+                        "node": "Create a row",
                         "type": "main",
                         "index": 0
                     }
@@ -4859,7 +5001,7 @@
             }
         ]
     },
-    "versionId": "ff66a33a-9b40-4dcf-9da5-5ce30aa8fd94",
+    "versionId": "4196f50a-62e1-4795-bc06-5e242a1f26dd",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
