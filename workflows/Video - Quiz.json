@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-29T23:59:22.805Z",
+    "updatedAt": "2026-03-30T23:59:57.609Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -64,8 +64,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                2048,
-                768
+                1920,
+                720
             ],
             "id": "f1124172-cac5-4d93-ae53-831449ba999f",
             "name": "Replicate leonardoai/lucid-origin",
@@ -224,8 +224,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                2240,
-                576
+                2112,
+                528
             ],
             "id": "db688aaa-9047-492f-9013-78511c1b69cb",
             "name": "Generate Voice",
@@ -237,27 +237,6 @@
                 "httpBearerAuth": {
                     "id": "YOplG9WUCOFF5T4t",
                     "name": "Bearer Azure SnakeTech account"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "tableId": "questions",
-                "dataToSend": "autoMapInputData"
-            },
-            "type": "n8n-nodes-base.supabase",
-            "typeVersion": 1,
-            "position": [
-                1856,
-                816
-            ],
-            "id": "4d9d84bb-20e4-47f2-8571-39bc0b38a0d5",
-            "name": "Create a row",
-            "alwaysOutputData": false,
-            "credentials": {
-                "supabaseApi": {
-                    "id": "WbnVqEv2ZGhdAeSX",
-                    "name": "Supabase SnakeTech DB Quiz"
                 }
             }
         },
@@ -479,8 +458,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                2848,
-                672
+                2736,
+                624
             ],
             "id": "bfa63a14-47f4-40cf-960c-1547a4b16a96",
             "name": "Replicate openai/whisper",
@@ -538,8 +517,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                3040,
-                448
+                2320,
+                336
             ],
             "id": "836bc558-f156-4376-a482-2b39357b0f9c",
             "name": "String to Json"
@@ -554,8 +533,8 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                2448,
-                576
+                2320,
+                528
             ],
             "id": "087eee0a-203c-4f32-a994-3a82db996833",
             "name": "Save audio file",
@@ -650,13 +629,13 @@
         },
         {
             "parameters": {
-                "jsCode": "const text = $input.first().json.output;\nconst jsonMatch = text.match(/```json\\n([\\s\\S]*?)\\n```/);\nconst jsonContent = jsonMatch ? jsonMatch[1] : text;\nconst questions = JSON.parse(jsonContent);\n\n// const allQuestionsItems = $('Rename Keys').all();\n// const allQuestions = allQuestionsItems.map(item => \n//   (item.json.question || '').trim().toLowerCase()\n// );\n\n// const newQuestions = questions.filter(q => \n//   !allQuestions.includes((q.question || '').trim().toLowerCase())\n// );\n\nreturn questions;"
+                "jsCode": "const output = $input.first().json.output;\n\nlet questions;\n\nif (Array.isArray(output)) {\n  // Déjà un tableau d'objets\n  questions = output;\n} else if (typeof output === 'object' && output !== null) {\n  // Objet seul\n  questions = [output];\n} else if (typeof output === 'string') {\n  // C'est un texte → on extrait le JSON\n  const jsonMatch = output.match(/```json\\n([\\s\\S]*?)\\n```/) || \n                    output.match(/(\\[[\\s\\S]*\\])/);\n  const jsonContent = jsonMatch ? jsonMatch[1] : output;\n  questions = JSON.parse(jsonContent);\n  if (!Array.isArray(questions)) questions = [questions];\n} else {\n  throw new Error(`Type inattendu : ${typeof output}`);\n}\n\nreturn questions.map(q => ({ json: q }));"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                928,
-                784
+                880,
+                864
             ],
             "id": "69393ed0-8ef1-4151-bbd4-265210a611c4",
             "name": "Get new questions"
@@ -668,8 +647,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                3312,
-                560
+                3168,
+                336
             ],
             "id": "15649dbe-8957-4258-8ee8-4a47d79d77cc",
             "name": "Prepare for Remotion"
@@ -683,8 +662,8 @@
             "type": "n8n-nodes-base.aggregate",
             "typeVersion": 1,
             "position": [
-                3536,
-                560
+                3392,
+                336
             ],
             "id": "9f21045f-418a-4569-bbc2-f756dbc90b23",
             "name": "Aggregate for Remotion"
@@ -696,8 +675,8 @@
             "type": "n8n-nodes-base.wait",
             "typeVersion": 1.1,
             "position": [
-                4032,
-                560
+                3888,
+                336
             ],
             "id": "91100a01-bff7-4372-9726-277af5920480",
             "name": "Wait 10s",
@@ -717,8 +696,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.3,
             "position": [
-                4240,
-                560
+                4096,
+                336
             ],
             "id": "b8c5ab37-b672-4785-91ee-3169c4c78742",
             "name": "Check Progress",
@@ -775,8 +754,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.3,
             "position": [
-                3776,
-                560
+                3632,
+                336
             ],
             "id": "31f9987e-60b1-423e-aab1-47d55fa5f0fd",
             "name": "Trigger Render",
@@ -820,8 +799,8 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                4640,
-                832
+                4496,
+                608
             ],
             "id": "2c5082af-3375-412b-ab74-d469f3a62112",
             "name": "Update a row",
@@ -840,8 +819,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                4480,
-                832
+                4288,
+                688
             ],
             "id": "b8327dff-2188-4a75-86a8-5dca29059992",
             "name": "Retreive id"
@@ -858,8 +837,8 @@
             "type": "n8n-nodes-base.redis",
             "typeVersion": 1,
             "position": [
-                2656,
-                448
+                1920,
+                336
             ],
             "id": "80ade5a2-3ecc-4815-bb06-427dfe80610c",
             "name": "Retrieve data",
@@ -881,8 +860,8 @@
             "type": "n8n-nodes-base.redis",
             "typeVersion": 1,
             "position": [
-                3040,
-                672
+                2960,
+                624
             ],
             "id": "68a37856-a4b4-4a7b-b6d0-604845a15e5e",
             "name": "Save data",
@@ -914,8 +893,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                2240,
-                768
+                2112,
+                720
             ],
             "id": "f1ad0036-da41-459d-ac8e-ed3196c8c112",
             "name": "Get image"
@@ -952,8 +931,8 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                2448,
-                768
+                2320,
+                720
             ],
             "id": "0e0d3604-5cb5-4929-88e3-ca55d2605706",
             "name": "Save image file",
@@ -979,8 +958,8 @@
             "type": "n8n-nodes-base.merge",
             "typeVersion": 3.2,
             "position": [
-                2656,
-                672
+                2528,
+                624
             ],
             "id": "8b1175c7-1798-4ec4-8d7c-09bec0ecadd0",
             "name": "Merge"
@@ -1012,8 +991,8 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.3,
             "position": [
-                4448,
-                560
+                4304,
+                336
             ],
             "id": "1f70edaa-83a5-473f-a337-d3447beb4c73",
             "name": "If done"
@@ -1051,8 +1030,8 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                3504,
-                992
+                3360,
+                768
             ],
             "id": "c8b9096f-9a8a-4303-b056-5826b5e45662",
             "name": "Send a video",
@@ -1072,8 +1051,8 @@
             "type": "n8n-nodes-base.wait",
             "typeVersion": 1.1,
             "position": [
-                3696,
-                992
+                3552,
+                768
             ],
             "id": "5bcac4d7-8d81-44d7-b9d4-2ac9ea59fa03",
             "name": "Wait",
@@ -1089,8 +1068,8 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                4080,
-                1104
+                3936,
+                848
             ],
             "id": "9c74abe5-dc73-46f3-b0d3-d72786398b3b",
             "name": "Delete a folder",
@@ -1111,8 +1090,8 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                4256,
-                1104
+                4112,
+                848
             ],
             "id": "a72caee1-ade9-4a75-b65f-e09d41d4d7bc",
             "name": "Send a text message",
@@ -1136,8 +1115,8 @@
             "type": "@igabm/n8n-nodes-tiktok.tiktok",
             "typeVersion": 2,
             "position": [
-                4256,
-                912
+                4112,
+                688
             ],
             "id": "203646b4-6967-40b8-86e3-8370953ce681",
             "name": "Upload video",
@@ -1156,71 +1135,22 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                3328,
-                992
+                3184,
+                768
             ],
             "id": "facfb053-cd37-4243-99e5-884e629fca53",
             "name": "Get finale render"
         },
         {
             "parameters": {
-                "operation": "get",
-                "tableId": "questions",
-                "filters": {
-                    "conditions": [
-                        {
-                            "keyName": "question",
-                            "keyValue": "={{ $json.question }}"
-                        }
-                    ]
-                }
-            },
-            "type": "n8n-nodes-base.supabase",
-            "typeVersion": 1,
-            "position": [
-                1104,
-                784
-            ],
-            "id": "9ca8576b-6bba-4577-a1f1-ac93d79b2616",
-            "name": "Get a row",
-            "alwaysOutputData": true,
-            "credentials": {
-                "supabaseApi": {
-                    "id": "WbnVqEv2ZGhdAeSX",
-                    "name": "Supabase SnakeTech DB Quiz"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "model": "openai/gpt-oss-20b",
-                "options": {}
-            },
-            "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
-            "typeVersion": 1,
-            "position": [
-                480,
-                1024
-            ],
-            "id": "e497a1c9-a2c6-41fd-85fd-0331208ec76f",
-            "name": "Groq Chat Model",
-            "credentials": {
-                "groqApi": {
-                    "id": "fu1zbj5SisambkYU",
-                    "name": "Groq account snaketech77"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "model": "qwen/qwen3-vl-8b-instruct",
+                "model": "nvidia/nemotron-3-nano-30b-a3b:free",
                 "options": {}
             },
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
             "typeVersion": 1,
             "position": [
-                -384,
-                1600
+                432,
+                1104
             ],
             "id": "17a5d6ea-3270-4911-bb48-55da80bf9a2a",
             "name": "OpenRouter Chat Model",
@@ -1258,45 +1188,11 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.3,
             "position": [
-                3872,
-                992
+                3728,
+                768
             ],
             "id": "92befeba-b6c0-4197-b294-92d314fb0089",
             "name": "If validate"
-        },
-        {
-            "parameters": {
-                "conditions": {
-                    "options": {
-                        "caseSensitive": true,
-                        "leftValue": "",
-                        "typeValidation": "strict",
-                        "version": 3
-                    },
-                    "conditions": [
-                        {
-                            "id": "24186634-001e-48d2-a9f9-8d007ae5115f",
-                            "leftValue": "={{ $json.isEmpty() }}",
-                            "rightValue": "",
-                            "operator": {
-                                "type": "boolean",
-                                "operation": "true",
-                                "singleValue": true
-                            }
-                        }
-                    ],
-                    "combinator": "and"
-                },
-                "options": {}
-            },
-            "type": "n8n-nodes-base.if",
-            "typeVersion": 2.3,
-            "position": [
-                1280,
-                784
-            ],
-            "id": "8a9d9dda-522a-40b2-8c18-dd02084074ee",
-            "name": "If question"
         },
         {
             "parameters": {
@@ -1308,8 +1204,8 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                2048,
-                576
+                1920,
+                528
             ],
             "id": "744b2f79-26a1-4578-9abf-ab6324dd6f7a",
             "name": "Delete audio file",
@@ -1328,8 +1224,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                4080,
-                912
+                3936,
+                688
             ],
             "id": "835cb831-3e7a-4dce-a5a3-aa592e742543",
             "name": "Get render for upload"
@@ -1343,8 +1239,8 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                4832,
-                832
+                4688,
+                608
             ],
             "id": "f07b6163-ac74-4fad-b45a-a19deb05248a",
             "name": "Send a text message1",
@@ -1391,8 +1287,8 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                4640,
-                1008
+                4496,
+                784
             ],
             "id": "e267355f-4274-4d72-8f7a-dd1c588b7f6a",
             "name": "Log Upload successful",
@@ -1419,20 +1315,21 @@
         {
             "parameters": {
                 "sessionIdType": "customKey",
-                "sessionKey": "16"
+                "sessionKey": "=test",
+                "sessionTTL": 5
             },
             "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
             "typeVersion": 1.5,
             "position": [
-                592,
-                1024
+                544,
+                1104
             ],
             "id": "828b4d85-fccf-4a96-910f-e4c1320097a0",
             "name": "Redis Chat Memory",
             "credentials": {
                 "redis": {
-                    "id": "ua59kyvCowPL9ZRc",
-                    "name": "Redis - pika account"
+                    "id": "vxKYAbBANjkUvKjN",
+                    "name": "Redis account pika for AI Agent"
                 }
             }
         },
@@ -1442,20 +1339,19 @@
                 "toolDescription": "Use this tool to check if a similar question already exists in the quiz \ndatabase before creating a new one. Always use this tool first when you \nhave generated a new question. If a similar question is found, discard \nthe new question and generate a different one.",
                 "tableName": {
                     "__rl": true,
-                    "value": "questions",
+                    "value": "questions_embeddings",
                     "mode": "list",
-                    "cachedResultName": "questions"
+                    "cachedResultName": "questions_embeddings"
                 },
-                "topK": 1,
-                "options": {
-                    "queryName": "match_questions"
-                }
+                "topK": 20,
+                "includeDocumentMetadata": false,
+                "options": {}
             },
             "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
             "typeVersion": 1.3,
             "position": [
-                704,
-                1024
+                672,
+                1104
             ],
             "id": "7f9cf88e-ace6-4737-8e99-4d78772e4efc",
             "name": "Supabase Vector Store",
@@ -1469,14 +1365,17 @@
         {
             "parameters": {
                 "promptType": "define",
-                "text": "Tu es un générateur expert de questions de quiz en français pour des vidéos dynamiques et engageantes.\n\nGénère 1 questions en français.\n\n## Objectif\nCes questions sont destinées à des vidéos quiz : elles doivent être percutantes, mémorables et adaptées à un large public.\n\n## Types de questions\n\n### QCM (4 options) — environ 70% des questions\n- option_a, option_b, option_c, option_d : toutes remplies et différentes\n- Les mauvaises réponses doivent être plausibles mais clairement fausses pour qui connaît la réponse\n- correct_answer : \"a\", \"b\", \"c\" et \"d\" (répartis aléatoirement et équitablement)\n\n### Vrai/Faux — environ 30% des questions\n- option_a = traduction de \"Vrai\" selon le champ \"language\"\n- option_b = traduction de \"Faux\" selon le champ \"language\"\n- option_c = \"\"\n- option_d = \"\"\n- correct_answer : \"a\" ou \"b\" uniquement\n\n## Règles de génération\n\n### Qualité des questions\n- Formule chaque question comme une accroche directe et dynamique (\"Quel est...\", \"Lequel de ces...\", \"En quelle année...\", \"Qui a...\", \"Est-il vrai que...\")\n- Privilégie les faits vérifiables, surprenants ou méconnus pour maximiser l'engagement\n- Évite toute ambiguïté, double négation ou formulation trop complexe\n- Maximum 120 caractères par question\n- Maximum 35 caractères par option de réponse\n- Les questions ne doivent pas être similaires à ce qui est présent dans Supabase. Utilise le tool Supabase Vector Store obligatoirement.\n\n### Diversité obligatoire\n- Répartis équitablement entre ces catégories : histoire, science, sport, culture générale, géographie, cinéma/séries, musique, gastronomie, nature/animaux, technologie\n- Alterne les niveaux : 30% facile, 50% moyen, 20% difficile\n- La bonne réponse doit être distribuée aléatoirement et équitablement entre a, b, c et d\n- Ne génère jamais deux questions au sujet similaire\n\n## Format de réponse\nRéponds UNIQUEMENT avec un tableau JSON valide, sans texte avant ni après, sans balises markdown, sans commentaires.\n\n[\n  {\n    \"question\": \"\",\n    \"option_a\": \"\",\n    \"option_b\": \"\",\n    \"option_c\": \"\",\n    \"option_d\": \"\",\n    \"correct_answer\": \"\",\n    \"category\": \"\",\n    \"difficulty\": \"facile\" | \"moyen\" | \"difficile\",\n    \"fun_fact\": \"\",\n    \"language\": \"fr\"\n  }\n]\n\n## Règles strictes du JSON\n- \"correct_answer\" : UNIQUEMENT la lettre a, b, c ou d (minuscule)\n- \"language\" : toujours \"fr\"\n- \"difficulty\" : toujours l'une des trois valeurs exactes : \"facile\", \"moyen\", \"difficile\"\n- \"fun_fact\" : une phrase courte (max 100 caractères) révélant un détail surprenant lié à la réponse, utile pour l'écran de résultat dans la vidéo\n- Aucun champ vide sauf option_c et option_d pour les questions Vrai/Faux\n- Aucun texte, explication ou markdown en dehors du tableau JSON",
-                "options": {}
+                "text": "=Tu es un générateur expert de questions de quiz en français pour des vidéos \nTikTok virales et engageantes.\n\nGénère {{ Math.abs($json.unused_questions_count - $('Global Fields').item.json.number_question) }} questions en français.\n\n## Contexte TikTok\nLes questions seront affichées pendant 5 à 8 secondes max. Elles doivent \nprovoquer une réaction immédiate : surprise, curiosité ou compétition.\nL'utilisateur doit avoir envie de répondre ET de partager.\n\n## Types de questions\n\n### QCM (4 options) — 70% des questions\n- option_a, option_b, option_c, option_d : toutes remplies et distinctes\n- Les distracteurs doivent être plausibles mais tranchés\n- correct_answer : \"a\", \"b\", \"c\" ou \"d\" — distribution parfaitement équilibrée\n\n### Vrai/Faux — 30% des questions\n- option_a = \"Vrai\", option_b = \"Faux\", option_c = \"\", option_d = \"\"\n- correct_answer : \"a\" ou \"b\" uniquement\n- Privilégie les affirmations contre-intuitives (ex : \"Les requins sont \n  plus vieux que les arbres — Vrai ou Faux ?\")\n\n## Règles de génération\n\n### Accroche et style\n- Commence par un verbe ou un mot fort : \"Quel\", \"Qui\", \"Lequel\", \n  \"En quelle année\", \"Combien\", \"Est-il vrai que...\"\n- Ton direct, vif, sans fioriture — comme un animateur de jeu TV\n- Favorise les faits surprenants, records, anecdotes méconnues\n- Pas de double négation, pas d'ambiguïté, pas de jargon inaccessible\n- Maximum 100 caractères par question (idéal : 60–80)\n- Maximum 30 caractères par option de réponse\n\n### Distribution des catégories (équilibre strict)\nhistoire | science | sport | culture générale | géographie | \ncinéma/séries | musique | gastronomie | nature/animaux | technologie\n\n### Distribution des niveaux\n- 30% facile — tout le monde peut répondre, crée de l'engagement\n- 50% moyen — stimulant, accessible avec réflexion\n- 20% difficile — effet \"wow\" quand on trouve\n\n### Distribution de correct_answer\nRépartis strictement et aléatoirement : a, b, c, d doivent chacun \nreprésenter ~25% des bonnes réponses sur l'ensemble du batch.\n\n### Anti-doublon (Vector Store Supabase)\nAvant de valider chaque question, interroge le Vector Store Supabase \npour vérifier l'absence de doublon.\nRejette toute question dont le sujet, le fait central ou la formulation \nest similaire à une entrée existante dans la base vectorielle.\nSi un doublon potentiel est détecté, génère une question de remplacement \nsur un fait différent dans la même catégorie.\n\n## Format de réponse\nRéponds UNIQUEMENT avec un tableau JSON valide.\nPas de texte avant, pas de texte après, pas de balises markdown, \npas de commentaires.\n\n[\n  {\n    \"question\": \"\",\n    \"option_a\": \"\",\n    \"option_b\": \"\",\n    \"option_c\": \"\",\n    \"option_d\": \"\",\n    \"correct_answer\": \"\",\n    \"category\": \"\",\n    \"difficulty\": \"facile\" | \"moyen\" | \"difficile\",\n    \"fun_fact\": \"\",\n    \"language\": \"fr\"\n  }\n]\n\n## Contraintes JSON strictes\n- \"correct_answer\" : lettre minuscule uniquement — a, b, c ou d\n- \"difficulty\" : exactement \"facile\", \"moyen\" ou \"difficile\"\n- \"fun_fact\" : 1 phrase max 120 caractères, ton punchy, fait inattendu \n  lié à la bonne réponse — affiché sur l'écran résultat de la vidéo\n- \"language\" : toujours \"fr\"\n- option_c et option_d peuvent être \"\" pour les Vrai/Faux uniquement\n- Tous les autres champs sont obligatoires et non vides\n- Aucun texte, explication ou markdown en dehors du tableau JSON",
+                "hasOutputParser": true,
+                "options": {
+                    "enableStreaming": false
+                }
             },
             "type": "@n8n/n8n-nodes-langchain.agent",
             "typeVersion": 3.1,
             "position": [
-                608,
-                784
+                560,
+                864
             ],
             "id": "74eee40a-7eec-4624-8cf6-e192efc09612",
             "name": "AI Agent"
@@ -1489,14 +1388,14 @@
                 "nodeCredentialType": "openAiApi",
                 "sendBody": true,
                 "specifyBody": "json",
-                "jsonBody": "={\n  \"input\": \"{{ $json.question }}\",\n  \"model\": \"text-embedding-3-small\"\n}",
+                "jsonBody": "={\n  \"input\": \"{{ $json.question }}\",\n  \"model\": \"text-embedding-3-small\",\n  \"dimensions\" : 512\n}",
                 "options": {}
             },
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                1520,
-                816
+                1088,
+                864
             ],
             "id": "c5b26bb5-b518-49a1-a700-fca8e5d3a47e",
             "name": "OpenAI Embeddings",
@@ -1509,13 +1408,15 @@
         },
         {
             "parameters": {
-                "options": {}
+                "options": {
+                    "dimensions": 512
+                }
             },
             "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
             "typeVersion": 1.2,
             "position": [
-                704,
-                1184
+                672,
+                1280
             ],
             "id": "efd09392-8863-4c68-93a1-8233d959497e",
             "name": "Embeddings OpenAI",
@@ -1529,17 +1430,136 @@
         {
             "parameters": {
                 "mode": "raw",
-                "jsonOutput": "={{ \n  Object.assign(\n    $('Get new questions').item.json,\n    { \"embedding\": $input.first().json.data[0].embedding }\n  ) \n}}",
+                "jsonOutput": "={{ \n  Object.assign(\n    $('Get new questions').item.json,\n  ) \n}}",
                 "options": {}
             },
             "type": "n8n-nodes-base.set",
             "typeVersion": 3.4,
             "position": [
-                1696,
-                816
+                1296,
+                864
             ],
             "id": "32767d7c-df86-44ff-b472-80866169bfd0",
             "name": "Retrieve data before create"
+        },
+        {
+            "parameters": {
+                "tableId": "questions",
+                "dataToSend": "autoMapInputData"
+            },
+            "type": "n8n-nodes-base.supabase",
+            "typeVersion": 1,
+            "position": [
+                1488,
+                864
+            ],
+            "id": "4d9d84bb-20e4-47f2-8571-39bc0b38a0d5",
+            "name": "Create a row question",
+            "alwaysOutputData": false,
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "tableId": "questions_embeddings",
+                "fieldsUi": {
+                    "fieldValues": [
+                        {
+                            "fieldId": "question_id",
+                            "fieldValue": "={{ $json.id }}"
+                        },
+                        {
+                            "fieldId": "content",
+                            "fieldValue": "={{ $json.question }}"
+                        },
+                        {
+                            "fieldId": "embedding",
+                            "fieldValue": "={{ $('OpenAI Embeddings').item.json.data[0].embedding }}"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.supabase",
+            "typeVersion": 1,
+            "position": [
+                1680,
+                864
+            ],
+            "id": "6038843e-d968-4826-800e-520ee18144dc",
+            "name": "Create a row question_embedding",
+            "alwaysOutputData": false,
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "schemaType": "manual",
+                "inputSchema": "{\n  \"type\": \"array\",\n  \"items\": {\n    \"type\": \"object\",\n    \"properties\": {\n      \"question\": { \"type\": \"string\" },\n      \"option_a\": { \"type\": \"string\" },\n      \"option_b\": { \"type\": \"string\" },\n      \"option_c\": { \"type\": \"string\" },\n      \"option_d\": { \"type\": \"string\" },\n      \"correct_answer\": {\n        \"type\": \"string\",\n        \"enum\": [\"a\", \"b\", \"c\", \"d\"]\n      },\n      \"category\": { \"type\": \"string\" },\n      \"difficulty\": {\n        \"type\": \"string\",\n        \"enum\": [\"facile\", \"moyen\", \"difficile\"]\n      },\n      \"fun_fact\": { \"type\": \"string\" },\n      \"language\": { \"type\": \"string\" }\n    },\n    \"required\": [\n      \"question\", \"option_a\", \"option_b\",\n      \"correct_answer\", \"category\",\n      \"difficulty\", \"fun_fact\", \"language\"\n    ]\n  }\n}"
+            },
+            "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
+            "typeVersion": 1.3,
+            "position": [
+                944,
+                1104
+            ],
+            "id": "88cf072c-8c4c-404b-a54e-ba701cbf69cc",
+            "name": "Structured Output Parser"
+        },
+        {
+            "parameters": {
+                "content": "[TikTok for developers](https://developers.tiktok.com/)",
+                "height": 80,
+                "width": 182,
+                "color": 5
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                4064,
+                592
+            ],
+            "typeVersion": 1,
+            "id": "0d2345bc-8083-453b-a0d4-4f25444294d1",
+            "name": "Sticky Note2"
+        },
+        {
+            "parameters": {
+                "content": "[TikTok for developers](https://developers.tiktok.com/)",
+                "height": 80,
+                "width": 182,
+                "color": 5
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                2480,
+                496
+            ],
+            "typeVersion": 1,
+            "id": "ac20323b-422c-440d-9f73-a5b3479e8f81",
+            "name": "Sticky Note3"
+        },
+        {
+            "parameters": {
+                "content": "[Supabases doc AI & Vectors](https://supabase.com/docs/guides/ai)",
+                "height": 80,
+                "width": 262,
+                "color": 5
+            },
+            "type": "n8n-nodes-base.stickyNote",
+            "position": [
+                1504,
+                768
+            ],
+            "typeVersion": 1,
+            "id": "9cd77984-3e5e-4a2f-a2ea-c0244479c33e",
+            "name": "Sticky Note4"
         }
     ],
     "connections": {
@@ -1560,17 +1580,6 @@
             ]
         },
         "Global Fields": {
-            "main": [
-                [
-                    {
-                        "node": "Get many rows",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Create a row": {
             "main": [
                 [
                     {
@@ -1750,7 +1759,7 @@
             "main": [
                 [
                     {
-                        "node": "Get a row",
+                        "node": "OpenAI Embeddings",
                         "type": "main",
                         "index": 0
                     }
@@ -1984,23 +1993,7 @@
                 ]
             ]
         },
-        "Get a row": {
-            "main": [
-                [
-                    {
-                        "node": "If question",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
         "OpenRouter Chat Model": {
-            "ai_languageModel": [
-                []
-            ]
-        },
-        "Groq Chat Model": {
             "ai_languageModel": [
                 [
                     {
@@ -2023,24 +2016,6 @@
                 [
                     {
                         "node": "Delete a folder",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "If question": {
-            "main": [
-                [
-                    {
-                        "node": "OpenAI Embeddings",
-                        "type": "main",
-                        "index": 0
-                    }
-                ],
-                [
-                    {
-                        "node": "Get new questions",
                         "type": "main",
                         "index": 0
                     }
@@ -2158,8 +2133,41 @@
             "main": [
                 [
                     {
-                        "node": "Create a row",
+                        "node": "Create a row question",
                         "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create a row question": {
+            "main": [
+                [
+                    {
+                        "node": "Create a row question_embedding",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Create a row question_embedding": {
+            "main": [
+                [
+                    {
+                        "node": "Get many rows",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Structured Output Parser": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_outputParser",
                         "index": 0
                     }
                 ]
@@ -5001,7 +5009,7 @@
             }
         ]
     },
-    "versionId": "4196f50a-62e1-4795-bc06-5e242a1f26dd",
+    "versionId": "ae44bf46-7376-4b4d-9264-a5837c31dbe1",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
