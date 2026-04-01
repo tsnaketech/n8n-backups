@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-30T23:59:57.609Z",
+    "updatedAt": "2026-03-31T23:24:30.118Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -25,8 +25,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1024,
-                -352
+                784,
+                -480
             ],
             "id": "8730a3a2-5524-4cb4-afad-b0df047a9caa",
             "name": "Get Voices",
@@ -90,8 +90,8 @@
             "type": "n8n-nodes-base.deepL",
             "typeVersion": 1,
             "position": [
-                592,
-                -64
+                928,
+                -272
             ],
             "id": "5ef4e151-eefe-4cdc-959d-b95d6bb29b71",
             "name": "Translate a language",
@@ -342,8 +342,8 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                608,
-                -352
+                464,
+                -480
             ],
             "id": "d77d5b82-eb59-45aa-a8a8-859bf5021793",
             "name": "Telegram",
@@ -366,8 +366,8 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                1264,
-                -352
+                1008,
+                -480
             ],
             "id": "81b22477-d4fa-4a44-b181-69cbcd00ec1b",
             "name": "Send an audio file",
@@ -423,8 +423,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1472,
-                -352
+                1248,
+                -480
             ],
             "id": "c2697fae-b1bc-4685-a351-fb8cd7270b6e",
             "name": "HTTP Request2",
@@ -580,8 +580,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                -32,
-                -144
+                -64,
+                -480
             ],
             "id": "182a4a2e-240f-4813-96e9-f07331316cac",
             "name": "Get limited question Python"
@@ -607,8 +607,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                192,
-                -144
+                160,
+                -480
             ],
             "id": "5aed2c62-3b22-4143-82a6-bc6ce089fec7",
             "name": "Get voice prompting Python"
@@ -621,8 +621,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                96,
-                32
+                64,
+                -304
             ],
             "id": "57dff129-12d2-466a-9f9d-0349b493a1da",
             "name": "Get new questions Python"
@@ -634,8 +634,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                880,
-                864
+                608,
+                880
             ],
             "id": "69393ed0-8ef1-4151-bbd4-265210a611c4",
             "name": "Get new questions"
@@ -772,54 +772,12 @@
         },
         {
             "parameters": {
-                "operation": "update",
-                "tableId": "questions",
-                "filters": {
-                    "conditions": [
-                        {
-                            "keyName": "id",
-                            "condition": "eq",
-                            "keyValue": "={{ $json.id }}"
-                        }
-                    ]
-                },
-                "fieldsUi": {
-                    "fieldValues": [
-                        {
-                            "fieldId": "used",
-                            "fieldValue": "true"
-                        },
-                        {
-                            "fieldId": "used_at",
-                            "fieldValue": "={{ $now }}"
-                        }
-                    ]
-                }
-            },
-            "type": "n8n-nodes-base.supabase",
-            "typeVersion": 1,
-            "position": [
-                4496,
-                608
-            ],
-            "id": "2c5082af-3375-412b-ab74-d469f3a62112",
-            "name": "Update a row",
-            "credentials": {
-                "supabaseApi": {
-                    "id": "WbnVqEv2ZGhdAeSX",
-                    "name": "Supabase SnakeTech DB Quiz"
-                }
-            },
-            "disabled": true
-        },
-        {
-            "parameters": {
                 "jsCode": "const questions = $('Get limited question').all();\nreturn questions.map(item => ({\n  json: {\n    id: item.json.id,\n  }\n}));"
             },
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                4288,
+                4752,
                 688
             ],
             "id": "b8327dff-2188-4a75-86a8-5dca29059992",
@@ -879,8 +837,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                1840,
-                -224
+                1248,
+                -304
             ],
             "id": "cc6b548a-06ef-42d3-8d51-98af026586d8",
             "name": "Get Base64"
@@ -1115,8 +1073,8 @@
             "type": "@igabm/n8n-nodes-tiktok.tiktok",
             "typeVersion": 2,
             "position": [
-                4112,
-                688
+                4352,
+                608
             ],
             "id": "203646b4-6967-40b8-86e3-8370953ce681",
             "name": "Upload video",
@@ -1149,8 +1107,8 @@
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
             "typeVersion": 1,
             "position": [
-                432,
-                1104
+                160,
+                1120
             ],
             "id": "17a5d6ea-3270-4911-bb48-55da80bf9a2a",
             "name": "OpenRouter Chat Model",
@@ -1239,7 +1197,7 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                4688,
+                5152,
                 608
             ],
             "id": "f07b6163-ac74-4fad-b45a-a19deb05248a",
@@ -1287,7 +1245,7 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                4496,
+                4960,
                 784
             ],
             "id": "e267355f-4274-4d72-8f7a-dd1c588b7f6a",
@@ -1321,8 +1279,8 @@
             "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
             "typeVersion": 1.5,
             "position": [
-                544,
-                1104
+                272,
+                1120
             ],
             "id": "828b4d85-fccf-4a96-910f-e4c1320097a0",
             "name": "Redis Chat Memory",
@@ -1350,8 +1308,8 @@
             "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
             "typeVersion": 1.3,
             "position": [
-                672,
-                1104
+                416,
+                1120
             ],
             "id": "7f9cf88e-ace6-4737-8e99-4d78772e4efc",
             "name": "Supabase Vector Store",
@@ -1374,8 +1332,8 @@
             "type": "@n8n/n8n-nodes-langchain.agent",
             "typeVersion": 3.1,
             "position": [
-                560,
-                864
+                288,
+                880
             ],
             "id": "74eee40a-7eec-4624-8cf6-e192efc09612",
             "name": "AI Agent"
@@ -1394,8 +1352,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                1088,
-                864
+                816,
+                880
             ],
             "id": "c5b26bb5-b518-49a1-a700-fca8e5d3a47e",
             "name": "OpenAI Embeddings",
@@ -1415,8 +1373,8 @@
             "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
             "typeVersion": 1.2,
             "position": [
-                672,
-                1280
+                1072,
+                1248
             ],
             "id": "efd09392-8863-4c68-93a1-8233d959497e",
             "name": "Embeddings OpenAI",
@@ -1436,8 +1394,8 @@
             "type": "n8n-nodes-base.set",
             "typeVersion": 3.4,
             "position": [
-                1296,
-                864
+                1024,
+                880
             ],
             "id": "32767d7c-df86-44ff-b472-80866169bfd0",
             "name": "Retrieve data before create"
@@ -1450,47 +1408,11 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                1488,
-                864
+                1216,
+                880
             ],
             "id": "4d9d84bb-20e4-47f2-8571-39bc0b38a0d5",
             "name": "Create a row question",
-            "alwaysOutputData": false,
-            "credentials": {
-                "supabaseApi": {
-                    "id": "WbnVqEv2ZGhdAeSX",
-                    "name": "Supabase SnakeTech DB Quiz"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "tableId": "questions_embeddings",
-                "fieldsUi": {
-                    "fieldValues": [
-                        {
-                            "fieldId": "question_id",
-                            "fieldValue": "={{ $json.id }}"
-                        },
-                        {
-                            "fieldId": "content",
-                            "fieldValue": "={{ $json.question }}"
-                        },
-                        {
-                            "fieldId": "embedding",
-                            "fieldValue": "={{ $('OpenAI Embeddings').item.json.data[0].embedding }}"
-                        }
-                    ]
-                }
-            },
-            "type": "n8n-nodes-base.supabase",
-            "typeVersion": 1,
-            "position": [
-                1680,
-                864
-            ],
-            "id": "6038843e-d968-4826-800e-520ee18144dc",
-            "name": "Create a row question_embedding",
             "alwaysOutputData": false,
             "credentials": {
                 "supabaseApi": {
@@ -1507,8 +1429,8 @@
             "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
             "typeVersion": 1.3,
             "position": [
-                944,
-                1104
+                672,
+                1120
             ],
             "id": "88cf072c-8c4c-404b-a54e-ba701cbf69cc",
             "name": "Structured Output Parser"
@@ -1523,7 +1445,7 @@
             "type": "n8n-nodes-base.stickyNote",
             "position": [
                 4064,
-                592
+                576
             ],
             "typeVersion": 1,
             "id": "0d2345bc-8083-453b-a0d4-4f25444294d1",
@@ -1560,6 +1482,184 @@
             "typeVersion": 1,
             "id": "9cd77984-3e5e-4a2f-a2ea-c0244479c33e",
             "name": "Sticky Note4"
+        },
+        {
+            "parameters": {
+                "tableId": "questions_embeddings",
+                "fieldsUi": {
+                    "fieldValues": [
+                        {
+                            "fieldId": "question_id",
+                            "fieldValue": "={{ $json.id }}"
+                        },
+                        {
+                            "fieldId": "content",
+                            "fieldValue": "={{ $json.question }}"
+                        },
+                        {
+                            "fieldId": "embedding",
+                            "fieldValue": "={{ $('OpenAI Embeddings').item.json.data[0].embedding }}"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.supabase",
+            "typeVersion": 1,
+            "position": [
+                1696,
+                1280
+            ],
+            "id": "80a80400-871c-4c88-addd-3cb5870ff9c1",
+            "name": "Create a row question_embedding1",
+            "alwaysOutputData": false,
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsonMode": "expressionData",
+                "jsonData": "={{ $json.question }}",
+                "options": {
+                    "metadata": {
+                        "metadataValues": [
+                            {}
+                        ]
+                    }
+                }
+            },
+            "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+            "typeVersion": 1.1,
+            "position": [
+                1536,
+                1088
+            ],
+            "id": "26198790-b75e-4447-9d18-b28ec93de4c1",
+            "name": "Default Data Loader"
+        },
+        {
+            "parameters": {
+                "mode": "insert",
+                "tableName": {
+                    "__rl": true,
+                    "value": "questions_embeddings",
+                    "mode": "list",
+                    "cachedResultName": "questions_embeddings"
+                },
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
+            "typeVersion": 1.3,
+            "position": [
+                1408,
+                880
+            ],
+            "id": "f1b36c67-8789-40c5-adcb-ec53330b1d1f",
+            "name": "Create a row question_embedding",
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "tableId": "questions",
+                "filters": {
+                    "conditions": [
+                        {
+                            "keyName": "id",
+                            "condition": "eq",
+                            "keyValue": "={{ $json.id }}"
+                        }
+                    ]
+                },
+                "fieldsUi": {
+                    "fieldValues": [
+                        {
+                            "fieldId": "used",
+                            "fieldValue": "true"
+                        },
+                        {
+                            "fieldId": "used_at",
+                            "fieldValue": "={{ $now }}"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.supabase",
+            "typeVersion": 1,
+            "position": [
+                4960,
+                608
+            ],
+            "id": "2c5082af-3375-412b-ab74-d469f3a62112",
+            "name": "Update question",
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
+                }
+            },
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "operation": "update",
+                "tableId": "questions_embeddings",
+                "filters": {
+                    "conditions": [
+                        {
+                            "keyName": "content",
+                            "condition": "eq",
+                            "keyValue": "={{ $json.pageContent }}"
+                        }
+                    ]
+                },
+                "fieldsUi": {
+                    "fieldValues": [
+                        {
+                            "fieldId": "question_id",
+                            "fieldValue": "= {{ $('Create a row question').item.json.id }}"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.supabase",
+            "typeVersion": 1,
+            "position": [
+                1712,
+                880
+            ],
+            "id": "86d71801-a688-4607-80b7-f7663e51418c",
+            "name": "Add question_id",
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "video",
+                "operation": "upload",
+                "regionCode": "FR",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.youTube",
+            "typeVersion": 1,
+            "position": [
+                4352,
+                768
+            ],
+            "id": "2bc5d2f2-35c1-4be7-be02-edca29b82ce7",
+            "name": "Upload a video"
         }
     ],
     "connections": {
@@ -1836,7 +1936,7 @@
             "main": [
                 [
                     {
-                        "node": "Update a row",
+                        "node": "Update question",
                         "type": "main",
                         "index": 0
                     },
@@ -2040,15 +2140,9 @@
                         "node": "Upload video",
                         "type": "main",
                         "index": 0
-                    }
-                ]
-            ]
-        },
-        "Update a row": {
-            "main": [
-                [
+                    },
                     {
-                        "node": "Send a text message1",
+                        "node": "Upload a video",
                         "type": "main",
                         "index": 0
                     }
@@ -2114,6 +2208,11 @@
                         "node": "Supabase Vector Store",
                         "type": "ai_embedding",
                         "index": 0
+                    },
+                    {
+                        "node": "Create a row question_embedding",
+                        "type": "ai_embedding",
+                        "index": 0
                     }
                 ]
             ]
@@ -2151,7 +2250,56 @@
                 ]
             ]
         },
+        "Structured Output Parser": {
+            "ai_outputParser": [
+                [
+                    {
+                        "node": "AI Agent",
+                        "type": "ai_outputParser",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "HTTP Request2": {
+            "main": [
+                []
+            ]
+        },
+        "Default Data Loader": {
+            "ai_document": [
+                [
+                    {
+                        "node": "Create a row question_embedding",
+                        "type": "ai_document",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
         "Create a row question_embedding": {
+            "main": [
+                [
+                    {
+                        "node": "Add question_id",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Update question": {
+            "main": [
+                [
+                    {
+                        "node": "Send a text message1",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Add question_id": {
             "main": [
                 [
                     {
@@ -2162,12 +2310,12 @@
                 ]
             ]
         },
-        "Structured Output Parser": {
-            "ai_outputParser": [
+        "Upload a video": {
+            "main": [
                 [
                     {
-                        "node": "AI Agent",
-                        "type": "ai_outputParser",
+                        "node": "Retreive id",
+                        "type": "main",
                         "index": 0
                     }
                 ]
@@ -5009,7 +5157,7 @@
             }
         ]
     },
-    "versionId": "ae44bf46-7376-4b4d-9264-a5837c31dbe1",
+    "versionId": "49bb973e-9301-44b8-a9f8-5eebe1ed6fd3",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
