@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-03-31T23:32:32.511Z",
+    "updatedAt": "2026-04-01T06:56:19.705Z",
     "createdAt": "2026-03-29T22:47:47.215Z",
     "id": "aOAxm6ZNoDHDxzSv",
     "name": "Create embeddings in an table exists",
@@ -219,6 +219,21 @@
                     "name": "Supabase SnakeTech DB Quiz"
                 }
             }
+        },
+        {
+            "parameters": {
+                "resource": "video",
+                "operation": "upload",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.youTube",
+            "typeVersion": 1,
+            "position": [
+                1104,
+                -160
+            ],
+            "id": "43a44485-8bec-44a0-b7a0-592126ff2044",
+            "name": "Upload a video"
         }
     ],
     "connections": {
@@ -10978,7 +10993,7 @@
             }
         ]
     },
-    "versionId": "86876880-4c62-4a5c-bd70-377ba8527bdf",
+    "versionId": "1a7449a2-5683-41cc-800c-721c9133cadb",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
