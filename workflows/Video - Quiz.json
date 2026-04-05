@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-04-03T22:52:04.703Z",
+    "updatedAt": "2026-04-04T19:22:40.638Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -685,12 +685,12 @@
         {
             "parameters": {
                 "method": "POST",
-                "url": "http://192.168.1.115:3000/api/render/progress",
+                "url": "http://192.168.1.112:3000/api/render/progress",
                 "authentication": "genericCredentialType",
                 "genericAuthType": "httpBasicAuth",
                 "sendBody": true,
                 "specifyBody": "json",
-                "jsonBody": "={{ $('Trigger Render').item.json }}",
+                "jsonBody": "={\n  \"profile\": \"quiz\",\n  \"renderId\": \"{{ $('Trigger Render').item.json.renderId }}\",\n  \"bucketName\": \"{{ $('Trigger Render').item.json.bucketName }}\"\n} ",
                 "options": {}
             },
             "type": "n8n-nodes-base.httpRequest",
@@ -743,12 +743,12 @@
         {
             "parameters": {
                 "method": "POST",
-                "url": "http://192.168.1.115:3000/api/render",
+                "url": "http://192.168.1.112:3000/api/render",
                 "authentication": "genericCredentialType",
                 "genericAuthType": "httpBasicAuth",
                 "sendBody": true,
                 "specifyBody": "json",
-                "jsonBody": "={{ $json }}",
+                "jsonBody": "={\n  \"profile\": \"quiz\",\n  \"inputProps\": {{ JSON.stringify($json) }}\n}",
                 "options": {}
             },
             "type": "n8n-nodes-base.httpRequest",
@@ -1080,7 +1080,7 @@
             "name": "Upload video",
             "credentials": {
                 "tiktokOAuth2Api": {
-                    "id": "f7LWIqMqugOODtgW",
+                    "id": "yP6tIBBXXbUU6auu",
                     "name": "TikTok SnakeTech Try"
                 }
             }
@@ -1444,7 +1444,7 @@
             },
             "type": "n8n-nodes-base.stickyNote",
             "position": [
-                4064,
+                4112,
                 576
             ],
             "typeVersion": 1,
@@ -1661,6 +1661,62 @@
             "id": "2bc5d2f2-35c1-4be7-be02-edca29b82ce7",
             "name": "Upload a video",
             "disabled": true
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.1.115:3000/api/render",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpBasicAuth",
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ $json }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.3,
+            "position": [
+                3632,
+                160
+            ],
+            "id": "9b3928e0-5de2-4901-b8b4-4de9ac94b6e6",
+            "name": "Trigger Render1",
+            "credentials": {
+                "aws": {
+                    "id": "69PVpJgi3UfZSQdm",
+                    "name": "AWS (IAM) account n8n in snaketech"
+                },
+                "httpBasicAuth": {
+                    "id": "T6YmT5actKu0b4xq",
+                    "name": "AWS (IAM) - snaketech n8n"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "http://192.168.1.115:3000/api/render/progress",
+                "authentication": "genericCredentialType",
+                "genericAuthType": "httpBasicAuth",
+                "sendBody": true,
+                "specifyBody": "json",
+                "jsonBody": "={{ $('Trigger Render').item.json }}",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.3,
+            "position": [
+                4096,
+                176
+            ],
+            "id": "b0fd6f8e-f5c8-4be4-b1d9-9807d9ce6bda",
+            "name": "Check Progress1",
+            "credentials": {
+                "httpBasicAuth": {
+                    "id": "T6YmT5actKu0b4xq",
+                    "name": "AWS (IAM) - snaketech n8n"
+                }
+            }
         }
     ],
     "connections": {
@@ -5011,62 +5067,11 @@
                 }
             }
         ],
-        "Trigger Render": [
+        "Trigger Render1": [
             {
                 "json": {
                     "renderId": "x6fvnrelmx",
                     "bucketName": "remotionlambda-euwest3-r1cnqfofeb"
-                },
-                "pairedItem": {
-                    "item": 0
-                }
-            }
-        ],
-        "Wait 10s": [
-            {
-                "json": {
-                    "renderId": "x6fvnrelmx",
-                    "bucketName": "remotionlambda-euwest3-r1cnqfofeb"
-                },
-                "pairedItem": {
-                    "item": 0
-                }
-            }
-        ],
-        "Get finale render": [
-            {
-                "json": {
-                    "status": "done",
-                    "url": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-r1cnqfofeb/renders/x6fvnrelmx/out.mp4",
-                    "renderId": "x6fvnrelmx"
-                },
-                "binary": {
-                    "data": {
-                        "mimeType": "video/mp4",
-                        "fileType": "video",
-                        "fileExtension": "mp4",
-                        "data": "filesystem-v2",
-                        "directory": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-r1cnqfofeb/renders/x6fvnrelmx/out.mp4",
-                        "fileName": "out.mp4",
-                        "id": "filesystem-v2:workflows/aw4R5UbolnyUZ37J/executions/22197/binary_data/d0fdb4bd-c142-40c5-b38e-e3fdb1092e71",
-                        "fileSize": "10.3 MB",
-                        "bytes": 10259935
-                    }
-                },
-                "pairedItem": {
-                    "item": 0
-                }
-            }
-        ],
-        "Check Progress": [
-            {
-                "json": {
-                    "status": "done",
-                    "url": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-r1cnqfofeb/renders/x6fvnrelmx/out.mp4",
-                    "renderId": "x6fvnrelmx"
-                },
-                "pairedItem": {
-                    "item": 0
                 }
             }
         ],
@@ -5156,9 +5161,68 @@
                     "item": 0
                 }
             }
+        ],
+        "Trigger Render": [
+            {
+                "json": {
+                    "renderId": "b6mtoesks6",
+                    "bucketName": "remotionlambda-euwest3-r1cnqfofeb"
+                },
+                "pairedItem": {
+                    "item": 0
+                }
+            }
+        ],
+        "Wait 10s": [
+            {
+                "json": {
+                    "renderId": "b6mtoesks6",
+                    "bucketName": "remotionlambda-euwest3-r1cnqfofeb"
+                },
+                "pairedItem": {
+                    "item": 0
+                }
+            }
+        ],
+        "Check Progress": [
+            {
+                "json": {
+                    "status": "rendering",
+                    "progress": 27,
+                    "renderId": "b6mtoesks6"
+                },
+                "pairedItem": {
+                    "item": 0
+                }
+            }
+        ],
+        "Get finale render": [
+            {
+                "json": {
+                    "status": "done",
+                    "url": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-r1cnqfofeb/renders/b6mtoesks6/out.mp4",
+                    "renderId": "b6mtoesks6"
+                },
+                "binary": {
+                    "data": {
+                        "mimeType": "video/mp4",
+                        "fileType": "video",
+                        "fileExtension": "mp4",
+                        "data": "filesystem-v2",
+                        "directory": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-r1cnqfofeb/renders/b6mtoesks6/out.mp4",
+                        "fileName": "out.mp4",
+                        "id": "filesystem-v2:workflows/aw4R5UbolnyUZ37J/executions/22537/binary_data/bab96c95-6110-49a5-bf09-4229dd6f172c",
+                        "fileSize": "10 MB",
+                        "bytes": 10018166
+                    }
+                },
+                "pairedItem": {
+                    "item": 0
+                }
+            }
         ]
     },
-    "versionId": "9b60ccf9-fb7b-49b7-85f1-ae4752529531",
+    "versionId": "83f93f07-50e2-4296-99fa-5fd714047360",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
