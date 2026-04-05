@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-04-03T23:00:08.291Z",
+    "updatedAt": "2026-04-04T17:47:52.613Z",
     "createdAt": "2026-03-29T22:47:47.215Z",
     "id": "aOAxm6ZNoDHDxzSv",
     "name": "Create embeddings in an table exists",
@@ -103,8 +103,8 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                400,
-                400
+                384,
+                96
             ],
             "id": "94b6c609-3eff-41e8-a8b0-680c4cbc54fa",
             "name": "Create a row",
@@ -236,26 +236,40 @@
             "name": "Upload a video"
         },
         {
-            "parameters": {},
-            "type": "n8n-nodes-base.pushbullet",
+            "parameters": {
+                "operation": "uploadVideo"
+            },
+            "type": "n8n-nodes-upload-post.uploadPost",
             "typeVersion": 1,
+            "position": [
+                528,
+                208
+            ],
+            "id": "14208bc0-8bcd-4a2d-af0e-dae989dc3982",
+            "name": "Upload a video1"
+        },
+        {
+            "parameters": {
+                "assignments": {
+                    "assignments": [
+                        {
+                            "id": "ab5d83a7-f617-472e-ae99-d4a39df0dab4",
+                            "name": "",
+                            "value": "={{ $env }}",
+                            "type": "string"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 3.4,
             "position": [
                 144,
                 144
             ],
-            "id": "273ece47-5004-4b66-a609-2bec268c5c0a",
-            "name": "Create a push"
-        },
-        {
-            "parameters": {},
-            "type": "@adaptive-ds/n8n-nodes-publer.publerAccounts",
-            "typeVersion": 1,
-            "position": [
-                352,
-                144
-            ],
-            "id": "1376bf76-066a-40d6-b0c7-4b835c0e69bf",
-            "name": "Publer Accounts"
+            "id": "5659b0d1-695d-424e-825c-baf0e37100e3",
+            "name": "Edit Fields"
         }
     ],
     "connections": {
@@ -335,17 +349,6 @@
                 [
                     {
                         "node": "Update a row",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Create a push": {
-            "main": [
-                [
-                    {
-                        "node": "Publer Accounts",
                         "type": "main",
                         "index": 0
                     }
@@ -11026,7 +11029,7 @@
             }
         ]
     },
-    "versionId": "010fa1aa-61a5-481c-9dd4-e5fda8add76d",
+    "versionId": "494814f4-db23-40c3-9930-662109be5163",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
