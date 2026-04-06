@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-04-04T19:22:40.638Z",
+    "updatedAt": "2026-04-05T23:04:34.111Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -670,20 +670,6 @@
         },
         {
             "parameters": {
-                "amount": 10
-            },
-            "type": "n8n-nodes-base.wait",
-            "typeVersion": 1.1,
-            "position": [
-                3888,
-                336
-            ],
-            "id": "91100a01-bff7-4372-9726-277af5920480",
-            "name": "Wait 10s",
-            "webhookId": "fb04accc-c0f6-4ef0-b56e-3753974c6e89"
-        },
-        {
-            "parameters": {
                 "method": "POST",
                 "url": "http://192.168.1.112:3000/api/render/progress",
                 "authentication": "genericCredentialType",
@@ -1061,29 +1047,6 @@
                 }
             },
             "disabled": true
-        },
-        {
-            "parameters": {
-                "source": "FILE_UPLOAD",
-                "privacyLevel": "SELF_ONLY",
-                "additionalFields": {
-                    "title": "={{ $('Get finale render').item.json.renderId }}"
-                }
-            },
-            "type": "@igabm/n8n-nodes-tiktok.tiktok",
-            "typeVersion": 2,
-            "position": [
-                4352,
-                608
-            ],
-            "id": "203646b4-6967-40b8-86e3-8370953ce681",
-            "name": "Upload video",
-            "credentials": {
-                "tiktokOAuth2Api": {
-                    "id": "yP6tIBBXXbUU6auu",
-                    "name": "TikTok SnakeTech Try"
-                }
-            }
         },
         {
             "parameters": {
@@ -1647,23 +1610,6 @@
         },
         {
             "parameters": {
-                "resource": "video",
-                "operation": "upload",
-                "regionCode": "FR",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.youTube",
-            "typeVersion": 1,
-            "position": [
-                4352,
-                768
-            ],
-            "id": "2bc5d2f2-35c1-4be7-be02-edca29b82ce7",
-            "name": "Upload a video",
-            "disabled": true
-        },
-        {
-            "parameters": {
                 "method": "POST",
                 "url": "http://192.168.1.115:3000/api/render",
                 "authentication": "genericCredentialType",
@@ -1715,6 +1661,80 @@
                 "httpBasicAuth": {
                     "id": "T6YmT5actKu0b4xq",
                     "name": "AWS (IAM) - snaketech n8n"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "source": "FILE_UPLOAD",
+                "privacyLevel": "SELF_ONLY",
+                "additionalFields": {
+                    "title": "={{ $('Get finale render').item.json.renderId }}"
+                }
+            },
+            "type": "@igabm/n8n-nodes-tiktok.tiktok",
+            "typeVersion": 2,
+            "position": [
+                4608,
+                544
+            ],
+            "id": "5f000495-c80c-4433-9952-30214d6907ca",
+            "name": "Upload video1",
+            "credentials": {
+                "tiktokOAuth2Api": {
+                    "id": "yP6tIBBXXbUU6auu",
+                    "name": "TikTok SnakeTech Try"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "amount": 30
+            },
+            "type": "n8n-nodes-base.wait",
+            "typeVersion": 1.1,
+            "position": [
+                3888,
+                336
+            ],
+            "id": "91100a01-bff7-4372-9726-277af5920480",
+            "name": "Wait 30s",
+            "webhookId": "fb04accc-c0f6-4ef0-b56e-3753974c6e89"
+        },
+        {
+            "parameters": {
+                "resource": "video",
+                "operation": "upload",
+                "regionCode": "FR",
+                "options": {}
+            },
+            "type": "n8n-nodes-base.youTube",
+            "typeVersion": 1,
+            "position": [
+                4352,
+                768
+            ],
+            "id": "2bc5d2f2-35c1-4be7-be02-edca29b82ce7",
+            "name": "Upload Youtube",
+            "disabled": true
+        },
+        {
+            "parameters": {
+                "privacyLevel": "SELF_ONLY",
+                "advancedOptions": {}
+            },
+            "type": "CUSTOM.tikTokUpload",
+            "typeVersion": 1,
+            "position": [
+                4352,
+                608
+            ],
+            "id": "1b787e1a-d678-4a1e-a898-05a69eeeb03e",
+            "name": "Upload Tiktok",
+            "credentials": {
+                "tikTokOAuth2Api": {
+                    "id": "XazttjK3LGk3kPS1",
+                    "name": "TikTok (Upload) account"
                 }
             }
         }
@@ -1945,17 +1965,6 @@
                 ]
             ]
         },
-        "Wait 10s": {
-            "main": [
-                [
-                    {
-                        "node": "Check Progress",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
         "Check Progress": {
             "main": [
                 [
@@ -1982,7 +1991,7 @@
             "main": [
                 [
                     {
-                        "node": "Wait 10s",
+                        "node": "Wait 30s",
                         "type": "main",
                         "index": 0
                     }
@@ -2088,7 +2097,7 @@
                 ],
                 [
                     {
-                        "node": "Wait 10s",
+                        "node": "Wait 30s",
                         "type": "main",
                         "index": 0
                     }
@@ -2122,17 +2131,6 @@
                 [
                     {
                         "node": "Send a text message",
-                        "type": "main",
-                        "index": 0
-                    }
-                ]
-            ]
-        },
-        "Upload video": {
-            "main": [
-                [
-                    {
-                        "node": "Retreive id",
                         "type": "main",
                         "index": 0
                     }
@@ -2194,12 +2192,12 @@
             "main": [
                 [
                     {
-                        "node": "Upload video",
+                        "node": "Upload Youtube",
                         "type": "main",
                         "index": 0
                     },
                     {
-                        "node": "Upload a video",
+                        "node": "Upload Tiktok",
                         "type": "main",
                         "index": 0
                     }
@@ -2367,7 +2365,29 @@
                 ]
             ]
         },
-        "Upload a video": {
+        "Wait 30s": {
+            "main": [
+                [
+                    {
+                        "node": "Check Progress",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Upload Youtube": {
+            "main": [
+                [
+                    {
+                        "node": "Retreive id",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Upload Tiktok": {
             "main": [
                 [
                     {
@@ -5162,59 +5182,34 @@
                 }
             }
         ],
-        "Trigger Render": [
-            {
-                "json": {
-                    "renderId": "b6mtoesks6",
-                    "bucketName": "remotionlambda-euwest3-r1cnqfofeb"
-                },
-                "pairedItem": {
-                    "item": 0
-                }
-            }
-        ],
-        "Wait 10s": [
-            {
-                "json": {
-                    "renderId": "b6mtoesks6",
-                    "bucketName": "remotionlambda-euwest3-r1cnqfofeb"
-                },
-                "pairedItem": {
-                    "item": 0
-                }
-            }
-        ],
         "Check Progress": [
             {
                 "json": {
-                    "status": "rendering",
-                    "progress": 27,
-                    "renderId": "b6mtoesks6"
+                    "status": "done",
+                    "url": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-r1cnqfofeb/renders/k0yd224m0k/out.mp4",
+                    "renderId": "k0yd224m0k"
                 },
                 "pairedItem": {
                     "item": 0
                 }
             }
         ],
-        "Get finale render": [
+        "Trigger Render": [
             {
                 "json": {
-                    "status": "done",
-                    "url": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-r1cnqfofeb/renders/b6mtoesks6/out.mp4",
-                    "renderId": "b6mtoesks6"
+                    "renderId": "k0yd224m0k",
+                    "bucketName": "remotionlambda-euwest3-r1cnqfofeb"
                 },
-                "binary": {
-                    "data": {
-                        "mimeType": "video/mp4",
-                        "fileType": "video",
-                        "fileExtension": "mp4",
-                        "data": "filesystem-v2",
-                        "directory": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-r1cnqfofeb/renders/b6mtoesks6/out.mp4",
-                        "fileName": "out.mp4",
-                        "id": "filesystem-v2:workflows/aw4R5UbolnyUZ37J/executions/22537/binary_data/bab96c95-6110-49a5-bf09-4229dd6f172c",
-                        "fileSize": "10 MB",
-                        "bytes": 10018166
-                    }
+                "pairedItem": {
+                    "item": 0
+                }
+            }
+        ],
+        "Wait 30s": [
+            {
+                "json": {
+                    "renderId": "k0yd224m0k",
+                    "bucketName": "remotionlambda-euwest3-r1cnqfofeb"
                 },
                 "pairedItem": {
                     "item": 0
@@ -5222,7 +5217,7 @@
             }
         ]
     },
-    "versionId": "83f93f07-50e2-4296-99fa-5fd714047360",
+    "versionId": "d3893202-de01-4e4c-9b4d-0d0b49fb11b7",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
