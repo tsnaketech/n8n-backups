@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-04-05T23:04:34.111Z",
+    "updatedAt": "2026-04-06T23:53:35.070Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -763,8 +763,8 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                4752,
-                688
+                4944,
+                704
             ],
             "id": "b8327dff-2188-4a75-86a8-5dca29059992",
             "name": "Retreive id"
@@ -1012,8 +1012,8 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                3936,
-                848
+                4288,
+                864
             ],
             "id": "9c74abe5-dc73-46f3-b0d3-d72786398b3b",
             "name": "Delete a folder",
@@ -1034,8 +1034,8 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                4112,
-                848
+                4464,
+                864
             ],
             "id": "a72caee1-ade9-4a75-b65f-e09d41d4d7bc",
             "name": "Send a text message",
@@ -1045,8 +1045,7 @@
                     "id": "t5jP1rX1Q7rEmgPc",
                     "name": "Telegram account"
                 }
-            },
-            "disabled": true
+            }
         },
         {
             "parameters": {
@@ -1145,8 +1144,8 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                3936,
-                688
+                4464,
+                704
             ],
             "id": "835cb831-3e7a-4dce-a5a3-aa592e742543",
             "name": "Get render for upload"
@@ -1160,7 +1159,7 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                5152,
+                5328,
                 608
             ],
             "id": "f07b6163-ac74-4fad-b45a-a19deb05248a",
@@ -1208,8 +1207,8 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                4960,
-                784
+                5136,
+                800
             ],
             "id": "e267355f-4274-4d72-8f7a-dd1c588b7f6a",
             "name": "Log Upload successful",
@@ -1407,7 +1406,7 @@
             },
             "type": "n8n-nodes-base.stickyNote",
             "position": [
-                4112,
+                4480,
                 576
             ],
             "typeVersion": 1,
@@ -1445,42 +1444,6 @@
             "typeVersion": 1,
             "id": "9cd77984-3e5e-4a2f-a2ea-c0244479c33e",
             "name": "Sticky Note4"
-        },
-        {
-            "parameters": {
-                "tableId": "questions_embeddings",
-                "fieldsUi": {
-                    "fieldValues": [
-                        {
-                            "fieldId": "question_id",
-                            "fieldValue": "={{ $json.id }}"
-                        },
-                        {
-                            "fieldId": "content",
-                            "fieldValue": "={{ $json.question }}"
-                        },
-                        {
-                            "fieldId": "embedding",
-                            "fieldValue": "={{ $('OpenAI Embeddings').item.json.data[0].embedding }}"
-                        }
-                    ]
-                }
-            },
-            "type": "n8n-nodes-base.supabase",
-            "typeVersion": 1,
-            "position": [
-                1696,
-                1280
-            ],
-            "id": "80a80400-871c-4c88-addd-3cb5870ff9c1",
-            "name": "Create a row question_embedding1",
-            "alwaysOutputData": false,
-            "credentials": {
-                "supabaseApi": {
-                    "id": "WbnVqEv2ZGhdAeSX",
-                    "name": "Supabase SnakeTech DB Quiz"
-                }
-            }
         },
         {
             "parameters": {
@@ -1558,7 +1521,7 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                4960,
+                5136,
                 608
             ],
             "id": "2c5082af-3375-412b-ab74-d469f3a62112",
@@ -1610,85 +1573,6 @@
         },
         {
             "parameters": {
-                "method": "POST",
-                "url": "http://192.168.1.115:3000/api/render",
-                "authentication": "genericCredentialType",
-                "genericAuthType": "httpBasicAuth",
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={{ $json }}",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.3,
-            "position": [
-                3632,
-                160
-            ],
-            "id": "9b3928e0-5de2-4901-b8b4-4de9ac94b6e6",
-            "name": "Trigger Render1",
-            "credentials": {
-                "aws": {
-                    "id": "69PVpJgi3UfZSQdm",
-                    "name": "AWS (IAM) account n8n in snaketech"
-                },
-                "httpBasicAuth": {
-                    "id": "T6YmT5actKu0b4xq",
-                    "name": "AWS (IAM) - snaketech n8n"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "method": "POST",
-                "url": "http://192.168.1.115:3000/api/render/progress",
-                "authentication": "genericCredentialType",
-                "genericAuthType": "httpBasicAuth",
-                "sendBody": true,
-                "specifyBody": "json",
-                "jsonBody": "={{ $('Trigger Render').item.json }}",
-                "options": {}
-            },
-            "type": "n8n-nodes-base.httpRequest",
-            "typeVersion": 4.3,
-            "position": [
-                4096,
-                176
-            ],
-            "id": "b0fd6f8e-f5c8-4be4-b1d9-9807d9ce6bda",
-            "name": "Check Progress1",
-            "credentials": {
-                "httpBasicAuth": {
-                    "id": "T6YmT5actKu0b4xq",
-                    "name": "AWS (IAM) - snaketech n8n"
-                }
-            }
-        },
-        {
-            "parameters": {
-                "source": "FILE_UPLOAD",
-                "privacyLevel": "SELF_ONLY",
-                "additionalFields": {
-                    "title": "={{ $('Get finale render').item.json.renderId }}"
-                }
-            },
-            "type": "@igabm/n8n-nodes-tiktok.tiktok",
-            "typeVersion": 2,
-            "position": [
-                4608,
-                544
-            ],
-            "id": "5f000495-c80c-4433-9952-30214d6907ca",
-            "name": "Upload video1",
-            "credentials": {
-                "tiktokOAuth2Api": {
-                    "id": "yP6tIBBXXbUU6auu",
-                    "name": "TikTok SnakeTech Try"
-                }
-            }
-        },
-        {
-            "parameters": {
                 "amount": 30
             },
             "type": "n8n-nodes-base.wait",
@@ -1711,8 +1595,8 @@
             "type": "n8n-nodes-base.youTube",
             "typeVersion": 1,
             "position": [
-                4352,
-                768
+                4704,
+                784
             ],
             "id": "2bc5d2f2-35c1-4be7-be02-edca29b82ce7",
             "name": "Upload Youtube",
@@ -1720,14 +1604,15 @@
         },
         {
             "parameters": {
-                "privacyLevel": "SELF_ONLY",
+                "postMode": "INBOX",
+                "title": "={{ $('Generate Title').item.json.output }} qsdsqdqsd",
                 "advancedOptions": {}
             },
             "type": "CUSTOM.tikTokUpload",
             "typeVersion": 1,
             "position": [
-                4352,
-                608
+                4704,
+                624
             ],
             "id": "1b787e1a-d678-4a1e-a898-05a69eeeb03e",
             "name": "Upload Tiktok",
@@ -1737,6 +1622,41 @@
                     "name": "TikTok (Upload) account"
                 }
             }
+        },
+        {
+            "parameters": {
+                "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+            "typeVersion": 1,
+            "position": [
+                4000,
+                928
+            ],
+            "id": "c984a589-7919-4ae6-b8ec-589696659dd6",
+            "name": "Groq Chat Model",
+            "credentials": {
+                "groqApi": {
+                    "id": "fu1zbj5SisambkYU",
+                    "name": "Groq account snaketech77"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "promptType": "define",
+                "text": "=Génère un titre TikTok accrocheur pour cette question de quiz.\n\nQuestion : {{ $('Get limited question').all()[$itemIndex].json.question }}\nCatégorie : {{ $('Get limited question').all()[$itemIndex].json.category }}\nDifficulté : {{ $('Get limited question').all()[$itemIndex].json.difficulty }}\nRègles :\n- Maximum 150 caractères tout compris\n- Commence par une accroche émotionnelle (ex: '98% se trompent 😱', 'Tu savais ça ? 🤔', 'Impossible à trouver 🧠')\n- Ne révèle JAMAIS la réponse\n- Termine par 2 ou 3 hashtags pertinents parmi : #quiz #culture #savoir #test #pourtoi #foryou #apprendresurtiktok #testtonQI\n- Ton : challenge, curiosité, compétition",
+                "options": {}
+            },
+            "type": "@n8n/n8n-nodes-langchain.agent",
+            "typeVersion": 3.1,
+            "position": [
+                4016,
+                704
+            ],
+            "id": "7e226b36-cc02-4cbb-8204-091cb3a0981f",
+            "name": "Generate Title"
         }
     ],
     "connections": {
@@ -2163,7 +2083,7 @@
             "main": [
                 [
                     {
-                        "node": "Get render for upload",
+                        "node": "Generate Title",
                         "type": "main",
                         "index": 0
                     }
@@ -2392,6 +2312,28 @@
                 [
                     {
                         "node": "Retreive id",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Groq Chat Model": {
+            "ai_languageModel": [
+                [
+                    {
+                        "node": "Generate Title",
+                        "type": "ai_languageModel",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Title": {
+            "main": [
+                [
+                    {
+                        "node": "Get render for upload",
                         "type": "main",
                         "index": 0
                     }
@@ -5087,14 +5029,6 @@
                 }
             }
         ],
-        "Trigger Render1": [
-            {
-                "json": {
-                    "renderId": "x6fvnrelmx",
-                    "bucketName": "remotionlambda-euwest3-r1cnqfofeb"
-                }
-            }
-        ],
         "Send a video": [
             {
                 "json": {
@@ -5215,9 +5149,32 @@
                     "item": 0
                 }
             }
+        ],
+        "Get render for upload": [
+            {
+                "json": {
+                    "output": "\"98% se trompent 😱 ! Quel élément porte le symbole Fe ? Mets ton cerveau à l'épreuve ! #quiz #savoir #testtonQI\""
+                },
+                "binary": {
+                    "data": {
+                        "mimeType": "video/mp4",
+                        "fileType": "video",
+                        "fileExtension": "mp4",
+                        "data": "filesystem-v2",
+                        "directory": "https://s3.eu-west-3.amazonaws.com/remotionlambda-euwest3-r1cnqfofeb/renders/k0yd224m0k/out.mp4",
+                        "fileName": "out.mp4",
+                        "id": "filesystem-v2:workflows/aw4R5UbolnyUZ37J/executions/22586/binary_data/2c634dc6-50f6-4291-a7bc-d1be96f9f2e8",
+                        "fileSize": "10 MB",
+                        "bytes": 10023640
+                    }
+                },
+                "pairedItem": {
+                    "item": 0
+                }
+            }
         ]
     },
-    "versionId": "d3893202-de01-4e4c-9b4d-0d0b49fb11b7",
+    "versionId": "1b0bed78-a473-4a44-a757-c979029e2bea",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
