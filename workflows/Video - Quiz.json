@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-04-22T23:55:14.577Z",
+    "updatedAt": "2026-04-23T00:32:49.711Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -1131,7 +1131,7 @@
         {
             "parameters": {
                 "chatId": "={{ $('Global Fields').item.json.telegram_chat_id }}",
-                "text": "✅ Upload terminé.",
+                "text": "=✅ Upload terminé.\n{{ $('Generate Title').first().json.output }}",
                 "additionalFields": {
                     "appendAttribution": false
                 }
@@ -1600,7 +1600,7 @@
             "name": "Upload Tiktok",
             "credentials": {
                 "tikTokOAuth2Api": {
-                    "id": "wA5mhXVd3mknPFx9",
+                    "id": "L5lDeaRF1Nfqzk94",
                     "name": "TikTok (Upload) account QuizCultureShow"
                 }
             }
@@ -1639,17 +1639,6 @@
             ],
             "id": "7e226b36-cc02-4cbb-8204-091cb3a0981f",
             "name": "Generate Title"
-        },
-        {
-            "parameters": {},
-            "type": "n8n-nodes-base.merge",
-            "typeVersion": 3.2,
-            "position": [
-                2976,
-                256
-            ],
-            "id": "13fc3199-e615-4cc0-b04a-3e121c7e6d24",
-            "name": "Merge2"
         },
         {
             "parameters": {
@@ -2374,11 +2363,6 @@
                         "index": 0
                     }
                 ]
-            ]
-        },
-        "Merge2": {
-            "main": [
-                []
             ]
         },
         "If2": {
@@ -8276,7 +8260,7 @@
             }
         ]
     },
-    "versionId": "dea6ad0e-36f6-4a68-89ca-abfe15e3c581",
+    "versionId": "5124c5bd-0d78-44ce-8fc8-34ddf3c9d9a4",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
