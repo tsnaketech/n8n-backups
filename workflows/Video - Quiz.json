@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-04-24T14:22:17.652Z",
+    "updatedAt": "2026-04-25T09:19:29.841Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -1182,7 +1182,7 @@
                         },
                         {
                             "fieldId": "tiktok_id",
-                            "fieldValue": "={{ $json.tiktok_video_id }}"
+                            "fieldValue": "={{ $('Upload Tiktok').first().json.publish_id }}"
                         }
                     ]
                 }
@@ -2405,7 +2405,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "1e445b63-d568-4307-87b5-6cc46cef8a08",
+    "versionId": "4a078de9-9221-4f88-be6f-dd291ed0cc22",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
