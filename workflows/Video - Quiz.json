@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-04-25T09:19:29.841Z",
+    "updatedAt": "2026-04-26T21:59:16.412Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -1630,7 +1630,7 @@
         {
             "parameters": {
                 "promptType": "define",
-                "text": "=Génère un titre TikTok accrocheur pour cette question de quiz.\n\nQuestion : {{ $('Get limited question').all()[$itemIndex].json.question }}\nCatégorie : {{ $('Get limited question').all()[$itemIndex].json.category }}\nDifficulté : {{ $('Get limited question').all()[$itemIndex].json.difficulty }}\nRègles :\n- Maximum 150 caractères tout compris\n- Commence par une accroche émotionnelle (ex: '98% se trompent 😱', 'Tu savais ça ? 🤔', 'Impossible à trouver 🧠')\n- Ne révèle JAMAIS la réponse\n- Termine par 2 ou 3 hashtags pertinents parmi : #quiz #culture #savoir #test #pourtoi #foryou #apprendresurtiktok #testtonQI\n- Ton : challenge, curiosité, compétition",
+                "text": "=Génère un titre TikTok accrocheur pour cette question de quiz.\n\nQuestion : {{ $('Get limited question').all()[$itemIndex].json.question }}\nCatégorie : {{ $('Get limited question').all()[$itemIndex].json.category }}\nDifficulté : {{ $('Get limited question').all()[$itemIndex].json.difficulty }}\nRègles :\n- Maximum 150 caractères tout compris\n- Commence par une accroche émotionnelle (ex: '98% se trompent 😱', 'Tu savais ça ? 🤔', 'Impossible à trouver 🧠')\n- Ne révèle JAMAIS la réponse\n- Termine par 2 ou 3 hashtags pertinents parmi : #quiz #culture #savoir #quiztime #trivia #test #pourtoi #apprendresurtiktok #testtonQI\n- Ajoute systématiquement les hashtags suivant : #foryou #pourtoi\n- Ton : challenge, curiosité, compétition",
                 "options": {}
             },
             "type": "@n8n/n8n-nodes-langchain.agent",
@@ -2405,7 +2405,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "4a078de9-9221-4f88-be6f-dd291ed0cc22",
+    "versionId": "7b3bf89a-0a04-4eed-8978-3efc9a77d78c",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
