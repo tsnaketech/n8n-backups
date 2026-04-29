@@ -1,5 +1,5 @@
 {
-    "updatedAt": "2026-04-27T18:07:21.968Z",
+    "updatedAt": "2026-04-28T08:24:07.834Z",
     "createdAt": "2025-08-23T21:53:58.420Z",
     "id": "aw4R5UbolnyUZ37J",
     "name": "Video - Quiz",
@@ -64,7 +64,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                1920,
+                2128,
                 720
             ],
             "id": "f1124172-cac5-4d93-ae53-831449ba999f",
@@ -126,7 +126,7 @@
                         {
                             "id": "50d0fc56-410d-4d0c-982c-a1e88487d282",
                             "name": "number_question",
-                            "value": 7,
+                            "value": 6,
                             "type": "number"
                         },
                         {
@@ -224,7 +224,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                2112,
+                2320,
                 528
             ],
             "id": "db688aaa-9047-492f-9013-78511c1b69cb",
@@ -458,7 +458,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.2,
             "position": [
-                2736,
+                2944,
                 624
             ],
             "id": "bfa63a14-47f4-40cf-960c-1547a4b16a96",
@@ -504,7 +504,7 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.2,
             "position": [
-                1648,
+                1856,
                 512
             ],
             "id": "cb3d21df-7b33-4d75-90fb-5e9ab3d871c1",
@@ -517,7 +517,7 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                2320,
+                2528,
                 336
             ],
             "id": "836bc558-f156-4376-a482-2b39357b0f9c",
@@ -533,7 +533,7 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                2320,
+                2528,
                 528
             ],
             "id": "087eee0a-203c-4f32-a994-3a82db996833",
@@ -558,7 +558,7 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                1152,
+                1360,
                 496
             ],
             "id": "070c3c6e-4f09-463e-b3f9-18af6ab9da2b",
@@ -634,7 +634,7 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                608,
+                368,
                 880
             ],
             "id": "69393ed0-8ef1-4151-bbd4-265210a611c4",
@@ -647,7 +647,7 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                3584,
+                3792,
                 336
             ],
             "id": "15649dbe-8957-4258-8ee8-4a47d79d77cc",
@@ -662,7 +662,7 @@
             "type": "n8n-nodes-base.aggregate",
             "typeVersion": 1,
             "position": [
-                3760,
+                3968,
                 336
             ],
             "id": "9f21045f-418a-4569-bbc2-f756dbc90b23",
@@ -682,7 +682,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.3,
             "position": [
-                4464,
+                4672,
                 336
             ],
             "id": "b8c5ab37-b672-4785-91ee-3169c4c78742",
@@ -740,7 +740,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.3,
             "position": [
-                4000,
+                4208,
                 336
             ],
             "id": "31f9987e-60b1-423e-aab1-47d55fa5f0fd",
@@ -763,7 +763,7 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                5312,
+                5520,
                 704
             ],
             "id": "b8327dff-2188-4a75-86a8-5dca29059992",
@@ -781,7 +781,7 @@
             "type": "n8n-nodes-base.redis",
             "typeVersion": 1,
             "position": [
-                1920,
+                2128,
                 336
             ],
             "id": "80ade5a2-3ecc-4815-bb06-427dfe80610c",
@@ -816,7 +816,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                2112,
+                2320,
                 720
             ],
             "id": "f1ad0036-da41-459d-ac8e-ed3196c8c112",
@@ -838,7 +838,7 @@
             "type": "n8n-nodes-base.merge",
             "typeVersion": 3.2,
             "position": [
-                1408,
+                1616,
                 640
             ],
             "id": "3ded7757-7dc5-4d8d-8e70-af65a10c8dc9",
@@ -854,7 +854,7 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                2320,
+                2528,
                 720
             ],
             "id": "0e0d3604-5cb5-4929-88e3-ca55d2605706",
@@ -881,7 +881,7 @@
             "type": "n8n-nodes-base.merge",
             "typeVersion": 3.2,
             "position": [
-                2528,
+                2736,
                 624
             ],
             "id": "8b1175c7-1798-4ec4-8d7c-09bec0ecadd0",
@@ -914,7 +914,7 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.3,
             "position": [
-                4672,
+                4880,
                 336
             ],
             "id": "1f70edaa-83a5-473f-a337-d3447beb4c73",
@@ -953,7 +953,7 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                3728,
+                3936,
                 768
             ],
             "id": "c8b9096f-9a8a-4303-b056-5826b5e45662",
@@ -974,7 +974,7 @@
             "type": "n8n-nodes-base.wait",
             "typeVersion": 1.1,
             "position": [
-                3920,
+                4128,
                 768
             ],
             "id": "5bcac4d7-8d81-44d7-b9d4-2ac9ea59fa03",
@@ -991,7 +991,7 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                4656,
+                4864,
                 864
             ],
             "id": "9c74abe5-dc73-46f3-b0d3-d72786398b3b",
@@ -1014,7 +1014,7 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                4832,
+                5040,
                 864
             ],
             "id": "a72caee1-ade9-4a75-b65f-e09d41d4d7bc",
@@ -1035,7 +1035,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                3552,
+                3760,
                 768
             ],
             "id": "facfb053-cd37-4243-99e5-884e629fca53",
@@ -1043,13 +1043,13 @@
         },
         {
             "parameters": {
-                "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+                "model": "openai/gpt-oss-120b:free",
                 "options": {}
             },
             "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
             "typeVersion": 1,
             "position": [
-                160,
+                -80,
                 1120
             ],
             "id": "17a5d6ea-3270-4911-bb48-55da80bf9a2a",
@@ -1088,7 +1088,7 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.3,
             "position": [
-                4096,
+                4304,
                 768
             ],
             "id": "92befeba-b6c0-4197-b294-92d314fb0089",
@@ -1104,7 +1104,7 @@
             "type": "n8n-nodes-base.awsS3",
             "typeVersion": 2,
             "position": [
-                1920,
+                2128,
                 528
             ],
             "id": "744b2f79-26a1-4578-9abf-ab6324dd6f7a",
@@ -1124,7 +1124,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                4832,
+                5040,
                 704
             ],
             "id": "835cb831-3e7a-4dce-a5a3-aa592e742543",
@@ -1141,7 +1141,7 @@
             "type": "n8n-nodes-base.telegram",
             "typeVersion": 1.2,
             "position": [
-                5696,
+                5904,
                 608
             ],
             "id": "f07b6163-ac74-4fad-b45a-a19deb05248a",
@@ -1190,7 +1190,7 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                5504,
+                5712,
                 800
             ],
             "id": "e267355f-4274-4d72-8f7a-dd1c588b7f6a",
@@ -1209,7 +1209,7 @@
             "type": "n8n-nodes-base.code",
             "typeVersion": 2,
             "position": [
-                928,
+                1136,
                 624
             ],
             "id": "a02e0b6d-0eef-483d-b98a-8c8212d64a40",
@@ -1224,8 +1224,8 @@
             "type": "@n8n/n8n-nodes-langchain.memoryRedisChat",
             "typeVersion": 1.5,
             "position": [
-                272,
-                1120
+                16,
+                1376
             ],
             "id": "828b4d85-fccf-4a96-910f-e4c1320097a0",
             "name": "Redis Chat Memory",
@@ -1253,7 +1253,7 @@
             "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
             "typeVersion": 1.3,
             "position": [
-                416,
+                176,
                 1120
             ],
             "id": "7f9cf88e-ace6-4737-8e99-4d78772e4efc",
@@ -1268,7 +1268,7 @@
         {
             "parameters": {
                 "promptType": "define",
-                "text": "=Tu es un générateur expert de questions de quiz en français pour des vidéos \nTikTok virales et engageantes.\n\nGénère {{ Math.abs($json.unused_questions_count - $('Global Fields').item.json.number_question) }} questions en français.\n\n## Contexte TikTok\nLes questions seront affichées pendant 5 à 8 secondes max. Elles doivent \nprovoquer une réaction immédiate : surprise, curiosité ou compétition.\nL'utilisateur doit avoir envie de répondre ET de partager.\n\n## Types de questions\n\n### QCM (4 options) — 70% des questions\n- option_a, option_b, option_c, option_d : toutes remplies et distinctes\n- Les distracteurs doivent être plausibles mais tranchés\n- correct_answer : \"a\", \"b\", \"c\" ou \"d\" — distribution parfaitement équilibrée\n\n### Vrai/Faux — 30% des questions\n- option_a = \"Vrai\", option_b = \"Faux\", option_c = \"\", option_d = \"\"\n- correct_answer : \"a\" ou \"b\" uniquement\n- Privilégie les affirmations contre-intuitives (ex : \"Les requins sont \n  plus vieux que les arbres — Vrai ou Faux ?\")\n\n## Règles de génération\n\n### Accroche et style\n- Commence par un verbe ou un mot fort : \"Quel\", \"Qui\", \"Lequel\", \n  \"En quelle année\", \"Combien\", \"Est-il vrai que...\"\n- Ton direct, vif, sans fioriture — comme un animateur de jeu TV\n- Favorise les faits surprenants, records, anecdotes méconnues\n- Pas de double négation, pas d'ambiguïté, pas de jargon inaccessible\n- Maximum 100 caractères par question (idéal : 60–80)\n- Maximum 30 caractères par option de réponse\n\n### Distribution des catégories (équilibre strict)\nhistoire | science | sport | culture générale | géographie | \ncinéma/séries | musique | gastronomie | nature/animaux | technologie\n\n### Distribution des niveaux\n- 30% facile — tout le monde peut répondre, crée de l'engagement\n- 50% moyen — stimulant, accessible avec réflexion\n- 20% difficile — effet \"wow\" quand on trouve\n\n### Distribution de correct_answer\nRépartis strictement et aléatoirement : a, b, c, d doivent chacun \nreprésenter ~25% des bonnes réponses sur l'ensemble du batch.\nNe fais pas d'erreur.\n\n### Anti-doublon (Vector Store Supabase)\nAvant de valider chaque question, interroge le Vector Store Supabase \npour vérifier l'absence de doublon.\nRejette toute question dont le sujet, le fait central ou la formulation \nest similaire à une entrée existante dans la base vectorielle.\nSi un doublon potentiel est détecté, génère une question de remplacement \nsur un fait différent dans la même catégorie.\n\n## Format de réponse\nRéponds UNIQUEMENT avec un tableau JSON valide.\nPas de texte avant, pas de texte après, pas de balises markdown, \npas de commentaires.\n\n[\n  {\n    \"question\": \"\",\n    \"option_a\": \"\",\n    \"option_b\": \"\",\n    \"option_c\": \"\",\n    \"option_d\": \"\",\n    \"correct_answer\": \"\",\n    \"category\": \"\",\n    \"difficulty\": \"facile\" | \"moyen\" | \"difficile\",\n    \"fun_fact\": \"\",\n    \"language\": \"fr\"\n  }\n]\n\n## Contraintes JSON strictes\n- \"correct_answer\" : lettre minuscule uniquement — a, b, c ou d\n- \"difficulty\" : exactement \"facile\", \"moyen\" ou \"difficile\"\n- \"fun_fact\" : 1 phrase max 120 caractères, ton punchy, fait inattendu \n  lié à la bonne réponse — affiché sur l'écran résultat de la vidéo\n- \"language\" : toujours \"fr\"\n- option_c et option_d peuvent être \"\" pour les Vrai/Faux uniquement\n- Tous les autres champs sont obligatoires et non vides\n- Aucun texte, explication ou markdown en dehors du tableau JSON",
+                "text": "=Tu es un générateur expert de questions de quiz en français pour des vidéos \nTikTok virales et engageantes.\n\nGénère {{ Math.abs($json.unused_questions_count - $('Global Fields').item.json.number_question) * 1.5 }} questions en français.\n\n## Contexte TikTok\nLes questions seront affichées pendant 5 à 8 secondes max. Elles doivent \nprovoquer une réaction immédiate : surprise, curiosité ou compétition.\nL'utilisateur doit avoir envie de répondre ET de partager.\n\n## Types de questions\n\n### QCM (4 options) — 70% des questions\n- option_a, option_b, option_c, option_d : toutes remplies et distinctes\n- Les distracteurs doivent être plausibles mais tranchés\n- correct_answer : \"a\", \"b\", \"c\" ou \"d\" — distribution parfaitement équilibrée\n\n### Vrai/Faux — 30% des questions\n- option_a = \"Vrai\", option_b = \"Faux\", option_c = \"\", option_d = \"\"\n- correct_answer : \"a\" ou \"b\" uniquement\n- Privilégie les affirmations contre-intuitives (ex : \"Les requins sont \n  plus vieux que les arbres — Vrai ou Faux ?\")\n\n## Règles de génération\n\n### Accroche et style\n- Commence par un verbe ou un mot fort : \"Quel\", \"Qui\", \"Lequel\", \n  \"En quelle année\", \"Combien\", \"Est-il vrai que...\"\n- Ton direct, vif, sans fioriture — comme un animateur de jeu TV\n- Favorise les faits surprenants, records, anecdotes méconnues\n- Pas de double négation, pas d'ambiguïté, pas de jargon inaccessible\n- Maximum 100 caractères par question (idéal : 60–80)\n- Maximum 30 caractères par option de réponse\n\n### Distribution des catégories (équilibre strict)\nhistoire | science | sport | culture générale | géographie | \ncinéma/séries | musique | gastronomie | nature/animaux | technologie\n\n### Distribution des niveaux\n- 30% facile — tout le monde peut répondre, crée de l'engagement\n- 50% moyen — stimulant, accessible avec réflexion\n- 20% difficile — effet \"wow\" quand on trouve\n\n### Distribution de correct_answer\nRépartis strictement et aléatoirement : a, b, c, d doivent chacun \nreprésenter ~25% des bonnes réponses sur l'ensemble du batch.\nNe fais pas d'erreur.\n\n### Anti-doublon (Vector Store Supabase)\n\nPROCÉDURE OBLIGATOIRE (suivre dans l'ordre exact) :\n\nÉTAPE 1 — Pour CHAQUE question que tu envisages de générer :\n  a) Formule la question\n  b) APPELE OBLIGATOIREMENT le tool \"Supabase Vector Store\" avec cette question\n  c) Examine les résultats : si une question retournée traite du même sujet \n     ou du même fait central, REJETTE et reformule sur un autre sujet\n  d) Répète jusqu'à obtenir une question unique\n\nÉTAPE 2 — Une fois N questions uniques validées, retourne le JSON final.\n\nTu DOIS appeler le tool Supabase Vector Store au moins N fois \n(une fois par question). Si tu ne le fais pas, ta réponse sera rejetée.\n\nRejette toute question dont le sujet, le fait central ou la formulation \nest similaire à une entrée existante dans la base vectorielle.\nSi un doublon potentiel est détecté, génère une question de remplacement \nsur un fait différent dans la même catégorie.\n\n## Format de réponse\nRéponds UNIQUEMENT avec un tableau JSON valide.\nPas de texte avant, pas de texte après, pas de balises markdown, \npas de commentaires.\n\n[\n  {\n    \"question\": \"\",\n    \"option_a\": \"\",\n    \"option_b\": \"\",\n    \"option_c\": \"\",\n    \"option_d\": \"\",\n    \"correct_answer\": \"\",\n    \"category\": \"\",\n    \"difficulty\": \"facile\" | \"moyen\" | \"difficile\",\n    \"fun_fact\": \"\",\n    \"language\": \"fr\"\n  }\n]\n\n## Contraintes JSON strictes\n- \"correct_answer\" : lettre minuscule uniquement — a, b, c ou d\n- \"difficulty\" : exactement \"facile\", \"moyen\" ou \"difficile\"\n- \"fun_fact\" : 1 phrase max 120 caractères, ton punchy, fait inattendu \n  lié à la bonne réponse — affiché sur l'écran résultat de la vidéo\n- \"language\" : toujours \"fr\"\n- option_c et option_d peuvent être \"\" pour les Vrai/Faux uniquement\n- Tous les autres champs sont obligatoires et non vides\n- Aucun texte, explication ou markdown en dehors du tableau JSON",
                 "hasOutputParser": true,
                 "options": {
                     "enableStreaming": false
@@ -1277,7 +1277,7 @@
             "type": "@n8n/n8n-nodes-langchain.agent",
             "typeVersion": 3.1,
             "position": [
-                288,
+                48,
                 880
             ],
             "id": "74eee40a-7eec-4624-8cf6-e192efc09612",
@@ -1297,7 +1297,7 @@
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 4.4,
             "position": [
-                816,
+                576,
                 880
             ],
             "id": "c5b26bb5-b518-49a1-a700-fca8e5d3a47e",
@@ -1318,8 +1318,8 @@
             "type": "@n8n/n8n-nodes-langchain.embeddingsOpenAi",
             "typeVersion": 1.2,
             "position": [
-                1072,
-                1248
+                1136,
+                1344
             ],
             "id": "efd09392-8863-4c68-93a1-8233d959497e",
             "name": "Embeddings OpenAI",
@@ -1339,7 +1339,7 @@
             "type": "n8n-nodes-base.set",
             "typeVersion": 3.4,
             "position": [
-                1024,
+                1232,
                 880
             ],
             "id": "32767d7c-df86-44ff-b472-80866169bfd0",
@@ -1353,7 +1353,7 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                1216,
+                1424,
                 880
             ],
             "id": "4d9d84bb-20e4-47f2-8571-39bc0b38a0d5",
@@ -1374,7 +1374,7 @@
             "type": "@n8n/n8n-nodes-langchain.outputParserStructured",
             "typeVersion": 1.3,
             "position": [
-                672,
+                432,
                 1120
             ],
             "id": "88cf072c-8c4c-404b-a54e-ba701cbf69cc",
@@ -1389,7 +1389,7 @@
             },
             "type": "n8n-nodes-base.stickyNote",
             "position": [
-                4848,
+                5056,
                 576
             ],
             "typeVersion": 1,
@@ -1405,7 +1405,7 @@
             },
             "type": "n8n-nodes-base.stickyNote",
             "position": [
-                2480,
+                2688,
                 496
             ],
             "typeVersion": 1,
@@ -1421,7 +1421,7 @@
             },
             "type": "n8n-nodes-base.stickyNote",
             "position": [
-                1504,
+                1712,
                 768
             ],
             "typeVersion": 1,
@@ -1443,7 +1443,7 @@
             "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
             "typeVersion": 1.1,
             "position": [
-                1536,
+                1744,
                 1088
             ],
             "id": "26198790-b75e-4447-9d18-b28ec93de4c1",
@@ -1463,7 +1463,7 @@
             "type": "@n8n/n8n-nodes-langchain.vectorStoreSupabase",
             "typeVersion": 1.3,
             "position": [
-                1408,
+                1616,
                 880
             ],
             "id": "f1b36c67-8789-40c5-adcb-ec53330b1d1f",
@@ -1504,7 +1504,7 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                5504,
+                5712,
                 608
             ],
             "id": "2c5082af-3375-412b-ab74-d469f3a62112",
@@ -1541,7 +1541,7 @@
             "type": "n8n-nodes-base.supabase",
             "typeVersion": 1,
             "position": [
-                1712,
+                1920,
                 880
             ],
             "id": "86d71801-a688-4607-80b7-f7663e51418c",
@@ -1560,7 +1560,7 @@
             "type": "n8n-nodes-base.wait",
             "typeVersion": 1.1,
             "position": [
-                4256,
+                4464,
                 336
             ],
             "id": "91100a01-bff7-4372-9726-277af5920480",
@@ -1577,7 +1577,7 @@
             "type": "n8n-nodes-base.youTube",
             "typeVersion": 1,
             "position": [
-                5072,
+                5280,
                 784
             ],
             "id": "2bc5d2f2-35c1-4be7-be02-edca29b82ce7",
@@ -1595,7 +1595,7 @@
             "type": "CUSTOM.tikTokUpload",
             "typeVersion": 1,
             "position": [
-                5072,
+                5280,
                 624
             ],
             "id": "1b787e1a-d678-4a1e-a898-05a69eeeb03e",
@@ -1615,7 +1615,7 @@
             "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
             "typeVersion": 1,
             "position": [
-                4368,
+                4576,
                 928
             ],
             "id": "c984a589-7919-4ae6-b8ec-589696659dd6",
@@ -1636,7 +1636,7 @@
             "type": "@n8n/n8n-nodes-langchain.agent",
             "typeVersion": 3.1,
             "position": [
-                4384,
+                4592,
                 704
             ],
             "id": "7e226b36-cc02-4cbb-8204-091cb3a0981f",
@@ -1669,7 +1669,7 @@
             "type": "n8n-nodes-base.if",
             "typeVersion": 2.3,
             "position": [
-                2944,
+                3152,
                 624
             ],
             "id": "0bf647a2-ea27-4e42-a7b3-bd906e2e9b26",
@@ -1684,7 +1684,7 @@
             "type": "n8n-nodes-base.redis",
             "typeVersion": 1,
             "position": [
-                3136,
+                3344,
                 608
             ],
             "id": "68a37856-a4b4-4a7b-b6d0-604845a15e5e",
@@ -1693,6 +1693,97 @@
                 "redis": {
                     "id": "ua59kyvCowPL9ZRc",
                     "name": "Redis - pika account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "operation": "executeQuery",
+                "query": "SELECT \n  COALESCE(MAX(similarity), 0) AS max_similarity,\n  COALESCE(\n    (SELECT content FROM public.match_documents(\n      $1::vector, \n      3, \n      0.0\n    ) ORDER BY similarity DESC LIMIT 1),\n    'Aucune'\n  ) AS closest_match\nFROM public.match_documents(\n  $1::vector, \n  3, \n  0.0\n);",
+                "options": {
+                    "queryReplacement": "={{ '[' + $json.data[0].embedding.join(',') + ']' }}"
+                }
+            },
+            "type": "n8n-nodes-base.postgres",
+            "typeVersion": 2.6,
+            "position": [
+                784,
+                880
+            ],
+            "id": "a8311ac2-ed84-4b07-878a-5bfef06ce847",
+            "name": "Check Similarity",
+            "credentials": {
+                "postgres": {
+                    "id": "PdQplJt0kraauzJT",
+                    "name": "Postgres Supabase account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "conditions": {
+                    "options": {
+                        "caseSensitive": true,
+                        "leftValue": "",
+                        "typeValidation": "strict",
+                        "version": 3
+                    },
+                    "conditions": [
+                        {
+                            "id": "a45e5ed4-7338-4baf-a3df-c112087d802c",
+                            "leftValue": "={{ $json.max_similarity }}",
+                            "rightValue": 0.85,
+                            "operator": {
+                                "type": "number",
+                                "operation": "lt"
+                            }
+                        }
+                    ],
+                    "combinator": "and"
+                },
+                "options": {}
+            },
+            "type": "n8n-nodes-base.if",
+            "typeVersion": 2.3,
+            "position": [
+                992,
+                880
+            ],
+            "id": "5cd53c5e-6458-48ac-9e7d-5f7c3bac5a67",
+            "name": "If not a duplicate"
+        },
+        {
+            "parameters": {
+                "tableId": "logs",
+                "fieldsUi": {
+                    "fieldValues": [
+                        {
+                            "fieldId": "workflow",
+                            "fieldValue": "={{ $workflow.name }}"
+                        },
+                        {
+                            "fieldId": "status",
+                            "fieldValue": "rejected_duplicate"
+                        },
+                        {
+                            "fieldId": "message",
+                            "fieldValue": "{{ 'Question rejetée (similarité ' + $('Check Similarity').item.json.max_similarity.toFixed(3) + ') - Plus proche: ' + $('Check Similarity').item.json.closest_match }}"
+                        }
+                    ]
+                }
+            },
+            "type": "n8n-nodes-base.supabase",
+            "typeVersion": 1,
+            "position": [
+                1424,
+                1216
+            ],
+            "id": "7771f235-acbb-4856-912e-087f2ae57132",
+            "name": "Log rejet",
+            "credentials": {
+                "supabaseApi": {
+                    "id": "WbnVqEv2ZGhdAeSX",
+                    "name": "Supabase SnakeTech DB Quiz"
                 }
             }
         }
@@ -2169,13 +2260,7 @@
         },
         "Redis Chat Memory": {
             "ai_memory": [
-                [
-                    {
-                        "node": "AI Agent",
-                        "type": "ai_memory",
-                        "index": 0
-                    }
-                ]
+                []
             ]
         },
         "Supabase Vector Store": {
@@ -2223,7 +2308,7 @@
             "main": [
                 [
                     {
-                        "node": "Retrieve data before create",
+                        "node": "Check Similarity",
                         "type": "main",
                         "index": 0
                     }
@@ -2395,6 +2480,35 @@
                     }
                 ]
             ]
+        },
+        "Check Similarity": {
+            "main": [
+                [
+                    {
+                        "node": "If not a duplicate",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "If not a duplicate": {
+            "main": [
+                [
+                    {
+                        "node": "Retrieve data before create",
+                        "type": "main",
+                        "index": 0
+                    }
+                ],
+                [
+                    {
+                        "node": "Log rejet",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
         }
     },
     "settings": {
@@ -2405,7 +2519,7 @@
         "templateCredsSetupCompleted": true
     },
     "pinData": {},
-    "versionId": "80d8b735-6ab1-484c-88b2-c295c987c416",
+    "versionId": "d9bca8ce-932f-4d09-9267-46a6ec2505e5",
     "activeVersionId": null,
     "triggerCount": 0,
     "shared": [
